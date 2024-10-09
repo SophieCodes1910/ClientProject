@@ -1,0 +1,246 @@
+.navbar {
+    background: #b2ffa0;
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+    position: relative;
+    z-index: 1000;
+    color: #42d623;
+    padding: 0 20px;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+    width: 100%;
+    max-width: 1500px;
+    padding: 0 50px;
+    margin: 0 auto;
+}
+
+.navbar-container .logo {
+    width: 80px;
+}
+
+.navbar-logo {
+    color: #fff;
+    justify-self: start;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 2rem;
+}
+
+.menu-icon {
+    display: none;
+}
+
+.nav-menu-container {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    text-align: center;
+    margin-right: -22px;
+    gap: 20px;
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    text-align: center;
+}
+
+.nav-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.nav-links {
+    color: #32ab26;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid transparent;
+    cursor: pointer;
+}
+
+.nav-links-border {
+    margin-bottom: 0;
+    border: 1px solid #32ab26;
+    border-radius: 10px;
+}
+
+.nav-links-border:hover {
+    background-color: #32ab26;
+    color: #fff;
+}
+
+.nav-links:hover::after {
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.nav-links.active-link {
+    color: #32ab26;
+    border-bottom: 3px solid #32ab26;
+}
+
+.login {
+    padding: 0;
+    border: 1px solid #32ab26;
+    border-radius: 10px;
+}
+
+.fa-bars,
+.fa-times {
+    color: #fff;
+    font-size: 1.8rem;
+}
+
+.dropdown-link {
+    white-space: nowrap;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%; /* Position the dropdown below the parent */
+    left: 0;
+    list-style: none;
+    text-align: start;
+    background: #32ab26;
+    padding: 10px;
+    border-radius: 0 0 5px 5px;
+    z-index: 999;
+    cursor: pointer;
+    margin-bottom: 20px !important;
+}
+
+.dropdown-menu li {
+    padding: 10px 20px;
+}
+
+.dropdown-menu li a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-menu li a:hover {
+    color: #42d623;
+}
+
+.nav-item:hover .dropdown-menu {
+    display: block;
+}
+
+/* Show dropdown when state is true */
+.nav-item .dropdown-menu {
+    display: block;
+}
+
+/* Media Queries for Mobile */
+@media screen and (max-width: 960px) {
+    .navbar-container {
+        padding: 0 20px;
+    }
+
+    .menu-icon {
+        display: flex;
+        font-size: 1.8rem;
+        cursor: pointer;
+    }
+
+    .nav-menu {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        flex-direction: column;
+        width: 100%;
+        height: calc(100vh - 80px);
+        position: absolute;
+        top: 80px;
+        left: -100%;
+        opacity: 1;
+        transition: all 0.5s ease;
+        background: #b2ffa0;
+        z-index: 1;
+    }
+
+    .nav-menu.active {
+        left: 0;
+        opacity: 1;
+        transition: all 0.5s ease;
+    }
+
+    .nav-item {
+        height: 40px;
+    }
+
+    .nav-links {
+        text-align: center;
+        padding: 1rem;
+        width: 100%;
+        display: table;
+        position: relative;
+    }
+
+    .nav-links.active-link {
+        color: #32ab26;
+        border-bottom: 0 solid #32ab26;
+    }
+
+    /* Dropdown Menu for Mobile */
+    .nav-item .dropdown-menu {
+        position: absolute;
+        border-radius: 0;
+        left: 10px;
+        margin: 0 auto;
+    }
+
+    .dropdown-menu li {
+        padding: 10px 0;
+        text-align: center;
+    }
+
+    /* Ensure dropdown is always visible on mobile */
+    .nav-item .dropdown-menu {
+        display: block;
+    }
+}
+
+/* General styles to hide the scroll and background when the menu is open */
+body.menu-open {
+    overflow: hidden;
+    height: 100vh;
+    position: fixed;
+    width: 100%;
+}
+
+/* Style to add a background overlay when the menu is open */
+.nav-menu.active {
+    background: #b2ffa0; /* The same color as your navbar background */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    overflow-y: auto;
+}
+
+/* Adjust the menu icon to be on top of everything when the menu is active */
+.menu-icon {
+
+    z-index: 1000;
+}

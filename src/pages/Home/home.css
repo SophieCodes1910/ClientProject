@@ -1,0 +1,97 @@
+.home-container {
+    display: flex !important;
+    justify-content: center !important;
+
+    .home-content {
+        text-align: center !important;
+        padding: 20px !important;
+        color: #fff !important;
+        display: flex !important;
+        justify-content: center !important;
+        flex-direction: column !important;
+        align-items: center !important;
+
+        p {
+            margin-bottom: 20px !important;
+        }
+    }
+
+    .events-grid {
+        display: grid !important;
+        grid-template-columns: repeat(4, 2fr) !important; /* Creates 4 columns */
+        gap: 20px !important; /* Space between grid items */
+        padding: 20px !important;
+    }
+
+    .event-card {
+        background-color: white !important;
+        padding: 50px !important;
+        border-radius: 10px !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+        color: #000 !important;
+    }
+
+    .video-background video {
+        width: 100% !important;
+        object-fit: cover !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        z-index: -1 !important;
+        min-width: 100% !important;
+        min-height: 100% !important;
+    }
+
+
+    @media screen and (max-width: 960px) {
+        .events-grid {
+            grid-template-columns: repeat(2, 2fr) !important;
+        }
+    }
+}
+
+.delete-button {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+
+.delete-button:hover {
+    background-color: darkred;
+}
+
+.event-card {
+    position: relative;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.no-events-container {
+    width: 100%;
+    height: calc(100vh - 80px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.no-events {
+    width: 300px !important;
+    height: 200px !important;
+    background-color: #fff !important;
+    border-radius: 10px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    color: #000 !important;
+    margin: 0 auto;
+    font-size: 2rem;
+}

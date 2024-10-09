@@ -1,0 +1,81 @@
+/* Container for the entire events section */
+.create-events-container {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 40px 20px;
+    background-color: #b2ffa0; /* Matches the website theme */
+    min-height: 100vh;
+}
+
+/* Styling for the event creation card */
+.events {
+    background-color: #fff; /* White background for the card */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 600px;
+    width: 100%;
+}
+
+/* Header styling */
+.events h2 {
+    text-align: center;
+    color: #32ab26; /* Green color for header */
+    margin-bottom: 20px;
+}
+
+/* Form styling */
+.event-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Input fields */
+.event-form input,
+.event-form select,
+.event-form textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    color: #333;
+}
+
+/* Input labels */
+.event-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #32ab26; /* Green color for labels */
+}
+
+/* Button styling */
+.create-event {
+    background-color: #32ab26; /* Green background for button */
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Button hover effect */
+.create-event:hover {
+    background-color: #42d623; /* Slightly darker green on hover */
+}
+
+/* Responsive design for smaller screens */
+@media screen and (max-width: 600px) {
+    .events {
+        padding: 15px;
+    }
+
+    .create-event {
+        padding: 15px;
+    }
+}

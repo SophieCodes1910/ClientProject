@@ -1,0 +1,106 @@
+/* Container for the whole events section */
+.fill-events-container {
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+
+    .events {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        max-width: 800px;
+        width: 100%;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Headers for the form */
+
+    h2, h3 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #32ab26; /* Green text matching the navbar */
+    }
+
+    /* Form layout */
+
+    .event-form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    /* Input fields, text areas, and select boxes */
+
+    input,
+    textarea,
+    select {
+        width: 100%;
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #32ab26; /* Green border */
+        box-sizing: border-box;
+        background-color: #f9f9f9; /* Light background */
+        color: #000000; /* Black text */
+        margin-bottom: 10px;
+    }
+
+    /* Focus state for inputs */
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+        outline: none;
+        border-color: #32ab26; /* Green border on focus */
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: #32ab26; /* Primary green color matching the navbar */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    button:hover {
+        background-color: #28a745; /* Slightly darker green on hover */
+    }
+
+    /* Guests and sub-events buttons */
+
+    button[type="button"] {
+        background-color: #32ab26; /* Same primary green color */
+        color: white;
+    }
+
+    button[type="button"]:hover {
+        background-color: #28a745; /* Slightly darker green on hover */
+    }
+
+    /* Guest item styling */
+
+    .guest-item,
+    .subevent-item {
+        background-color: #f9f9f9;
+        border: 1px solid #32ab26;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 15px;
+    }
+
+    /* Header for sub-events and guests */
+
+    .guest-item h3,
+    .subevent-item h3 {
+        color: #32ab26;
+    }
+
+    .remove-button {
+        background-color: red !important;
+    }
+}
