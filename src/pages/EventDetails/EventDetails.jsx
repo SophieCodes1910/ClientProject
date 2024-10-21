@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import axios from "axios"; // Import axios for API calls
+import { db, storage } from "../../firebase"; // Import Firebase config
+import { doc, setDoc } from "firebase/firestore"; // Firestore functions
+import { ref, uploadBytes } from "firebase/storage"; // Storage functions
 import 'react-toastify/dist/ReactToastify.css';
 import './EventDetails.css';
 
@@ -15,68 +17,50 @@ export const EventDetails = () => {
   const [name, setName] = useState(eventName || "");
   const [email, setEmail] = useState(organizerEmail || "");
   const [eventDescription, setEventDescription] = useState(description || "");
-  const [mediaFiles, setMediaFiles] = useState([]); // State to store media files
-  const [inviteeEmails, setInviteeEmails] = useState([""]); // Start with an empty input for emails
-  const [isPublic, setIsPublic] = useState(true); // Toggle for event visibility
+  const [mediaFiles, setMediaFiles] = useState([]);
+  const [inviteeEmails, setInviteeEmails] = useState([""]);
+  const [isPublic, setIsPublic] = useState(true);
   const [schedules, setSchedules] = useState([{ 
     date: "", 
     startTime: "", 
     endTime: "", 
-    plans: [{ time: "", description: "" }], // Updated to hold multiple plans
+    plans: [{ time: "", description: "" }],
     dressCode: "", 
     location: "",
     whatToBring: "",
     specialInstructions: "",
-    showDetails: false, // State to manage visibility of additional details
-    showInputs: false // State to manage visibility of input fields
-  }]); // State for schedules
+    showDetails: false,
+    showInputs: false 
+  }]);
 
   const handleFileChange = (e) => {
-    const files = Array.from(e.target.files); // Convert FileList to Array
-    setMediaFiles([...mediaFiles, ...files]); // Append new files to existing files
+    const files = Array.from(e.target.files);
+    setMediaFiles([...mediaFiles, ...files]);
   };
 
   const handleInviteeChange = (index, value) => {
     const newEmails = [...inviteeEmails];
-    newEmails[index] = value; // Update the specific email based on index
+    newEmails[index] = value;
     setInviteeEmails(newEmails);
   };
 
   const addInviteeEmail = () => {
-    setInviteeEmails([...inviteeEmails, ""]); // Add a new empty email input
+    setInviteeEmails([...inviteeEmails, ""]);
   };
 
   const removeInviteeEmail = (index) => {
-    const newEmails = inviteeEmails.filter((_, i) => i !== index); // Remove the email at the specified index
+    const newEmails = inviteeEmails.filter((_, i) => i !== index);
     setInviteeEmails(newEmails);
   };
 
   const removeMediaFile = (index) => {
-    const newFiles = mediaFiles.filter((_, i) => i !== index); // Remove the media file at the specified index
+    const newFiles = mediaFiles.filter((_, i) => i !== index);
     setMediaFiles(newFiles);
   };
 
   const handleScheduleChange = (index, field, value) => {
     const newSchedules = [...schedules];
-    newSchedules[index][field] = value; // Update the specific field for the given schedule
-    setSchedules(newSchedules);
-  };
-
-  const handlePlanChange = (scheduleIndex, planIndex, field, value) => {
-    const newSchedules = [...schedules];
-    newSchedules[scheduleIndex].plans[planIndex][field] = value; // Update the specific plan field
-    setSchedules(newSchedules);
-  };
-
-  const addPlan = (scheduleIndex) => {
-    const newSchedules = [...schedules];
-    newSchedules[scheduleIndex].plans.push({ time: "", description: "" }); // Add a new plan for the specified schedule
-    setSchedules(newSchedules);
-  };
-
-  const removePlan = (scheduleIndex, planIndex) => {
-    const newSchedules = [...schedules];
-    newSchedules[scheduleIndex].plans = newSchedules[scheduleIndex].plans.filter((_, i) => i !== planIndex); // Remove the plan at the specified index
+    newSchedules[index][field] = value;
     setSchedules(newSchedules);
   };
 
@@ -85,77 +69,57 @@ export const EventDetails = () => {
       date: "", 
       startTime: "", 
       endTime: "", 
-      plans: [{ time: "", description: "" }], // Start with one empty plan
+      plans: [{ time: "", description: "" }],
       dressCode: "", 
       location: "",
       whatToBring: "",
       specialInstructions: "",
-      showDetails: false, // Initialize visibility state
-      showInputs: false // Initialize visibility of input fields
-    }]); // Add a new schedule
+      showDetails: false,
+      showInputs: false 
+    }]);
   };
 
   const removeSchedule = (index) => {
-    const newSchedules = schedules.filter((_, i) => i !== index); // Remove the schedule at the specified index
+    const newSchedules = schedules.filter((_, i) => i !== index);
     setSchedules(newSchedules);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Create FormData for file upload
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("email", email);
-    formData.append("description", eventDescription);
-    formData.append("isPublic", isPublic); // Add visibility status to the form data
-    mediaFiles.forEach((file) => {
-      formData.append("media", file); // Append each file to the FormData object
-    });
-    inviteeEmails.forEach((invitee) => {
-      if (invitee) {
-        formData.append("invitees", invitee); // Append each invitee's email
-      }
-    });
-    schedules.forEach((schedule) => {
-      if (schedule.date && schedule.startTime && schedule.endTime) {
-        formData.append("schedules", JSON.stringify(schedule)); // Append schedules
-      }
-    });
+    // Create a new event object
+    const eventData = {
+      name,
+      email,
+      description: eventDescription,
+      isPublic,
+      invitees: inviteeEmails.filter(invitee => invitee), // Filter out empty emails
+      schedules: schedules.filter(schedule => schedule.date && schedule.startTime && schedule.endTime), // Filter valid schedules
+    };
 
+    // Upload media files to Firebase Storage and create a document in Firestore
     try {
-      const response = await axios.post('/api/events', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data', // Set the content type
-        },
+      const eventDocRef = doc(db, "events", name); // Create a reference for the event document
+      await setDoc(eventDocRef, eventData); // Add event data to Firestore
+
+      // Upload media files to Storage
+      const uploadPromises = mediaFiles.map((file) => {
+        const fileRef = ref(storage, `media/${file.name}`); // Create a reference for the file
+        return uploadBytes(fileRef, file); // Upload the file
       });
 
-      if (response.data.success) {
-        toast.success("Event updated and invitations sent!"); // Notify the user of success
-        navigate('/events/my-invitations'); // Navigate to My Invitations page after successful submission
-      } else {
-        toast.error("Error updating event."); // Notify user of failure
-      }
+      await Promise.all(uploadPromises); // Wait for all uploads to finish
+
+      toast.success("Event updated and invitations sent!"); 
+      navigate('/events/my-invitations'); // Navigate to My Invitations page
     } catch (error) {
-      toast.error("Error updating event."); // Catch and handle error
+      toast.error("Error updating event.");
       console.error("Error:", error);
     }
   };
 
   const handleBack = () => {
-    navigate(-1); // Navigate back to the previous page
-  };
-
-  const toggleDetails = (index) => {
-    const newSchedules = [...schedules];
-    newSchedules[index].showDetails = !newSchedules[index].showDetails; // Toggle the visibility of additional details
-    setSchedules(newSchedules);
-  };
-
-  const toggleInputs = (index) => {
-    const newSchedules = [...schedules];
-    newSchedules[index].showInputs = !newSchedules[index].showInputs; // Toggle the visibility of input fields
-    setSchedules(newSchedules);
+    navigate(-1);
   };
 
   return (
@@ -247,106 +211,25 @@ export const EventDetails = () => {
                 <input
                   type="date"
                   value={schedule.date}
-                  onChange={(e) => handleScheduleChange(scheduleIndex, 'date', e.target.value)}
-                  required
+                  onChange={(e) => handleScheduleChange(scheduleIndex, "date", e.target.value)}
                 />
               </div>
-
               <div className="form-group">
                 <label>Start Time:</label>
                 <input
                   type="time"
                   value={schedule.startTime}
-                  onChange={(e) => handleScheduleChange(scheduleIndex, 'startTime', e.target.value)}
-                  required
+                  onChange={(e) => handleScheduleChange(scheduleIndex, "startTime", e.target.value)}
                 />
               </div>
-
               <div className="form-group">
                 <label>End Time:</label>
                 <input
                   type="time"
                   value={schedule.endTime}
-                  onChange={(e) => handleScheduleChange(scheduleIndex, 'endTime', e.target.value)}
-                  required
+                  onChange={(e) => handleScheduleChange(scheduleIndex, "endTime", e.target.value)}
                 />
               </div>
-
-              <button type="button" onClick={() => toggleInputs(scheduleIndex)}>
-                {schedule.showInputs ? 'Hide Input Details' : 'More'}
-              </button>
-
-              {schedule.showInputs && (
-                <div className="schedule-details">
-                  <div className="form-group">
-                    <label>Location:</label>
-                    <input
-                      type="text"
-                      value={schedule.location}
-                      onChange={(e) => handleScheduleChange(scheduleIndex, 'location', e.target.value)}
-                      placeholder="Location"
-                      required
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Dress Code:</label>
-                    <input
-                      type="text"
-                      value={schedule.dressCode}
-                      onChange={(e) => handleScheduleChange(scheduleIndex, 'dressCode', e.target.value)}
-                      placeholder="Dress Code"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>What to Bring:</label>
-                    <input
-                      type="text"
-                      value={schedule.whatToBring}
-                      onChange={(e) => handleScheduleChange(scheduleIndex, 'whatToBring', e.target.value)}
-                      placeholder="What to Bring"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Special Instructions:</label>
-                    <input
-                      type="text"
-                      value={schedule.specialInstructions}
-                      onChange={(e) => handleScheduleChange(scheduleIndex, 'specialInstructions', e.target.value)}
-                      placeholder="Special Instructions"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Plans:</label>
-                    {schedule.plans.map((plan, planIndex) => (
-                      <div key={planIndex} className="plan" style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                        <input
-                          type="time"
-                          value={plan.time}
-                          onChange={(e) => handlePlanChange(scheduleIndex, planIndex, 'time', e.target.value)}
-                          placeholder="Plan Time"
-                          required
-                          style={{ marginRight: '10px' }} // Spacing between elements
-                        />
-                        <input
-                          type="text"
-                          value={plan.description}
-                          onChange={(e) => handlePlanChange(scheduleIndex, planIndex, 'description', e.target.value)}
-                          placeholder="Plan Description"
-                          required
-                          style={{ marginRight: '10px', flexGrow: 1 }} // Allows the description input to grow
-                        />
-                        <button type="button" onClick={() => removePlan(scheduleIndex, planIndex)}>Remove Plan</button>
-                      </div>
-                    ))}
-                    <button type="button" onClick={() => addPlan(scheduleIndex)}>Add Another Plan</button>
-                  </div>
-                </div>
-              )}
-
               <button type="button" onClick={() => removeSchedule(scheduleIndex)}>Remove Schedule</button>
             </div>
           ))}

@@ -1,14 +1,12 @@
-import {useState} from "react";
-import axios from "axios";
-import {useNavigate} from "react-router-dom";
-import toast, {Toaster} from 'react-hot-toast';
-
-const apiUrl = import.meta.env.VITE_API_URL;
-
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import toast from 'react-hot-toast';
+import { signInWithEmailAndPassword } from "firebase/auth";  
+import { auth } from "../../firebase"; 
+import PropTypes from 'prop-types';
 import "./login.css";
-import {Link} from "react-router-dom";
 
-export const Login = ({setLoggedIn}) => {
+export const Login = ({ setLoggedIn }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
@@ -17,71 +15,41 @@ export const Login = ({setLoggedIn}) => {
     const handleLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
-
+    
         try {
-            const response = await axios.post(apiUrl + "/auth/login", {
-                email,
-                password,
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            localStorage.setItem("email", email);
+            setLoggedIn(true); 
+
+            toast.success("Login successful!", {
+                position: 'bottom-right'
             });
-
-            console.log(response.data)
-
-
-            if (response.data.success) {
-                const token = response.data.data.token;
-                localStorage.setItem("token", token);
-                localStorage.setItem("email", email);
-                setLoading(false);
-                toast.success('Successfully created!', {
-                    position: 'bottom-right'
-                });
-
-                setLoggedIn(true);
-
-                setTimeout(() => {
-                    navigate("/");
-                }, 3000);
-            } else {
-                setLoading(false);
-                toast.error("This didn't work. 1", {
-                    position: 'bottom-right'
-                })
-
-            }
+    
+            setTimeout(() => {
+                navigate("/"); 
+            }, 3000);
+    
         } catch (error) {
-            if (error.response) {
-                console.log(error.response);
-                console.log(error)
-                if (error.response.status === 500) {
-                    setLoading(false);
-                    toast.error("Server not working")
-                } else if (error.response.status === 400) {
-                    setLoading(false);
-                    // Handle 400 Bad Request error (e.g., invalid credentials)
-                    toast.error("Please register first", {
-                        position: 'bottom-right'
-                    })
-                } else if (error.response.status === 406) {
-                    setLoading(false)
-                    toast.error("Email or password is incorrect", {
-                        position: 'bottom-right'
-                    })
-                } else if (error.response.status === 401) {
-                    setLoading(false);
-                    toast.error("Please verify email first", {
-                        position: 'bottom-right'
-                    })
-
-                }
-            } else if (error.request) {
-                setLoading(false);
-                // Handle network error (e.g., server is down)
-                toast.error("This didn't work.")
-
-            } else {
-                setLoading(false);
-                toast.error("This didn't work. 3")
-
+            console.error("Login error:", error);
+            
+            switch (error.code) {
+                case 'auth/user-not-found':
+                    toast.error("User not found. Please register.", { position: 'bottom-right' });
+                    break;
+                case 'auth/wrong-password':
+                    toast.error("Incorrect password. Please try again.", { position: 'bottom-right' });
+                    break;
+                case 'auth/too-many-requests':
+                    toast.error("Too many attempts. Try again later.", { position: 'bottom-right' });
+                    break;
+                case 'auth/invalid-email':
+                    toast.error("Invalid email format.", { position: 'bottom-right' });
+                    break;
+                default:
+                    toast.error(`Login failed: ${error.message}`, { position: 'bottom-right' });
+                    break;
             }
         } finally {
             setLoading(false);
@@ -90,7 +58,7 @@ export const Login = ({setLoggedIn}) => {
 
     return (
         <div className="login-container">
-            <h2 style={location.pathname === '/login' ? {} : {color: 'white'}}>Login</h2>
+            <h2 style={{ color: window.location.pathname === '/login' ? 'black' : 'white' }}>Login</h2>
             <form onSubmit={handleLogin}>
                 <div>
                     <label>Email:</label>
@@ -113,10 +81,14 @@ export const Login = ({setLoggedIn}) => {
                 <button type="submit" disabled={loading} className={loading ? "loading" : ""}>
                     {loading ? <span className="loader"></span> : "Login"}
                 </button>
-                Don't have an account?
-                <Link to="/register" className="register-btn">Register</Link>
+                <p>Don't have an account? 
+                    <Link to="/register" className="register-btn"> Register</Link>
+                </p>
             </form>
-            {/*<ToastContainer/>*/}
         </div>
     );
+};
+
+Login.propTypes = {
+    setLoggedIn: PropTypes.func.isRequired,
 };

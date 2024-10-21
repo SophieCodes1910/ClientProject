@@ -1,22 +1,21 @@
-// CreateEvents.jsx
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { db } from "../../firebase"; // Ensure firebase is correctly initialized
+import { addDoc, collection } from "firebase/firestore";
 import './createEvents.css';
 
-const apiUrl = import.meta.env.VITE_API_URL;
-
-export const CreateEvents = () => {
+export const CreateEvents = () => {  
     const [eventName, setEventName] = useState("");
-    const organizerEmail = localStorage.getItem("email"); // Organizer email from localStorage
-    const token = localStorage.getItem("token");
-
+    const organizerEmail = localStorage.getItem("email");
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Debug: Check if organizerEmail is set
+        console.log("Organizer Email:", organizerEmail);
 
         const eventData = {
             eventName,
@@ -24,34 +23,23 @@ export const CreateEvents = () => {
         };
 
         try {
-            const response = await axios.post(apiUrl + "/invitations/invitationByName", eventData, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+            // Add event to Firestore collection 'events'
+            const docRef = await addDoc(collection(db, "events"), eventData);
+            toast.success("Event created successfully!", {
+                position: "bottom-right",
+                autoClose: 1500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                onClose: () => navigate("/EventDetails", { state: { eventName, organizerEmail, docId: docRef.id } }) 
             });
-            if (response.data.success) {
-                toast.success("Event created successfully!", {
-                    position: "bottom-right",
-                    autoClose: 1500,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    onClose: () => navigate("/EventDetails", { state: { eventName, organizerEmail } }) 
-                });
-                setEventName('');
-            } else {
-                toast.error("Failed to create event: " + response.data.message);
-            }
+            // Clear input field after submission
+            setEventName('');
         } catch (error) {
             console.error("Error creating event:", error);
-            if (!error.response) {
-                navigate("/EventDetails", { state: { eventName, organizerEmail } }) //remove once server working
-                toast.error("Server not working. Please try again later.");
-            } else {
-                toast.error("An error occurred while creating the event. Please try again.");
-            }
+            toast.error(`Error: ${error.message}`); // Show specific error message
         }
     };
 
@@ -79,4 +67,3 @@ export const CreateEvents = () => {
         </div>
     );
 };
-
