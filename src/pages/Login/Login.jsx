@@ -31,7 +31,10 @@ export const Login = ({ setLoggedIn }) => {
                 navigate("/"); 
             }, 3000);
         } catch (error) {
-            console.error("Login error:", error);
+            cconsole.error("Login error:", error);
+            console.log("Error code:", error.code);
+            console.log("Error message:", error.message);
+            
             
             switch (error.code) {
                 case 'auth/user-not-found':
