@@ -1,10 +1,9 @@
 {
-  "name": "birthday-invitation",
+  "name": "huppsi",
   "homepage": "sophiecodes.net/birthday-invitation-main",
   "proxy": "http://localhost:5173",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
