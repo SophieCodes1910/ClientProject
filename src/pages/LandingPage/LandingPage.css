@@ -1,0 +1,37 @@
+#landing-page .hero {
+    text-align: center;
+    padding: 20px;
+}
+
+.how-it-works-container {
+    margin-top: 20px;
+}
+
+.how-it-works-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10%; /* Add 10% padding on the left and right */
+}
+
+.how-it-works-text {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.how-it-works-images.carousel {
+    flex: 1;
+    overflow: hidden;
+    max-width: 600px; /* Set a maximum width to ensure only one image is visible at a time */
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-image {
+    min-width: 100%; /* Ensure each image takes up the full width of the container */
+    max-width: 100%;
+}
+
