@@ -15,14 +15,14 @@ export const Login = ({ setLoggedIn }) => {
     const handleLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
-    
+        
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-
+    
             localStorage.setItem("email", email);
             setLoggedIn(true); 
-
+    
             toast.success("Login successful!", {
                 position: 'bottom-right'
             });
@@ -30,7 +30,6 @@ export const Login = ({ setLoggedIn }) => {
             setTimeout(() => {
                 navigate("/"); 
             }, 3000);
-    
         } catch (error) {
             console.error("Login error:", error);
             
@@ -47,6 +46,9 @@ export const Login = ({ setLoggedIn }) => {
                 case 'auth/invalid-email':
                     toast.error("Invalid email format.", { position: 'bottom-right' });
                     break;
+                case 'auth/network-request-failed':
+                    toast.error("Network error. Please check your connection.", { position: 'bottom-right' });
+                    break;
                 default:
                     toast.error(`Login failed: ${error.message}`, { position: 'bottom-right' });
                     break;
@@ -55,6 +57,7 @@ export const Login = ({ setLoggedIn }) => {
             setLoading(false);
         }
     };
+    
 
     return (
         <div className="login-container">
