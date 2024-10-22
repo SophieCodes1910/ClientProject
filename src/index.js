@@ -2,10 +2,11 @@ const functions = require('firebase-functions');
 const cors = require('cors');
 const express = require('express');
 
-const app = express();
+// Create an instance of Express
+const expressApp = express(); // Rename here
 
 // Use CORS middleware with a specific origin
-app.use(cors({
+expressApp.use(cors({
     origin: 'https://sophiecodes1910.github.io', // Your GitHub Pages URL
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true // Allow cookies or other credentials if needed
@@ -23,20 +24,21 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const firebaseApp = initializeApp(firebaseConfig); // Rename here
 
 // Initialize Firestore
-const db = getFirestore(app); // Firestore initialization
-const auth = getAuth(app);
-const storage = getStorage(app);
+const db = getFirestore(firebaseApp); // Firestore initialization
+const auth = getAuth(firebaseApp);
+const storage = getStorage(firebaseApp);
 
-export { db, storage, auth }; // Export Firestore and auth instances for use in other files
+// Export Firestore and auth instances for use in other files
+export { db, storage, auth };
 
 // Define your endpoints
-app.post('/auth/login', (req, res) => {
+expressApp.post('/auth/login', (req, res) => {
     // Handle login logic here
     res.send("Login successful");
 });
 
 // Export your API
-exports.api = functions.https.onRequest(app);
+exports.api = functions.https.onRequest(expressApp); // Use the renamed express app
