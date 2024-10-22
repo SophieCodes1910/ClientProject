@@ -10,6 +10,25 @@ export const LandingPage = () => {
     const [error, setError] = useState(null); // State to store error if any
     const images = [image60th, imageAMconcert, imageParis];
 
+    // Fetch data from the API
+    useEffect(() => {
+        fetch('https://eur3-huppsi-f21cd.cloudfunctions.net/api/events', {
+            method: 'GET',
+            credentials: 'include', // Include cookies and authorization headers
+            headers: {
+                'Content-Type': 'application/json', // Adjust headers as needed
+            },
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => setData(data))
+        .catch(error => setError(error));
+    }, []); // Empty dependency array means this runs once when the component mounts
+
     // Image rotation logic
     useEffect(() => {
         const rotateImages = () => {
@@ -21,19 +40,6 @@ export const LandingPage = () => {
             clearInterval(interval);
         };
     }, [images.length]);
-
-    // Fetch data from the API
-    useEffect(() => {
-        fetch('https://<your-region>-<your-project-id>.cloudfunctions.net/api/your-endpoint')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => setData(data))
-            .catch(error => setError(error));
-    }, []); // Empty dependency array means this runs once when the component mounts
 
     return (
         <div id="landing-page">

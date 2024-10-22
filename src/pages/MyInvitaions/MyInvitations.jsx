@@ -1,3 +1,4 @@
+//MyInvitations.jsx
 import React, { useState, useEffect } from "react";
 import { db } from "../../firebase"; // Import your Firebase configuration
 import { collection, query, where, getDocs, updateDoc, doc } from "firebase/firestore"; // Firestore functions

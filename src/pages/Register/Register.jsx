@@ -1,3 +1,4 @@
+//Register.jsx
 import { useState } from "react";
 import { auth } from "../../firebase"; // Import Firebase Auth
 import { createUserWithEmailAndPassword } from "firebase/auth"; // Firebase method to create users

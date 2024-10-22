@@ -1,5 +1,5 @@
+//Home.jsx
 import {useState, useEffect} from 'react';
-import video from '../../assets/backgroundVideo.mp4';
 import './home.css';
 import {Login} from "../Login/Login";
 import {isAuthenticated} from "../../auth/auth";
