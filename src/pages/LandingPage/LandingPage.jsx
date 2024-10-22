@@ -6,6 +6,8 @@ import "./LandingPage.css";
 
 export const LandingPage = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [data, setData] = useState(null); // State to store fetched data
+    const [error, setError] = useState(null); // State to store error if any
     const images = [image60th, imageAMconcert, imageParis];
 
     // Image rotation logic
@@ -19,6 +21,19 @@ export const LandingPage = () => {
             clearInterval(interval);
         };
     }, [images.length]);
+
+    // Fetch data from the API
+    useEffect(() => {
+        fetch('https://<your-region>-<your-project-id>.cloudfunctions.net/api/your-endpoint')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => setData(data))
+            .catch(error => setError(error));
+    }, []); // Empty dependency array means this runs once when the component mounts
 
     return (
         <div id="landing-page">
@@ -54,6 +69,15 @@ export const LandingPage = () => {
                 </div>
 
                 <h1>Section 2</h1>
+
+                {/* Display fetched data or error message */}
+                {error && <p>Error: {error.message}</p>}
+                {data && (
+                    <div>
+                        <h2>Fetched Data:</h2>
+                        <pre>{JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                )}
             </div>
         </div>
     );
