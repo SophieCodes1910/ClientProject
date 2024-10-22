@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from 'react-hot-toast';
 import { signInWithEmailAndPassword } from "firebase/auth";  
-import { auth } from "../../index"; 
+import { auth } from "../../firebase"; 
 import PropTypes from 'prop-types';
 import "./login.css";
 

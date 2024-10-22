@@ -1,6 +1,6 @@
 //Register.jsx
 import { useState } from "react";
-import { auth } from "../../index"; // Import Firebase Auth
+import { auth } from "../../firebase"; // Import Firebase Auth
 import { createUserWithEmailAndPassword } from "firebase/auth"; // Firebase method to create users
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";

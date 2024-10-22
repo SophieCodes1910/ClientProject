@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { db, storage } from "../../index"; // Import Firebase config
+import { db, storage } from "../../firebase"; // Import Firebase config
 import { doc, setDoc } from "firebase/firestore"; // Firestore functions
 import { ref, uploadBytes } from "firebase/storage"; // Storage functions
 import 'react-toastify/dist/ReactToastify.css';
