@@ -12,7 +12,7 @@ export const LandingPage = () => {
 
     // Fetch data from the API
     useEffect(() => {
-        fetch('https://eur3-huppsi-f21cd.cloudfunctions.net/api/events', {
+        fetch('https://4b9b-80-233-47-137.ngrok-free.app ', {
             method: 'GET',
             credentials: 'include', // Include cookies and authorization headers
             headers: {
