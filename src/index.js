@@ -1,9 +1,13 @@
 const functions = require('firebase-functions');
 const cors = require('cors');
 const express = require('express');
+const { initializeApp } = require('firebase/app'); // Import Firebase methods
+const { getFirestore } = require('firebase/firestore');
+const { getAuth } = require('firebase/auth');
+const { getStorage } = require('firebase/storage');
 
 // Create an instance of Express
-const expressApp = express(); // Rename here
+const expressApp = express(); // Renamed to avoid confusion
 
 // Use CORS middleware with a specific origin
 expressApp.use(cors({
@@ -24,7 +28,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const firebaseApp = initializeApp(firebaseConfig); // Rename here
+const firebaseApp = initializeApp(firebaseConfig);
 
 // Initialize Firestore
 const db = getFirestore(firebaseApp); // Firestore initialization
@@ -32,7 +36,9 @@ const auth = getAuth(firebaseApp);
 const storage = getStorage(firebaseApp);
 
 // Export Firestore and auth instances for use in other files
-export { db, storage, auth };
+exports.db = db; // Use module exports instead of ES6 export
+exports.storage = storage;
+exports.auth = auth;
 
 // Define your endpoints
 expressApp.post('/auth/login', (req, res) => {
