@@ -37,7 +37,7 @@ export const MyInvitations = () => {
     }, [email]);
 
     const handleEditClick = (event) => {
-        navigate("/events/event-details", { state: event }); // Navigate to EventDetails.jsx with event data
+        navigate("/EventDetails", { state: event }); // Navigate to EventDetails.jsx with event data
     };
 
     return (
