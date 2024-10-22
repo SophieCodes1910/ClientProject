@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import {Loader} from "../../components/Loader/Loader.jsx";
 import {Link, useNavigate} from "react-router-dom";
+import "./index.js";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 

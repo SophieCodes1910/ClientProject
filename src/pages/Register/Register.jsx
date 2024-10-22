@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./register.css";
 import { Link } from "react-router-dom";
+import "./index.js";
 
 export const Register = () => {
   const [name, setName] = useState("");

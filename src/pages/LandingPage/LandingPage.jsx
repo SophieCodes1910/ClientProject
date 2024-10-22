@@ -3,6 +3,7 @@ import image60th from "../../assets/images/image60th.jpg";
 import imageAMconcert from "../../assets/images/imageAMconcert.jpg";
 import imageParis from "../../assets/images/imageParis.jpg";
 import "./LandingPage.css";
+import "./index.js";
 
 export const LandingPage = () => {
     const [currentIndex, setCurrentIndex] = useState(0);

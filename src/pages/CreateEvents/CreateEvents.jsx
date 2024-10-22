@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { db } from "../../firebase"; // Ensure firebase is correctly initialized
 import { addDoc, collection } from "firebase/firestore";
 import './createEvents.css';
+import "./index.js";
 
 export const CreateEvents = () => {  
     const [eventName, setEventName] = useState("");

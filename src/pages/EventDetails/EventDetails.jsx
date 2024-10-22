@@ -7,6 +7,7 @@ import { doc, setDoc } from "firebase/firestore"; // Firestore functions
 import { ref, uploadBytes } from "firebase/storage"; // Storage functions
 import 'react-toastify/dist/ReactToastify.css';
 import './EventDetails.css';
+import "./index.js";
 
 export const EventDetails = () => {
   const location = useLocation();
