@@ -6,7 +6,6 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase"; 
 import PropTypes from 'prop-types';
 import "./login.css";
-import "./index.js";
 
 export const Login = ({ setLoggedIn }) => {
     const [email, setEmail] = useState("");

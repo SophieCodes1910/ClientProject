@@ -4,8 +4,6 @@ import { db } from "../../firebase"; // Import your Firebase configuration
 import { collection, query, where, getDocs, updateDoc, doc } from "firebase/firestore"; // Firestore functions
 import { Loader } from "../../components/Loader/Loader.jsx";
 import "./myInvitations.css";
-import "./index.js";
-
 export const MyInvitations = () => {
     const [events, setEvents] = useState([]);
     const [expandedSubEvent, setExpandedSubEvent] = useState(null);
