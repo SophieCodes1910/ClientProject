@@ -54,7 +54,7 @@ export const MyInvitations = () => {
                         </div>
                     ) : (
                         events.map((event) => (
-                            <div key={event.id} className="event-card" onClick={() => handleEditClick(event)}>
+                            <div key={event.id} className="event-card">
                                 <div className="event-header">
                                     <h2 className="event-name">{event.eventName}</h2>
                                     <span className={`event-status ${event.response}`}>
@@ -68,6 +68,9 @@ export const MyInvitations = () => {
                                 <a href={"mailto:" + event.organizerEmail}>
                                     <strong>Organizer:</strong> {event.organizerName} ({event.organizerEmail})
                                 </a>
+                                <button className="edit-button" onClick={() => handleEditClick(event)}>
+                                    Edit
+                                </button>
                             </div>
                         ))
                     )}
