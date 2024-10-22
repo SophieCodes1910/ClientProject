@@ -1,4 +1,3 @@
-//EventDetails.jsx
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -13,11 +12,13 @@ export const EventDetails = () => {
   const navigate = useNavigate();
 
   // Extract event details from location state
-  const { eventName, organizerEmail, description } = location.state || {};
+  const { id, eventName, organizerEmail, description, eventStartTime, eventEndTime, note } = location.state || {};
 
   const [name, setName] = useState(eventName || "");
   const [email, setEmail] = useState(organizerEmail || "");
   const [eventDescription, setEventDescription] = useState(description || "");
+  const [eventStart, setEventStart] = useState(eventStartTime || "");
+  const [eventEnd, setEventEnd] = useState(eventEndTime || "");
   const [mediaFiles, setMediaFiles] = useState([]);
   const [inviteeEmails, setInviteeEmails] = useState([""]);
   const [isPublic, setIsPublic] = useState(true);
@@ -90,84 +91,64 @@ export const EventDetails = () => {
 
     // Create a new event object
     const eventData = {
+      id, // Include the ID to update the existing document
       name,
       email,
       description: eventDescription,
+      eventStartTime: eventStart,
+      eventEndTime: eventEnd,
+      mediaFiles: mediaFiles.map(file => file.name), // Store file names for reference
+      invitees: inviteeEmails,
       isPublic,
-      invitees: inviteeEmails.filter(invitee => invitee), // Filter out empty emails
-      schedules: schedules.filter(schedule => schedule.date && schedule.startTime && schedule.endTime), // Filter valid schedules
+      schedules,
+      note,
     };
 
-    // Upload media files to Firebase Storage and create a document in Firestore
-    try {
-      const eventDocRef = doc(db, "events", name); // Create a reference for the event document
-      await setDoc(eventDocRef, eventData); // Add event data to Firestore
+    // Update event in Firestore
+    const eventRef = doc(db, "events", id); // Reference to the event document
+    await setDoc(eventRef, eventData);
 
-      // Upload media files to Storage
-      const uploadPromises = mediaFiles.map((file) => {
-        const fileRef = ref(storage, `media/${file.name}`); // Create a reference for the file
-        return uploadBytes(fileRef, file); // Upload the file
+    // Handle media file uploads if any
+    mediaFiles.forEach(file => {
+      const fileRef = ref(storage, `events/${id}/${file.name}`);
+      uploadBytes(fileRef, file).then(() => {
+        console.log("Uploaded file: ", file.name);
       });
+    });
 
-      await Promise.all(uploadPromises); // Wait for all uploads to finish
-
-      toast.success("Event updated and invitations sent!"); 
-      navigate('/events/my-invitations'); // Navigate to My Invitations page
-    } catch (error) {
-      toast.error("Error updating event.");
-      console.error("Error:", error);
-    }
-  };
-
-  const handleBack = () => {
-    navigate(-1);
+    toast.success("Event updated successfully!");
+    navigate("/my-invitations"); // Navigate back to MyInvitations after editing
   };
 
   return (
-    <div className="event-details">
-      <h1>Edit Event Details</h1>
+    <div className="event-details-container">
+      <h2>Edit Event</h2>
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="event-name">Event Name:</label>
-          <input
-            id="event-name"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
+        {/* Form fields for event details */}
+        <div>
+          <label>Event Name</label>
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
         </div>
-
-        <div className="form-group">
-          <label htmlFor="organizer-email">Organizer Email:</label>
-          <input
-            id="organizer-email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+        <div>
+          <label>Organizer Email</label>
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
-
-        <div className="form-group">
-          <label htmlFor="event-description">Event Description:</label>
-          <textarea
-            id="event-description"
-            value={eventDescription}
-            onChange={(e) => setEventDescription(e.target.value)}
-            required
-          ></textarea>
+        <div>
+          <label>Description</label>
+          <textarea value={eventDescription} onChange={(e) => setEventDescription(e.target.value)} />
         </div>
-
-        <div className="form-group">
-          <label htmlFor="media-upload">Upload Media:</label>
-          <input
-            id="media-upload"
-            type="file"
-            multiple
-            onChange={handleFileChange}
-          />
-          <div className="uploaded-files">
+        <div>
+          <label>Start Time</label>
+          <input type="datetime-local" value={eventStart} onChange={(e) => setEventStart(e.target.value)} required />
+        </div>
+        <div>
+          <label>End Time</label>
+          <input type="datetime-local" value={eventEnd} onChange={(e) => setEventEnd(e.target.value)} required />
+        </div>
+        <div>
+          <label>Media Files</label>
+          <input type="file" multiple onChange={handleFileChange} />
+          <div>
             {mediaFiles.map((file, index) => (
               <div key={index}>
                 {file.name} <button type="button" onClick={() => removeMediaFile(index)}>Remove</button>
@@ -175,72 +156,38 @@ export const EventDetails = () => {
             ))}
           </div>
         </div>
-
-        <div className="form-group">
-          <label>Invitee Emails:</label>
+        <div>
+          <label>Invitee Emails</label>
           {inviteeEmails.map((email, index) => (
-            <div key={index} className="invitee-email">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => handleInviteeChange(index, e.target.value)}
-                placeholder="Invitee Email"
-                required
-              />
+            <div key={index}>
+              <input type="email" value={email} onChange={(e) => handleInviteeChange(index, e.target.value)} />
               <button type="button" onClick={() => removeInviteeEmail(index)}>Remove</button>
             </div>
           ))}
-          <button type="button" onClick={addInviteeEmail}>Add Another Invitee</button>
+          <button type="button" onClick={addInviteeEmail}>Add Invitee</button>
         </div>
-
-        <div className="form-group">
-          <label>Make Event Public:</label>
-          <input
-            type="checkbox"
-            checked={isPublic}
-            onChange={() => setIsPublic(!isPublic)}
-          />
+        <div>
+          <label>Is Public</label>
+          <input type="checkbox" checked={isPublic} onChange={() => setIsPublic(!isPublic)} />
         </div>
-
-        <div className="schedules">
-          <h4>Event Schedules:</h4>
-          {schedules.map((schedule, scheduleIndex) => (
-            <div key={scheduleIndex} className="schedule">
-              <h5>Schedule {scheduleIndex + 1}</h5>
-              <div className="form-group">
-                <label>Date:</label>
-                <input
-                  type="date"
-                  value={schedule.date}
-                  onChange={(e) => handleScheduleChange(scheduleIndex, "date", e.target.value)}
-                />
-              </div>
-              <div className="form-group">
-                <label>Start Time:</label>
-                <input
-                  type="time"
-                  value={schedule.startTime}
-                  onChange={(e) => handleScheduleChange(scheduleIndex, "startTime", e.target.value)}
-                />
-              </div>
-              <div className="form-group">
-                <label>End Time:</label>
-                <input
-                  type="time"
-                  value={schedule.endTime}
-                  onChange={(e) => handleScheduleChange(scheduleIndex, "endTime", e.target.value)}
-                />
-              </div>
-              <button type="button" onClick={() => removeSchedule(scheduleIndex)}>Remove Schedule</button>
+        <div>
+          <h3>Schedules</h3>
+          {schedules.map((schedule, index) => (
+            <div key={index}>
+              <label>Date</label>
+              <input type="date" value={schedule.date} onChange={(e) => handleScheduleChange(index, "date", e.target.value)} />
+              <label>Start Time</label>
+              <input type="time" value={schedule.startTime} onChange={(e) => handleScheduleChange(index, "startTime", e.target.value)} />
+              <label>End Time</label>
+              <input type="time" value={schedule.endTime} onChange={(e) => handleScheduleChange(index, "endTime", e.target.value)} />
+              {/* More schedule fields can go here */}
+              <button type="button" onClick={() => removeSchedule(index)}>Remove Schedule</button>
             </div>
           ))}
-          <button type="button" onClick={addSchedule}>Add Another Schedule</button>
+          <button type="button" onClick={addSchedule}>Add Schedule</button>
         </div>
-
-        <button type="submit">Submit</button>
-        <button type="button" onClick={handleBack}>Back</button>
+        <button type="submit">Update Event</button>
       </form>
-
       <ToastContainer />
     </div>
   );

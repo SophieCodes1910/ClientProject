@@ -1,9 +1,12 @@
-// vite.config.js
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
+// Replace "username" with your GitHub username and "repo-name" with your repo name
+const repoName = 'ClientProject'; // Your GitHub repo name
+
 export default defineConfig({
   plugins: [react()],
+  base: `/${repoName}/`, // Set base path for GitHub Pages
   server: {
     proxy: {
       "/api": {
@@ -14,3 +17,4 @@ export default defineConfig({
     },
   },
 });
+
