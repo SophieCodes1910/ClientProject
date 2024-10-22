@@ -1,14 +1,18 @@
 const functions = require('firebase-functions');
 const cors = require('cors');
-const express = require('express'); // Make sure you have Express installed
+const express = require('express');
 const app = express();
 
 // Use CORS middleware
-app.use(cors({ origin: true })); // Allows all origins; you can customize this as needed
+app.use(cors({ origin: 'https://sophiecodes1910.github.io' })); // Specify your front-end URL
+
+// Enable preflight requests
+app.options('/auth/login', cors());
 
 // Define your endpoints
-app.get('/your-endpoint', (req, res) => {
-    res.send("Hello from Firebase!");
+app.post('/auth/login', (req, res) => {
+    // Handle login logic here
+    res.send("Login endpoint");
 });
 
 // Export your API
