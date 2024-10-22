@@ -7,7 +7,6 @@ import "./myInvitations.css";
 
 export const MyInvitations = () => {
     const [events, setEvents] = useState([]);
-    const [expandedSubEvent, setExpandedSubEvent] = useState(null);
     const [loading, setLoading] = useState(false);
     const email = localStorage.getItem("email");
     const navigate = useNavigate(); // Initialize navigate
@@ -17,13 +16,12 @@ export const MyInvitations = () => {
             setLoading(true);
             try {
                 const eventsCollection = collection(db, "events");
-                // Query to get events where the organizerEmail matches the current user's email
                 const q = query(eventsCollection, where("organizerEmail", "==", email));
 
                 const querySnapshot = await getDocs(q);
                 const fetchedEvents = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-                // Sort events by start time (ascending) if eventStartTime is defined
+                // Sort events by start time (ascending)
                 const sortedEvents = fetchedEvents.sort((a, b) => 
                     new Date(a.eventStartTime) - new Date(b.eventStartTime)
                 );
@@ -37,10 +35,6 @@ export const MyInvitations = () => {
 
         fetchEvents();
     }, [email]);
-
-    const toggleAccordion = (id) => {
-        setExpandedSubEvent(expandedSubEvent === id ? null : id);
-    };
 
     const handleEditClick = (event) => {
         navigate("/events/event-details", { state: event }); // Navigate to EventDetails.jsx with event data
@@ -74,35 +68,6 @@ export const MyInvitations = () => {
                                 <a href={"mailto:" + event.organizerEmail}>
                                     <strong>Organizer:</strong> {event.organizerName} ({event.organizerEmail})
                                 </a>
-                                <div className="response-buttons">
-                                    {/* Add any response buttons or actions if needed */}
-                                </div>
-                                {event.subEvents && event.subEvents.length > 0 && (
-                                    <div className="sub-events">
-                                        <h4>Sub Events:</h4>
-                                        {event.subEvents.map((sub) => (
-                                            <div key={sub.id} className="sub-event">
-                                                <div
-                                                    className="accordion-header"
-                                                    onClick={() => toggleAccordion(`${event.id}-${sub.id}`)}
-                                                >
-                                                    <p><strong>Part Name:</strong> {sub.partName}</p>
-                                                    <span>
-                                                        {expandedSubEvent === `${event.id}-${sub.id}` ? "-" : "+"}
-                                                    </span>
-                                                </div>
-                                                {expandedSubEvent === `${event.id}-${sub.id}` && (
-                                                    <div className="accordion-content">
-                                                        <p><strong>Start:</strong> {new Date(sub.startTime).toLocaleString()}</p>
-                                                        <p><strong>End:</strong> {new Date(sub.endTime).toLocaleString()}</p>
-                                                        <p><strong>Location:</strong> {sub.location}</p>
-                                                        <p><strong>Note:</strong> {sub.note}</p>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
                             </div>
                         ))
                     )}
