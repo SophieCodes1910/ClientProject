@@ -198,14 +198,77 @@ export const EventDetails = () => {
         <div>
           <h3>Schedules</h3>
           {schedules.map((schedule, index) => (
-            <div key={index}>
+            <div key={index} className="schedule-entry">
               <label>Date</label>
               <input type="date" value={schedule.date} onChange={(e) => handleScheduleChange(index, "date", e.target.value)} />
               <label>Start Time</label>
               <input type="time" value={schedule.startTime} onChange={(e) => handleScheduleChange(index, "startTime", e.target.value)} />
               <label>End Time</label>
               <input type="time" value={schedule.endTime} onChange={(e) => handleScheduleChange(index, "endTime", e.target.value)} />
-              {/* Media Files for each schedule */}
+
+              {/* Additional Fields for Each Schedule */}
+              <div>
+                <label>Dress Code</label>
+                <input type="text" value={schedule.dressCode} onChange={(e) => handleScheduleChange(index, "dressCode", e.target.value)} />
+              </div>
+              <div>
+                <label>Location</label>
+                <input type="text" value={schedule.location} onChange={(e) => handleScheduleChange(index, "location", e.target.value)} />
+              </div>
+              <div>
+                <label>What to Bring</label>
+                <input type="text" value={schedule.whatToBring} onChange={(e) => handleScheduleChange(index, "whatToBring", e.target.value)} />
+              </div>
+              <div>
+                <label>Special Instructions</label>
+                <textarea value={schedule.specialInstructions} onChange={(e) => handleScheduleChange(index, "specialInstructions", e.target.value)} />
+              </div>
+              
+              {/* Plans Field */}
+              <label>Plans</label>
+              {schedule.plans.map((plan, planIndex) => (
+                <div key={planIndex}>
+                  <input
+                    type="time"
+                    placeholder="Time"
+                    value={plan.time}
+                    onChange={(e) => {
+                      const newPlans = [...schedules[index].plans];
+                      newPlans[planIndex].time = e.target.value;
+                      const updatedSchedules = [...schedules];
+                      updatedSchedules[index].plans = newPlans;
+                      setSchedules(updatedSchedules);
+                    }}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Description"
+                    value={plan.description}
+                    onChange={(e) => {
+                      const newPlans = [...schedules[index].plans];
+                      newPlans[planIndex].description = e.target.value;
+                      const updatedSchedules = [...schedules];
+                      updatedSchedules[index].plans = newPlans;
+                      setSchedules(updatedSchedules);
+                    }}
+                  />
+                  <button type="button" onClick={() => {
+                    const newPlans = [...schedules[index].plans];
+                    newPlans.splice(planIndex, 1);
+                    const updatedSchedules = [...schedules];
+                    updatedSchedules[index].plans = newPlans;
+                    setSchedules(updatedSchedules);
+                  }}>Remove Plan</button>
+                </div>
+              ))}
+              <button type="button" onClick={() => {
+                const newPlans = [...schedules[index].plans, { time: "", description: "" }];
+                const updatedSchedules = [...schedules];
+                updatedSchedules[index].plans = newPlans;
+                setSchedules(updatedSchedules);
+              }}>Add Plan</button>
+
+              {/* Media Files for Schedule */}
               <label>Schedule Media Files</label>
               <input type="file" multiple onChange={(e) => handleScheduleFileChange(index, e)} />
               <div>
