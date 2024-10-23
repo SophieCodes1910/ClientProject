@@ -32,9 +32,14 @@ export const EventDetails = () => {
     whatToBring: "",
     specialInstructions: "",
     mediaFiles: [], // Store media files for each schedule
-    showDetails: false,
-    showInputs: false 
   }]);
+
+  const [furtherInfo, setFurtherInfo] = useState({
+    dressCode: "",
+    location: "",
+    whatToBring: "",
+    specialInstructions: ""
+  });
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
@@ -67,38 +72,32 @@ export const EventDetails = () => {
     setSchedules(newSchedules);
   };
 
-  const handleScheduleFileChange = (index, e) => {
-    const files = Array.from(e.target.files);
-    const newSchedules = [...schedules];
-    newSchedules[index].mediaFiles = [...newSchedules[index].mediaFiles, ...files]; // Update media files for the specific schedule
-    setSchedules(newSchedules);
-  };
-
   const addSchedule = () => {
     setSchedules([...schedules, { 
       date: "", 
       startTime: "", 
       endTime: "", 
       plans: [{ time: "", description: "" }],
-      dressCode: "", 
-      location: "",
-      whatToBring: "",
-      specialInstructions: "",
       mediaFiles: [], // Reset mediaFiles for the new schedule
-      showDetails: false,
-      showInputs: false 
     }]);
   };
 
-  const removeSchedule = (index) => {
-    const newSchedules = schedules.filter((_, i) => i !== index);
-    setSchedules(newSchedules);
+  const handleFurtherInfoChange = (field, value) => {
+    setFurtherInfo({ ...furtherInfo, [field]: value });
   };
 
-  const removeScheduleMediaFile = (scheduleIndex, fileIndex) => {
-    const newSchedules = [...schedules];
-    newSchedules[scheduleIndex].mediaFiles = newSchedules[scheduleIndex].mediaFiles.filter((_, i) => i !== fileIndex);
-    setSchedules(newSchedules);
+  const togglePlan = (field) => {
+    const updatedSchedules = [...schedules];
+    const existingPlanIndex = updatedSchedules[0].plans.findIndex(plan => plan.description === furtherInfo[field]);
+
+    if (existingPlanIndex >= 0) {
+      // If plan exists, remove it
+      updatedSchedules[0].plans.splice(existingPlanIndex, 1);
+    } else {
+      // If plan does not exist, add it
+      updatedSchedules[0].plans.push({ time: "", description: furtherInfo[field] });
+    }
+    setSchedules(updatedSchedules);
   };
 
   const handleSubmit = async (e) => {
@@ -128,16 +127,6 @@ export const EventDetails = () => {
       const fileRef = ref(storage, `events/${id}/${file.name}`);
       uploadBytes(fileRef, file).then(() => {
         console.log("Uploaded file: ", file.name);
-      });
-    });
-
-    // Handle uploads for each schedule's media files
-    schedules.forEach((schedule, scheduleIndex) => {
-      schedule.mediaFiles.forEach(file => {
-        const fileRef = ref(storage, `events/${id}/schedules/${scheduleIndex}/${file.name}`);
-        uploadBytes(fileRef, file).then(() => {
-          console.log("Uploaded schedule file: ", file.name);
-        });
       });
     });
 
@@ -195,78 +184,116 @@ export const EventDetails = () => {
           <label>Is Public</label>
           <input type="checkbox" checked={isPublic} onChange={() => setIsPublic(!isPublic)} />
         </div>
+        
+        {/* Further Information Section */}
+        <div>
+          <h3>Further Information</h3>
+          <div>
+            <label>Dress Code</label>
+            <input 
+              type="text" 
+              value={furtherInfo.dressCode} 
+              onChange={(e) => handleFurtherInfoChange('dressCode', e.target.value)} 
+            />
+            <button type="button" onClick={() => togglePlan('dressCode')}>
+              {schedules[0]?.plans.some(plan => plan.description === furtherInfo.dressCode) ? 'Remove from Plans' : 'Add to Plans'}
+            </button>
+          </div>
+          <div>
+            <label>Location</label>
+            <input 
+              type="text" 
+              value={furtherInfo.location} 
+              onChange={(e) => handleFurtherInfoChange('location', e.target.value)} 
+            />
+            <button type="button" onClick={() => togglePlan('location')}>
+              {schedules[0]?.plans.some(plan => plan.description === furtherInfo.location) ? 'Remove from Plans' : 'Add to Plans'}
+            </button>
+          </div>
+          <div>
+            <label>What to Bring</label>
+            <input 
+              type="text" 
+              value={furtherInfo.whatToBring} 
+              onChange={(e) => handleFurtherInfoChange('whatToBring', e.target.value)} 
+            />
+            <button type="button" onClick={() => togglePlan('whatToBring')}>
+              {schedules[0]?.plans.some(plan => plan.description === furtherInfo.whatToBring) ? 'Remove from Plans' : 'Add to Plans'}
+            </button>
+          </div>
+          <div>
+            <label>Special Instructions</label>
+            <textarea 
+              value={furtherInfo.specialInstructions} 
+              onChange={(e) => handleFurtherInfoChange('specialInstructions', e.target.value)} 
+            />
+            <button type="button" onClick={() => togglePlan('specialInstructions')}>
+              {schedules[0]?.plans.some(plan => plan.description === furtherInfo.specialInstructions) ? 'Remove from Plans' : 'Add to Plans'}
+            </button>
+          </div>
+        </div>
+
+        {/* Schedules Section */}
         <div>
           <h3>Schedules</h3>
           {schedules.map((schedule, index) => (
-            <div key={index} className="schedule-entry">
-              <label>Date</label>
-              <input type="date" value={schedule.date} onChange={(e) => handleScheduleChange(index, "date", e.target.value)} />
-              <label>Start Time</label>
-              <input type="time" value={schedule.startTime} onChange={(e) => handleScheduleChange(index, "startTime", e.target.value)} />
-              <label>End Time</label>
-              <input type="time" value={schedule.endTime} onChange={(e) => handleScheduleChange(index, "endTime", e.target.value)} />
-
-              {/* Additional Fields for Each Schedule */}
+            <div key={index}>
               <div>
-                <label>Dress Code</label>
-                <input type="text" value={schedule.dressCode} onChange={(e) => handleScheduleChange(index, "dressCode", e.target.value)} />
+                <label>Date</label>
+                <input type="date" value={schedule.date} onChange={(e) => handleScheduleChange(index, "date", e.target.value)} />
               </div>
               <div>
-                <label>Location</label>
-                <input type="text" value={schedule.location} onChange={(e) => handleScheduleChange(index, "location", e.target.value)} />
+                <label>Start Time</label>
+                <input type="time" value={schedule.startTime} onChange={(e) => handleScheduleChange(index, "startTime", e.target.value)} />
               </div>
               <div>
-                <label>What to Bring</label>
-                <input type="text" value={schedule.whatToBring} onChange={(e) => handleScheduleChange(index, "whatToBring", e.target.value)} />
+                <label>End Time</label>
+                <input type="time" value={schedule.endTime} onChange={(e) => handleScheduleChange(index, "endTime", e.target.value)} />
               </div>
               <div>
-                <label>Special Instructions</label>
-                <textarea value={schedule.specialInstructions} onChange={(e) => handleScheduleChange(index, "specialInstructions", e.target.value)} />
-              </div>
-              
-              {/* Plans Field */}
-              <label>Plans</label>
-              {schedule.plans.map((plan, planIndex) => (
-                <div key={planIndex}>
-                  <input
-                    type="time"
-                    placeholder="Time"
-                    value={plan.time}
-                    onChange={(e) => {
+                <label>Plans</label>
+                {schedule.plans.map((plan, planIndex) => (
+                  <div key={planIndex}>
+                    <input
+                      type="time"
+                      placeholder="Time"
+                      value={plan.time}
+                      onChange={(e) => {
+                        const newPlans = [...schedules[index].plans];
+                        newPlans[planIndex].time = e.target.value;
+                        const updatedSchedules = [...schedules];
+                        updatedSchedules[index].plans = newPlans;
+                        setSchedules(updatedSchedules);
+                      }}
+                    />
+                    <input
+                      type="text"
+                      placeholder="Description"
+                      value={plan.description}
+                      onChange={(e) => {
+                        const newPlans = [...schedules[index].plans];
+                        newPlans[planIndex].description = e.target.value;
+                        const updatedSchedules = [...schedules];
+                        updatedSchedules[index].plans = newPlans;
+                        setSchedules(updatedSchedules);
+                      }}
+                    />
+                    <button type="button" onClick={() => {
                       const newPlans = [...schedules[index].plans];
-                      newPlans[planIndex].time = e.target.value;
+                      newPlans.splice(planIndex, 1);
                       const updatedSchedules = [...schedules];
                       updatedSchedules[index].plans = newPlans;
                       setSchedules(updatedSchedules);
-                    }}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Description"
-                    value={plan.description}
-                    onChange={(e) => {
-                      const newPlans = [...schedules[index].plans];
-                      newPlans[planIndex].description = e.target.value;
-                      const updatedSchedules = [...schedules];
-                      updatedSchedules[index].plans = newPlans;
-                      setSchedules(updatedSchedules);
-                    }}
-                  />
-                  <button type="button" onClick={() => {
-                    const newPlans = [...schedules[index].plans];
-                    newPlans.splice(planIndex, 1);
-                    const updatedSchedules = [...schedules];
-                    updatedSchedules[index].plans = newPlans;
-                    setSchedules(updatedSchedules);
-                  }}>Remove Plan</button>
-                </div>
-              ))}
-              <button type="button" onClick={() => {
-                const newPlans = [...schedules[index].plans, { time: "", description: "" }];
-                const updatedSchedules = [...schedules];
-                updatedSchedules[index].plans = newPlans;
-                setSchedules(updatedSchedules);
-              }}>Add Plan</button>
+                    }}>Remove Plan</button>
+                  </div>
+                ))}
+                <button type="button" onClick={() => {
+                  const newPlans = [...schedules[index].plans, { time: "", description: "" }];
+                  const updatedSchedules = [...schedules];
+                  updatedSchedules[index].plans = newPlans;
+                  setSchedules(updatedSchedules);
+                }}>Add Plan</button>
+              </div>
 
               {/* Media Files for Schedule */}
               <label>Schedule Media Files</label>
