@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom"; 
-import { db } from "../../firebase"; // Ensure Firebase is correctly initialized
+import { db } from "../../firebase"; 
 import { doc, getDoc, updateDoc } from "firebase/firestore"; 
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -14,6 +14,11 @@ const EventDetails = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        if (!docId) {
+            toast.error("Event details are missing. Please go back and try again.");
+            return;
+        }
+
         const fetchEventDetails = async () => {
             try {
                 const eventRef = doc(db, "events", docId);
@@ -21,10 +26,9 @@ const EventDetails = () => {
 
                 if (docSnap.exists()) {
                     const eventData = docSnap.data();
-                    // Set invitee emails or any other data you need
                     setInviteeEmails(eventData.inviteeEmails || []);
                 } else {
-                    console.error("No such document!");
+                    toast.error("No such event found!");
                 }
             } catch (error) {
                 console.error("Error fetching event details:", error);
@@ -53,7 +57,7 @@ const EventDetails = () => {
             await updateDoc(eventRef, { inviteeEmails: updatedInvitees });
             setInviteeEmails(updatedInvitees);
             toast.success("Invitee added successfully!");
-            e.target.inviteeEmail.value = ""; // Clear input field
+            e.target.inviteeEmail.value = ""; 
         } catch (error) {
             console.error("Error updating invitees:", error);
             toast.error("Error adding invitee.");
@@ -61,7 +65,7 @@ const EventDetails = () => {
     };
 
     if (loading) {
-        return <div>Loading...</div>; // You can replace this with a Loader component
+        return <div>Loading...</div>; 
     }
 
     return (
