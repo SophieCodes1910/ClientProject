@@ -4,7 +4,7 @@ import { ref, uploadBytes } from 'firebase/storage';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import { db, storage } from './firebaseConfig'; // Make sure to import your firebase config
+import { db, storage } from '/../../firebase';
 
 const EventDetails = ({ id }) => {
   // State variables for event details
