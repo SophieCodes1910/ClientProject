@@ -4,7 +4,8 @@ import { ref, uploadBytes } from 'firebase/storage';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import { db, storage } from '/../../firebase';
+import { db, storage } from '../../firebase'; // Adjust based on your structure
+
 
 const EventDetails = ({ id }) => {
   // State variables for event details
