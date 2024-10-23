@@ -19,7 +19,7 @@ export const EventDetails = () => {
   const [eventDescription, setEventDescription] = useState(description || "");
   const [eventStart, setEventStart] = useState(eventStartTime || "");
   const [eventEnd, setEventEnd] = useState(eventEndTime || "");
-  const [mediaFiles, setMediaFiles] = useState([]);
+  const [mediaFiles, setMediaFiles] = useState([]); // Main media files for the event
   const [inviteeEmails, setInviteeEmails] = useState([""]);
   const [isPublic, setIsPublic] = useState(true);
   const [schedules, setSchedules] = useState([{ 
@@ -31,6 +31,7 @@ export const EventDetails = () => {
     location: "",
     whatToBring: "",
     specialInstructions: "",
+    mediaFiles: [], // Store media files for each schedule
     showDetails: false,
     showInputs: false 
   }]);
@@ -66,6 +67,13 @@ export const EventDetails = () => {
     setSchedules(newSchedules);
   };
 
+  const handleScheduleFileChange = (index, e) => {
+    const files = Array.from(e.target.files);
+    const newSchedules = [...schedules];
+    newSchedules[index].mediaFiles = [...newSchedules[index].mediaFiles, ...files]; // Update media files for the specific schedule
+    setSchedules(newSchedules);
+  };
+
   const addSchedule = () => {
     setSchedules([...schedules, { 
       date: "", 
@@ -76,6 +84,7 @@ export const EventDetails = () => {
       location: "",
       whatToBring: "",
       specialInstructions: "",
+      mediaFiles: [], // Reset mediaFiles for the new schedule
       showDetails: false,
       showInputs: false 
     }]);
@@ -83,6 +92,12 @@ export const EventDetails = () => {
 
   const removeSchedule = (index) => {
     const newSchedules = schedules.filter((_, i) => i !== index);
+    setSchedules(newSchedules);
+  };
+
+  const removeScheduleMediaFile = (scheduleIndex, fileIndex) => {
+    const newSchedules = [...schedules];
+    newSchedules[scheduleIndex].mediaFiles = newSchedules[scheduleIndex].mediaFiles.filter((_, i) => i !== fileIndex);
     setSchedules(newSchedules);
   };
 
@@ -113,6 +128,16 @@ export const EventDetails = () => {
       const fileRef = ref(storage, `events/${id}/${file.name}`);
       uploadBytes(fileRef, file).then(() => {
         console.log("Uploaded file: ", file.name);
+      });
+    });
+
+    // Handle uploads for each schedule's media files
+    schedules.forEach((schedule, scheduleIndex) => {
+      schedule.mediaFiles.forEach(file => {
+        const fileRef = ref(storage, `events/${id}/schedules/${scheduleIndex}/${file.name}`);
+        uploadBytes(fileRef, file).then(() => {
+          console.log("Uploaded schedule file: ", file.name);
+        });
       });
     });
 
@@ -180,7 +205,16 @@ export const EventDetails = () => {
               <input type="time" value={schedule.startTime} onChange={(e) => handleScheduleChange(index, "startTime", e.target.value)} />
               <label>End Time</label>
               <input type="time" value={schedule.endTime} onChange={(e) => handleScheduleChange(index, "endTime", e.target.value)} />
-              {/* More schedule fields can go here */}
+              {/* Media Files for each schedule */}
+              <label>Schedule Media Files</label>
+              <input type="file" multiple onChange={(e) => handleScheduleFileChange(index, e)} />
+              <div>
+                {schedule.mediaFiles.map((file, fileIndex) => (
+                  <div key={fileIndex}>
+                    {file.name} <button type="button" onClick={() => removeScheduleMediaFile(index, fileIndex)}>Remove</button>
+                  </div>
+                ))}
+              </div>
               <button type="button" onClick={() => removeSchedule(index)}>Remove Schedule</button>
             </div>
           ))}
