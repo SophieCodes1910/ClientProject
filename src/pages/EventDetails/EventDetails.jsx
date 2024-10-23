@@ -1,269 +1,93 @@
-import React, { useEffect, useState } from 'react';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { ref, uploadBytes } from 'firebase/storage';
-import { toast } from 'react-toastify';
-import { useNavigate, useParams } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
-import { db, storage } from '../../firebase'; // Adjust based on your structure
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom"; 
+import { db } from "../../firebase"; // Ensure Firebase is correctly initialized
+import { doc, getDoc, updateDoc } from "firebase/firestore"; 
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import './eventDetails.css';
 
 const EventDetails = () => {
-  const { id } = useParams(); // Use useParams to get the ID from the route
-  const navigate = useNavigate();
+    const location = useLocation();
+    const { eventName, organizerEmail, docId } = location.state || {};
+    
+    const [inviteeEmails, setInviteeEmails] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-  // State variables for event details
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [eventDescription, setEventDescription] = useState('');
-  const [eventStart, setEventStart] = useState('');
-  const [eventEnd, setEventEnd] = useState('');
-  const [mediaFiles, setMediaFiles] = useState([]);
-  const [inviteeEmails, setInviteeEmails] = useState(['']);
-  const [isPublic, setIsPublic] = useState(false);
-  const [schedules, setSchedules] = useState([]);
-  const [furtherInfo, setFurtherInfo] = useState({
-    dressCode: '',
-    location: '',
-    whatToBring: '',
-    specialInstructions: '',
-  });
+    useEffect(() => {
+        const fetchEventDetails = async () => {
+            try {
+                const eventRef = doc(db, "events", docId);
+                const docSnap = await getDoc(eventRef);
 
-  // Fetch the existing event data when the component mounts
-  useEffect(() => {
-    const fetchEventData = async () => {
-      try {
-        const eventRef = doc(db, "events", id);
-        const eventDoc = await getDoc(eventRef);
-        
-        if (eventDoc.exists()) {
-          const eventData = eventDoc.data();
-          // Populate the state with fetched data
-          setName(eventData.name || '');
-          setEmail(eventData.email || '');
-          setEventDescription(eventData.description || '');
-          setEventStart(eventData.eventStartTime || '');
-          setEventEnd(eventData.eventEndTime || '');
-          setMediaFiles(eventData.mediaFiles || []);
-          setInviteeEmails(eventData.invitees || ['']);
-          setIsPublic(eventData.isPublic || false);
-          setSchedules(eventData.schedules || []);
-          setFurtherInfo({
-            dressCode: eventData.dressCode || '',
-            location: eventData.location || '',
-            whatToBring: eventData.whatToBring || '',
-            specialInstructions: eventData.specialInstructions || '',
-          });
-        } else {
-          toast.error("Event not found!");
-          navigate("/my-invitations"); // Redirect if the event is not found
+                if (docSnap.exists()) {
+                    const eventData = docSnap.data();
+                    // Set invitee emails or any other data you need
+                    setInviteeEmails(eventData.inviteeEmails || []);
+                } else {
+                    console.error("No such document!");
+                }
+            } catch (error) {
+                console.error("Error fetching event details:", error);
+                toast.error("Error fetching event details.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchEventDetails();
+    }, [docId]);
+
+    const handleAddInvitee = async (e) => {
+        e.preventDefault();
+        const newInviteeEmail = e.target.inviteeEmail.value;
+
+        if (!newInviteeEmail) {
+            toast.error("Invitee email is required.");
+            return;
         }
-      } catch (error) {
-        console.error("Error fetching event data:", error);
-        toast.error("Error fetching event data");
-      }
+
+        const updatedInvitees = [...inviteeEmails, newInviteeEmail];
+
+        try {
+            const eventRef = doc(db, "events", docId);
+            await updateDoc(eventRef, { inviteeEmails: updatedInvitees });
+            setInviteeEmails(updatedInvitees);
+            toast.success("Invitee added successfully!");
+            e.target.inviteeEmail.value = ""; // Clear input field
+        } catch (error) {
+            console.error("Error updating invitees:", error);
+            toast.error("Error adding invitee.");
+        }
     };
 
-    fetchEventData();
-  }, [id, navigate]);
-
-  // Handle media file change
-  const handleFileChange = (e) => {
-    setMediaFiles([...mediaFiles, ...Array.from(e.target.files)]);
-  };
-
-  const removeMediaFile = (index) => {
-    const updatedFiles = mediaFiles.filter((_, i) => i !== index);
-    setMediaFiles(updatedFiles);
-  };
-
-  const handleInviteeChange = (index, value) => {
-    const updatedEmails = [...inviteeEmails];
-    updatedEmails[index] = value;
-    setInviteeEmails(updatedEmails);
-  };
-
-  const removeInviteeEmail = (index) => {
-    const updatedEmails = inviteeEmails.filter((_, i) => i !== index);
-    setInviteeEmails(updatedEmails);
-  };
-
-  const addInviteeEmail = () => {
-    setInviteeEmails([...inviteeEmails, '']);
-  };
-
-  const togglePlan = (planName) => {
-    const planExists = schedules[0]?.plans?.some(plan => plan.description === furtherInfo[planName]);
-    if (planExists) {
-      // Remove plan
-      const updatedPlans = schedules[0].plans.filter(plan => plan.description !== furtherInfo[planName]);
-      setSchedules([{ ...schedules[0], plans: updatedPlans }]);
-    } else {
-      // Add plan
-      const newPlan = { time: '', description: furtherInfo[planName] };
-      const updatedPlans = [...schedules[0].plans, newPlan];
-      setSchedules([{ ...schedules[0], plans: updatedPlans }]);
+    if (loading) {
+        return <div>Loading...</div>; // You can replace this with a Loader component
     }
-  };
 
-  const addSchedule = () => {
-    setSchedules([...schedules, { date: '', startTime: '', endTime: '', plans: [] }]);
-  };
-
-  const removeSchedule = (index) => {
-    const updatedSchedules = schedules.filter((_, i) => i !== index);
-    setSchedules(updatedSchedules);
-  };
-
-  const handleScheduleChange = (index, field, value) => {
-    const updatedSchedules = [...schedules];
-    updatedSchedules[index][field] = value;
-    setSchedules(updatedSchedules);
-  };
-
-  const handleFurtherInfoChange = (field, value) => {
-    setFurtherInfo({ ...furtherInfo, [field]: value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Create a new event object
-    const eventData = {
-      id, // Include the ID to update the existing document
-      name,
-      email,
-      description: eventDescription,
-      eventStartTime: eventStart,
-      eventEndTime: eventEnd,
-      mediaFiles: mediaFiles.map(file => file.name), // Store file names for reference
-      invitees: inviteeEmails,
-      isPublic,
-      schedules,
-      dressCode: furtherInfo.dressCode,
-      location: furtherInfo.location,
-      whatToBring: furtherInfo.whatToBring,
-      specialInstructions: furtherInfo.specialInstructions,
-    };
-
-    // Update event in Firestore
-    const eventRef = doc(db, "events", id); // Reference to the event document
-    await setDoc(eventRef, eventData);
-
-    // Handle media file uploads if any
-    mediaFiles.forEach(file => {
-      const fileRef = ref(storage, `events/${id}/${file.name}`);
-      uploadBytes(fileRef, file).then(() => {
-        console.log("Uploaded file: ", file.name);
-      });
-    });
-
-    toast.success("Event updated successfully!");
-    navigate("/my-invitations"); // Navigate back to MyInvitations after editing
-  };
-
-  return (
-    <div className="event-details-container">
-      <h2>Edit Event</h2>
-      <form onSubmit={handleSubmit}>
-        {/* Form fields for event details */}
-        <div>
-          <label>Event Name</label>
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+    return (
+        <div className="event-details-container">
+            <h2>{eventName}</h2>
+            <p><strong>Organizer Email:</strong> {organizerEmail}</p>
+            <h3>Invitees</h3>
+            <ul>
+                {inviteeEmails.length === 0 ? (
+                    <li>No invitees added yet.</li>
+                ) : (
+                    inviteeEmails.map((email, index) => <li key={index}>{email}</li>)
+                )}
+            </ul>
+            <form onSubmit={handleAddInvitee}>
+                <input
+                    type="email"
+                    name="inviteeEmail"
+                    placeholder="Add invitee email"
+                    required
+                />
+                <button type="submit">Add Invitee</button>
+            </form>
+            <ToastContainer />
         </div>
-        <div>
-          <label>Organizer Email</label>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        </div>
-        <div>
-          <label>Description</label>
-          <textarea value={eventDescription} onChange={(e) => setEventDescription(e.target.value)} />
-        </div>
-        <div>
-          <label>Start Time</label>
-          <input type="datetime-local" value={eventStart} onChange={(e) => setEventStart(e.target.value)} required />
-        </div>
-        <div>
-          <label>End Time</label>
-          <input type="datetime-local" value={eventEnd} onChange={(e) => setEventEnd(e.target.value)} required />
-        </div>
-        <div>
-          <label>Media Files</label>
-          <input type="file" multiple onChange={handleFileChange} />
-          <div>
-            {mediaFiles.map((file, index) => (
-              <div key={index}>
-                {file.name} <button type="button" onClick={() => removeMediaFile(index)}>Remove</button>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div>
-          <label>Invitee Emails</label>
-          {inviteeEmails.map((email, index) => (
-            <div key={index}>
-              <input type="email" value={email} onChange={(e) => handleInviteeChange(index, e.target.value)} />
-              <button type="button" onClick={() => removeInviteeEmail(index)}>Remove</button>
-            </div>
-          ))}
-          <button type="button" onClick={addInviteeEmail}>Add Invitee</button>
-        </div>
-        <div>
-          <label>Is Public</label>
-          <input type="checkbox" checked={isPublic} onChange={() => setIsPublic(!isPublic)} />
-        </div>
-        
-        {/* Further Information Section */}
-        <div>
-          <h3>Further Information</h3>
-          <div>
-            <label>Dress Code</label>
-            <input 
-              type="text" 
-              value={furtherInfo.dressCode} 
-              onChange={(e) => handleFurtherInfoChange('dressCode', e.target.value)} 
-            />
-            <button type="button" onClick={() => togglePlan('dressCode')}>
-              {schedules[0]?.plans.some(plan => plan.description === furtherInfo.dressCode) ? 'Remove from Plans' : 'Add to Plans'}
-            </button>
-          </div>
-          <div>
-            <label>Location</label>
-            <input 
-              type="text" 
-              value={furtherInfo.location} 
-              onChange={(e) => handleFurtherInfoChange('location', e.target.value)} 
-            />
-            <button type="button" onClick={() => togglePlan('location')}>
-              {schedules[0]?.plans.some(plan => plan.description === furtherInfo.location) ? 'Remove from Plans' : 'Add to Plans'}
-            </button>
-          </div>
-          <div>
-            <label>What to Bring</label>
-            <input 
-              type="text" 
-              value={furtherInfo.whatToBring} 
-              onChange={(e) => handleFurtherInfoChange('whatToBring', e.target.value)} 
-            />
-            <button type="button" onClick={() => togglePlan('whatToBring')}>
-              {schedules[0]?.plans.some(plan => plan.description === furtherInfo.whatToBring) ? 'Remove from Plans' : 'Add to Plans'}
-            </button>
-          </div>
-          <div>
-            <label>Special Instructions</label>
-            <textarea 
-              value={furtherInfo.specialInstructions} 
-              onChange={(e) => handleFurtherInfoChange('specialInstructions', e.target.value)} 
-            />
-            <button type="button" onClick={() => togglePlan('specialInstructions')}>
-              {schedules[0]?.plans.some(plan => plan.description === furtherInfo.specialInstructions) ? 'Remove from Plans' : 'Add to Plans'}
-            </button>
-          </div>
-        </div>
-        <button type="submit">Update Event</button>
-      </form>
-      <ToastContainer />
-    </div>
-  );
+    );
 };
 
 export default EventDetails;
-
