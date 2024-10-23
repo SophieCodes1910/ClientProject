@@ -15,7 +15,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { isAuthenticated } from "./auth/auth.js";
 import { FillCreatedEvent } from "./components/FillCreatedEvent/FillCreatedEvent.jsx";
-import { EventDetails } from './pages/EventDetails/EventDetails.jsx';
+import EventDetails from './pages/EventDetails/EventDetails.jsx';
+
 
 export const App = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
