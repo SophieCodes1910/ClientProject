@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { db, storage } from "../../firebase"; // Import Firebase config
@@ -11,7 +11,7 @@ export const EventDetails = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Extract the event ID from the location state
+  // Extract event ID from location state
   const { id } = location.state || {};
 
   const [name, setName] = useState("");
@@ -22,10 +22,10 @@ export const EventDetails = () => {
   const [mediaFiles, setMediaFiles] = useState([]); // Main media files for the event
   const [inviteeEmails, setInviteeEmails] = useState([""]);
   const [isPublic, setIsPublic] = useState(true);
-  const [schedules, setSchedules] = useState([{
-    date: "",
-    startTime: "",
-    endTime: "",
+  const [schedules, setSchedules] = useState([{ 
+    date: "", 
+    startTime: "", 
+    endTime: "", 
     plans: [{ time: "", description: "" }],
     mediaFiles: [], // Store media files for each schedule
   }]);
@@ -37,42 +37,37 @@ export const EventDetails = () => {
     specialInstructions: ""
   });
 
-  // Fetch event data on component mount
+  // Fetch existing event data from Firestore
   useEffect(() => {
     const fetchEventData = async () => {
-      if (id) {
-        const eventRef = doc(db, "events", id);
-        const eventDoc = await getDoc(eventRef);
-        if (eventDoc.exists()) {
-          const eventData = eventDoc.data();
-          // Set the state with event data
-          setName(eventData.name);
-          setEmail(eventData.email);
-          setEventDescription(eventData.description);
-          setEventStart(eventData.eventStartTime);
-          setEventEnd(eventData.eventEndTime);
-          setMediaFiles(eventData.mediaFiles || []);
-          setInviteeEmails(eventData.invitees || [""]);
-          setIsPublic(eventData.isPublic || true);
-          setSchedules(eventData.schedules || [{
-            date: "",
-            startTime: "",
-            endTime: "",
-            plans: [{ time: "", description: "" }],
-            mediaFiles: [],
-          }]);
-
-          // Further info
-          setFurtherInfo({
-            dressCode: eventData.dressCode || "",
-            location: eventData.location || "",
-            whatToBring: eventData.whatToBring || "",
-            specialInstructions: eventData.specialInstructions || ""
-          });
-        } else {
-          toast.error("Event not found.");
-          navigate("/my-invitations"); // Navigate back if event doesn't exist
-        }
+      const eventRef = doc(db, "events", id);
+      const eventDoc = await getDoc(eventRef);
+      if (eventDoc.exists()) {
+        const eventData = eventDoc.data();
+        setName(eventData.name);
+        setEmail(eventData.email);
+        setEventDescription(eventData.description);
+        setEventStart(eventData.eventStartTime);
+        setEventEnd(eventData.eventEndTime);
+        setMediaFiles(eventData.mediaFiles || []);
+        setInviteeEmails(eventData.invitees || [""]);
+        setIsPublic(eventData.isPublic || true);
+        setSchedules(eventData.schedules || [{ 
+          date: "", 
+          startTime: "", 
+          endTime: "", 
+          plans: [{ time: "", description: "" }],
+          mediaFiles: [], 
+        }]);
+        setFurtherInfo({
+          dressCode: eventData.dressCode || "",
+          location: eventData.location || "",
+          whatToBring: eventData.whatToBring || "",
+          specialInstructions: eventData.specialInstructions || ""
+        });
+      } else {
+        toast.error("Event not found!");
+        navigate("/my-invitations");
       }
     };
 
@@ -111,10 +106,10 @@ export const EventDetails = () => {
   };
 
   const addSchedule = () => {
-    setSchedules([...schedules, {
-      date: "",
-      startTime: "",
-      endTime: "",
+    setSchedules([...schedules, { 
+      date: "", 
+      startTime: "", 
+      endTime: "", 
       plans: [{ time: "", description: "" }],
       mediaFiles: [], // Reset mediaFiles for the new schedule
     }]);
@@ -153,11 +148,10 @@ export const EventDetails = () => {
       invitees: inviteeEmails,
       isPublic,
       schedules,
-      note: furtherInfo.note, // Assuming 'note' is part of furtherInfo
       dressCode: furtherInfo.dressCode,
       location: furtherInfo.location,
       whatToBring: furtherInfo.whatToBring,
-      specialInstructions: furtherInfo.specialInstructions
+      specialInstructions: furtherInfo.specialInstructions,
     };
 
     // Update event in Firestore
@@ -353,6 +347,7 @@ export const EventDetails = () => {
           ))}
           <button type="button" onClick={addSchedule}>Add Schedule</button>
         </div>
+
         <button type="submit">Update Event</button>
       </form>
       <ToastContainer />
