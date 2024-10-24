@@ -16,6 +16,7 @@ const EventDetails = () => {
     const [eventStartTime, setEventStartTime] = useState("");
     const [eventEndTime, setEventEndTime] = useState("");
     const [inviteeEmails, setInviteeEmails] = useState([]);
+    const [newEmail, setNewEmail] = useState(""); // State for new email input
     const [additionalDetailsOpen, setAdditionalDetailsOpen] = useState(false);
     const [adPlans, setAdPlans] = useState(""); // For additional plans
     const [additionalNotes, setAdditionalNotes] = useState(""); // For additional notes
@@ -78,6 +79,19 @@ const EventDetails = () => {
         }
     };
 
+    const handleAddEmail = () => {
+        if (newEmail && !inviteeEmails.includes(newEmail)) {
+            setInviteeEmails([...inviteeEmails, newEmail]);
+            setNewEmail(""); // Clear input after adding
+        } else {
+            toast.error("Please enter a valid email or avoid duplicates.");
+        }
+    };
+
+    const handleRemoveEmail = (emailToRemove) => {
+        setInviteeEmails(inviteeEmails.filter(email => email !== emailToRemove));
+    };
+
     // Display loading state while fetching event details
     if (loading) {
         return <div>Loading...</div>;
@@ -117,11 +131,23 @@ const EventDetails = () => {
                 />
 
                 <h3>Invitees</h3>
+                <input
+                    type="email"
+                    value={newEmail}
+                    onChange={(e) => setNewEmail(e.target.value)}
+                    placeholder="Add invitee email"
+                />
+                <button type="button" onClick={handleAddEmail}>Add Email</button>
                 <ul>
                     {inviteeEmails.length === 0 ? (
                         <li>No invitees added yet.</li>
                     ) : (
-                        inviteeEmails.map((email, index) => <li key={index}>{email}</li>)
+                        inviteeEmails.map((email, index) => (
+                            <li key={index}>
+                                {email}
+                                <button type="button" onClick={() => handleRemoveEmail(email)}>Remove</button>
+                            </li>
+                        ))
                     )}
                 </ul>
 
@@ -145,11 +171,9 @@ const EventDetails = () => {
                             placeholder="Add any additional notes here..."
                         />
 
-                        {/* Add functionality to upload files or images */}
                         <label>Import Map PDF:</label>
                         <input type="file" accept="application/pdf" />
 
-                        {/* Placeholder for any other upload functionalities */}
                         <label>Add Plans (Image or PDF):</label>
                         <input type="file" accept="image/*,application/pdf" />
                     </div>
@@ -163,4 +187,5 @@ const EventDetails = () => {
 };
 
 export default EventDetails;
+
 
