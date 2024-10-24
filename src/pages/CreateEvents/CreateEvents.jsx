@@ -1,13 +1,12 @@
-//CreateEvent.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { db } from "../../firebase"; // Ensure firebase is correctly initialized
+import { db } from "../../firebase";
 import { addDoc, collection } from "firebase/firestore";
 import './createEvents.css';
 
-export const CreateEvents = () => {  
+export const CreateEvents = () => {
     const [eventName, setEventName] = useState("");
     const organizerEmail = localStorage.getItem("email");
     const navigate = useNavigate();
@@ -15,16 +14,12 @@ export const CreateEvents = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Debug: Check if organizerEmail is set
-        console.log("Organizer Email:", organizerEmail);
-
         const eventData = {
             eventName,
             organizerEmail,
         };
 
         try {
-            // Add event to Firestore collection 'events'
             const docRef = await addDoc(collection(db, "events"), eventData);
             toast.success("Event created successfully!", {
                 position: "bottom-right",
@@ -34,13 +29,12 @@ export const CreateEvents = () => {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                onClose: () => navigate("/EventDetails", { state: { eventName, organizerEmail, docId: docRef.id } }) 
+                onClose: () => navigate("/EventDetails", { state: { docId: docRef.id } })
             });
-            // Clear input field after submission
             setEventName('');
         } catch (error) {
             console.error("Error creating event:", error);
-            toast.error(`Error: ${error.message}`); // Show specific error message
+            toast.error(`Error: ${error.message}`);
         }
     };
 
