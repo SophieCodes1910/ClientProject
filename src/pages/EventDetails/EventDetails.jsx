@@ -1,3 +1,4 @@
+//EventDetails.jsx
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom"; 
 import { db } from "../../firebase"; 
@@ -8,7 +9,7 @@ import './eventDetails.css';
 
 const EventDetails = () => {
     const location = useLocation();
-    const { docId } = location.state || {};
+    const { docId } = location.state || {}; // Retrieve docId from the location state
     
     const [eventName, setEventName] = useState("");
     const [locationName, setLocationName] = useState("");
@@ -18,6 +19,7 @@ const EventDetails = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        // Check if docId is present
         if (!docId) {
             toast.error("Event details are missing. Please go back and try again.");
             return;
@@ -28,6 +30,7 @@ const EventDetails = () => {
                 const eventRef = doc(db, "events", docId);
                 const docSnap = await getDoc(eventRef);
 
+                // Check if the document exists
                 if (!docSnap.exists()) {
                     toast.error("No such event found!");
                     return;
@@ -68,6 +71,7 @@ const EventDetails = () => {
         }
     };
 
+    // Display loading state while fetching event details
     if (loading) {
         return <div>Loading...</div>;
     }

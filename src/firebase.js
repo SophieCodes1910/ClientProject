@@ -1,7 +1,7 @@
 // src/firebase.js
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore, doc, updateDoc } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
 // Your Firebase configuration
@@ -21,5 +21,18 @@ const auth = getAuth(firebaseApp); // Initialize auth
 const db = getFirestore(firebaseApp); // Initialize Firestore
 const storage = getStorage(firebaseApp); // Initialize Storage
 
-// Export auth, db, and storage
-export { auth, db, storage };
+// Function to update a document in Firestore
+const updateEvent = async (docId, eventData) => {
+    const eventRef = doc(db, "events", docId);
+    try {
+        await updateDoc(eventRef, eventData);
+        console.log("Event updated successfully!");
+    } catch (error) {
+        console.error("Error updating event: ", error);
+        throw error; // Rethrow error for handling in the calling function
+    }
+};
+
+// Export auth, db, storage, and updateEvent
+export { auth, db, storage, updateEvent };
+
