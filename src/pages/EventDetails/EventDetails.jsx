@@ -16,8 +16,11 @@ const EventDetails = () => {
     const [eventStartTime, setEventStartTime] = useState("");
     const [eventEndTime, setEventEndTime] = useState("");
     const [inviteeEmails, setInviteeEmails] = useState([]);
+    const [additionalDetailsOpen, setAdditionalDetailsOpen] = useState(false);
+    const [adPlans, setAdPlans] = useState(""); // For additional plans
+    const [additionalNotes, setAdditionalNotes] = useState(""); // For additional notes
     const [loading, setLoading] = useState(true);
-
+    
     useEffect(() => {
         // Check if docId is present
         if (!docId) {
@@ -42,6 +45,8 @@ const EventDetails = () => {
                 setEventStartTime(eventData.eventStartTime || "");
                 setEventEndTime(eventData.eventEndTime || "");
                 setInviteeEmails(eventData.inviteeEmails || []);
+                setAdPlans(eventData.adPlans || ""); // Load additional plans
+                setAdditionalNotes(eventData.additionalNotes || ""); // Load additional notes
             } catch (error) {
                 console.error("Error fetching event details:", error);
                 toast.error("Error fetching event details.");
@@ -62,7 +67,9 @@ const EventDetails = () => {
                 location: locationName,
                 eventStartTime,
                 eventEndTime,
-                inviteeEmails
+                inviteeEmails,
+                adPlans, // Update additional plans
+                additionalNotes // Update additional notes
             });
             toast.success("Event updated successfully!");
         } catch (error) {
@@ -109,17 +116,47 @@ const EventDetails = () => {
                     onChange={(e) => setEventEndTime(e.target.value)}
                 />
 
+                <h3>Invitees</h3>
+                <ul>
+                    {inviteeEmails.length === 0 ? (
+                        <li>No invitees added yet.</li>
+                    ) : (
+                        inviteeEmails.map((email, index) => <li key={index}>{email}</li>)
+                    )}
+                </ul>
+
+                <button type="button" onClick={() => setAdditionalDetailsOpen(!additionalDetailsOpen)}>
+                    {additionalDetailsOpen ? "Close Additional Details" : "Additional Details"}
+                </button>
+
+                {additionalDetailsOpen && (
+                    <div className="additional-details">
+                        <label>Plans:</label>
+                        <textarea
+                            value={adPlans}
+                            onChange={(e) => setAdPlans(e.target.value)}
+                            placeholder="Add your plans here..."
+                        />
+
+                        <label>Additional Notes:</label>
+                        <textarea
+                            value={additionalNotes}
+                            onChange={(e) => setAdditionalNotes(e.target.value)}
+                            placeholder="Add any additional notes here..."
+                        />
+
+                        {/* Add functionality to upload files or images */}
+                        <label>Import Map PDF:</label>
+                        <input type="file" accept="application/pdf" />
+
+                        {/* Placeholder for any other upload functionalities */}
+                        <label>Add Plans (Image or PDF):</label>
+                        <input type="file" accept="image/*,application/pdf" />
+                    </div>
+                )}
+
                 <button type="submit">Update Event</button>
             </form>
-
-            <h3>Invitees</h3>
-            <ul>
-                {inviteeEmails.length === 0 ? (
-                    <li>No invitees added yet.</li>
-                ) : (
-                    inviteeEmails.map((email, index) => <li key={index}>{email}</li>)
-                )}
-            </ul>
             <ToastContainer />
         </div>
     );
