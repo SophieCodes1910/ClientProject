@@ -18,13 +18,29 @@ export const MyInvitations = () => {
                 const eventsCollection = collection(db, "events");
                 const q = query(eventsCollection, where("organizerEmail", "==", email));
                 const querySnapshot = await getDocs(q);
-                const fetchedEvents = querySnapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data(),
-                    // Convert Firebase Timestamps to JS Date objects if necessary
-                    eventStartTime: doc.data().eventStartTime?.toDate ? doc.data().eventStartTime.toDate() : doc.data().eventStartTime,
-                    eventEndTime: doc.data().eventEndTime?.toDate ? doc.data().eventEndTime.toDate() : doc.data().eventEndTime
-                }));
+                
+                const fetchedEvents = querySnapshot.docs.map(doc => {
+                    const data = doc.data();
+                    
+                    // Combine eventDate with eventStartTime and eventEndTime to create valid Date objects
+                    const startTime = `${data.eventDate}T${data.eventStartTime}:00`;
+                    const endTime = `${data.eventDate}T${data.eventEndTime}:00`;
+                    
+                    const eventStartTime = new Date(startTime);
+                    const eventEndTime = new Date(endTime);
+
+                    // Check for invalid dates
+                    const startTimeValid = !isNaN(eventStartTime.getTime());
+                    const endTimeValid = !isNaN(eventEndTime.getTime());
+
+                    return {
+                        id: doc.id,
+                        ...data,
+                        eventStartTime: startTimeValid ? eventStartTime : null,
+                        eventEndTime: endTimeValid ? eventEndTime : null
+                    };
+                });
+
                 setEvents(fetchedEvents);
             } catch (error) {
                 console.error("Error fetching events:", error);
@@ -59,8 +75,8 @@ export const MyInvitations = () => {
                                     <h2 className="event-name">{event.eventName}</h2>
                                 </div>
                                 <p><strong>Location:</strong> {event.location}</p>
-                                <p><strong>Start:</strong> {event.eventStartTime ? new Date(event.eventStartTime).toLocaleString() : "N/A"}</p>
-                                <p><strong>End:</strong> {event.eventEndTime ? new Date(event.eventEndTime).toLocaleString() : "N/A"}</p>
+                                <p><strong>Start:</strong> {event.eventStartTime ? event.eventStartTime.toLocaleString() : "N/A"}</p>
+                                <p><strong>End:</strong> {event.eventEndTime ? event.eventEndTime.toLocaleString() : "N/A"}</p>
                                 <button className="edit-button" onClick={() => handleEditClick(event)}>
                                     Edit
                                 </button>
