@@ -20,9 +20,8 @@ const EventDetails = () => {
     const [inviteeEmails, setInviteeEmails] = useState([]);
     const [newEmail, setNewEmail] = useState("");
     const [additionalDetailsOpen, setAdditionalDetailsOpen] = useState(false);
-    const [adPlans, setAdPlans] = useState([]);
-    const [description, setDescription] = useState("");
-    const [time, setTime] = useState("");
+    const [adPlans, setAdPlans] = useState("");
+    const [manualPlan, setManualPlan] = useState("");
     const [uploadedFile, setUploadedFile] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -49,7 +48,7 @@ const EventDetails = () => {
                 setEventStartTime(eventData.eventStartTime || "");
                 setEventEndTime(eventData.eventEndTime || "");
                 setInviteeEmails(eventData.inviteeEmails || []);
-                setAdPlans(eventData.adPlans || []);
+                setAdPlans(eventData.adPlans || "");
             } catch (error) {
                 console.error("Error fetching event details:", error);
                 toast.error("Error fetching event details.");
@@ -101,12 +100,12 @@ const EventDetails = () => {
     };
 
     const handleAddPlan = () => {
-        if (description && time) {
-            setAdPlans((prevPlans) => [...prevPlans, { description, time }]);
-            setDescription("");
-            setTime("");
+        const planPattern = /^.+:\s*\d{2}:\d{2}$/;
+        if (manualPlan.match(planPattern)) {
+            setAdPlans((prevPlans) => `${prevPlans}\n${manualPlan}`);
+            setManualPlan("");
         } else {
-            toast.error("Please enter both description and time.");
+            toast.error("Plan format should be 'Description: HH:MM'");
         }
     };
 
@@ -192,32 +191,21 @@ const EventDetails = () => {
 
                 {additionalDetailsOpen && (
                     <div className="additional-details">
-                        <label>Description:</label>
+                        <label>Plans Manually:</label>
+                        <textarea
+                            value={adPlans}
+                            onChange={(e) => setAdPlans(e.target.value)}
+                            placeholder="Add your plans here..."
+                        />
+
+                        <label>Add Plan Manually:</label>
                         <input
                             type="text"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            placeholder="Enter description"
+                            value={manualPlan}
+                            onChange={(e) => setManualPlan(e.target.value)}
+                            placeholder="Description: HH:MM"
                         />
-
-                        <label>Time:</label>
-                        <input
-                            type="time"
-                            value={time}
-                            onChange={(e) => setTime(e.target.value)}
-                        />
-                        
                         <button type="button" onClick={handleAddPlan}>Add Plan</button>
-
-                        <ul>
-                            {adPlans.length === 0 ? (
-                                <li>No plans added yet.</li>
-                            ) : (
-                                adPlans.map((plan, index) => (
-                                    <li key={index}>{plan.description}: {plan.time}</li>
-                                ))
-                            )}
-                        </ul>
 
                         <label>Upload Schedule (Plans):</label>
                         <input type="file" accept="application/pdf" onChange={handleFileChange} />
