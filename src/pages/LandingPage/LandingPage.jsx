@@ -15,7 +15,7 @@ export const LandingPage = () => {
     useEffect(() => {
         fetch('https://4b9b-80-233-47-137.ngrok-free.app', {
             method: 'GET',
-            credentials: 'include', // Include cookies and authorization headers
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -28,21 +28,22 @@ export const LandingPage = () => {
         })
         .then(data => setData(data))
         .catch(error => setError(error));
-    }, []); // Run once when the component mounts
+    }, []);
 
     // Image rotation logic for carousel
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-        }, 3000); // Change every 3 seconds
+        }, 3000);
 
-        return () => {
-            clearInterval(interval); // Clear interval on component unmount
-        };
+        return () => clearInterval(interval);
     }, [images.length]);
 
     return (
         <div id="landing-page">
+            {/* Render Navbar at the top */}
+            <Navbar />
+
             <div className="hero">
                 <h1>Welcome to Huppsi!</h1>
                 <p>Create a celebration with one click!</p>
@@ -89,4 +90,3 @@ export const LandingPage = () => {
         </div>
     );
 };
-
