@@ -1,3 +1,11 @@
+/* Reset for consistent box sizing */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Navbar styles */
 .navbar {
     background: #b2ffa0;
     height: 80px;
@@ -8,43 +16,52 @@
     position: relative;
     z-index: 1000;
     color: #42d623;
-    padding: 80px;
+    padding: 0 20px; /* Adjusted padding */
 }
 
+/* Navbar container */
 .navbar-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 80px;
+    height: 100%; /* Ensure it fills the height of the navbar */
     width: 100%;
-    max-width: 1500px;
-    padding: 0 50px;
+    max-width: 1200px; /* Reduced max-width to prevent overflow on smaller screens */
+    padding: 0 20px;
     margin: 0 auto;
 }
 
-.navbar-container .logo {
-    width: 80px;
-}
-
+/* Navbar Logo */
 .navbar-logo {
     color: #fff;
-    justify-self: start;
     cursor: pointer;
     text-decoration: none;
     font-size: 2rem;
 }
 
-.menu-icon {
-    display: none;
+/* Logo container */
+.navbar-container .logo {
+    width: 80px;
 }
 
+/* Menu Icon */
+.menu-icon {
+    display: none;
+    color: #fff;
+    font-size: 1.8rem;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+/* Navbar Menu */
 .nav-menu-container {
     display: flex;
     align-items: center;
     list-style: none;
     text-align: center;
-    margin-right: -22px;
     gap: 20px;
+    width: 100%;
+    padding: 0;
 }
 
 .nav-menu {
@@ -54,6 +71,7 @@
     text-align: center;
 }
 
+/* Navbar items and links */
 .nav-item {
     display: flex;
     justify-content: center;
@@ -94,23 +112,18 @@
     border-bottom: 3px solid #32ab26;
 }
 
+/* Login button styling */
 .login {
     padding: 0;
     border: 1px solid #32ab26;
     border-radius: 10px;
 }
 
-.fa-bars,
-.fa-times {
-    color: #fff;
-    font-size: 1.8rem;
-}
-
+/* Dropdown Menu */
 .dropdown-link {
     white-space: nowrap;
 }
 
-/* Dropdown Menu */
 .dropdown-menu {
     display: none;
     position: absolute;
@@ -144,7 +157,6 @@
     display: block;
 }
 
-/* Show dropdown when state is true */
 .nav-item .dropdown-menu {
     display: block;
 }
@@ -162,25 +174,21 @@
     }
 
     .nav-menu {
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
         flex-direction: column;
         width: 100%;
         height: calc(100vh - 80px);
-        position: absolute;
+        position: fixed; /* Ensures menu covers the screen when open */
         top: 80px;
-        left: -100%;
-        opacity: 1;
+        left: 0;
+        opacity: 0;
         transition: all 0.5s ease;
         background: #b2ffa0;
-        z-index: 1;
+        z-index: 999;
+        overflow-y: auto;
     }
 
     .nav-menu.active {
-        left: 0;
         opacity: 1;
-        transition: all 0.5s ease;
     }
 
     .nav-item {
@@ -202,7 +210,7 @@
 
     /* Dropdown Menu for Mobile */
     .nav-item .dropdown-menu {
-        position: absolute;
+        position: relative;
         border-radius: 0;
         left: 10px;
         margin: 0 auto;
@@ -237,10 +245,4 @@ body.menu-open {
     height: 100%;
     z-index: 999;
     overflow-y: auto;
-}
-
-/* Adjust the menu icon to be on top of everything when the menu is active */
-.menu-icon {
-
-    z-index: 1000;
 }
