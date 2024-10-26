@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Navbar from "../../components/Navbar"; 
 import image60th from "../../assets/images/image60th.jpg";
 import imageAMconcert from "../../assets/images/imageAMconcert.jpg";
 import imageParis from "../../assets/images/imageParis.jpg";
