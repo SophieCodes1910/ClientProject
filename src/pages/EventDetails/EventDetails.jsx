@@ -1,33 +1,31 @@
 //EventDetails.jsx
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom"; 
-import { db } from "../../firebase"; 
-import { doc, getDoc, updateDoc } from "firebase/firestore"; 
+import { useLocation } from "react-router-dom";
+import { db } from "../../firebase";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import './eventDetails.css';
 
 const EventDetails = () => {
     const location = useLocation();
-    const { docId } = location.state || {}; // Retrieve docId from the location state
-    
+    const { docId } = location.state || {};
+
     const [eventName, setEventName] = useState("");
+    const [organizerEmail, setOrganizerEmail] = useState("");
     const [locationName, setLocationName] = useState("");
-    const [eventDate, setEventDate] = useState(""); // Separate date state
+    const [eventDate, setEventDate] = useState("");
     const [eventStartTime, setEventStartTime] = useState("");
     const [eventEndTime, setEventEndTime] = useState("");
     const [inviteeEmails, setInviteeEmails] = useState([]);
-    const [newEmail, setNewEmail] = useState(""); // State for new email input
+    const [newEmail, setNewEmail] = useState("");
     const [additionalDetailsOpen, setAdditionalDetailsOpen] = useState(false);
-    const [adPlans, setAdPlans] = useState(""); // For additional plans
-    const [additionalNotes, setAdditionalNotes] = useState(""); // For additional notes
+    const [adPlans, setAdPlans] = useState("");
+    const [manualPlan, setManualPlan] = useState("");
+    const [uploadedFile, setUploadedFile] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [organizerEmail, setOrganizerEmail] = useState(""); // State for organizer email
-    const [manualPlan, setManualPlan] = useState(""); // State for manual plan input
-    const [uploadedFile, setUploadedFile] = useState(null); // State for uploaded file
-    
+
     useEffect(() => {
-        // Check if docId is present
         if (!docId) {
             toast.error("Event details are missing. Please go back and try again.");
             return;
@@ -37,8 +35,6 @@ const EventDetails = () => {
             try {
                 const eventRef = doc(db, "events", docId);
                 const docSnap = await getDoc(eventRef);
-
-                // Check if the document exists
                 if (!docSnap.exists()) {
                     toast.error("No such event found!");
                     return;
@@ -46,14 +42,13 @@ const EventDetails = () => {
 
                 const eventData = docSnap.data();
                 setEventName(eventData.eventName || "");
+                setOrganizerEmail(eventData.organizerEmail || "");
                 setLocationName(eventData.location || "");
-                setEventDate(eventData.eventDate || ""); // Load event date
+                setEventDate(eventData.eventDate || "");
                 setEventStartTime(eventData.eventStartTime || "");
                 setEventEndTime(eventData.eventEndTime || "");
                 setInviteeEmails(eventData.inviteeEmails || []);
-                setAdPlans(eventData.adPlans || ""); // Load additional plans
-                setAdditionalNotes(eventData.additionalNotes || ""); // Load additional notes
-                setOrganizerEmail(eventData.organizerEmail || ""); // Load organizer email
+                setAdPlans(eventData.adPlans || "");
             } catch (error) {
                 console.error("Error fetching event details:", error);
                 toast.error("Error fetching event details.");
@@ -71,15 +66,14 @@ const EventDetails = () => {
             const eventRef = doc(db, "events", docId);
             await updateDoc(eventRef, {
                 eventName,
+                organizerEmail,
                 location: locationName,
                 eventDate,
                 eventStartTime,
                 eventEndTime,
                 inviteeEmails,
-                adPlans, // Update additional plans
-                additionalNotes, // Update additional notes
-                organizerEmail, // Include organizer email
-                uploadedFile // Include uploaded file information
+                adPlans,
+                uploadedFile
             });
             toast.success("Event updated successfully!");
         } catch (error) {
@@ -91,7 +85,7 @@ const EventDetails = () => {
     const handleAddEmail = () => {
         if (newEmail && !inviteeEmails.includes(newEmail)) {
             setInviteeEmails([...inviteeEmails, newEmail]);
-            setNewEmail(""); // Clear input after adding
+            setNewEmail("");
         } else {
             toast.error("Please enter a valid email or avoid duplicates.");
         }
@@ -102,19 +96,18 @@ const EventDetails = () => {
     };
 
     const handleFileChange = (e) => {
-        setUploadedFile(e.target.files[0]); // Handle file upload
+        setUploadedFile(e.target.files[0]);
     };
 
     const handleAddPlan = () => {
         if (manualPlan) {
-            setAdPlans((prevPlans) => prevPlans + "\n" + manualPlan); // Add the manual plan
-            setManualPlan(""); // Clear input after adding
+            setAdPlans((prevPlans) => prevPlans + "\n" + manualPlan);
+            setManualPlan("");
         } else {
             toast.error("Please enter a valid plan.");
         }
     };
 
-    // Display loading state while fetching event details
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -128,6 +121,14 @@ const EventDetails = () => {
                     type="text"
                     value={eventName}
                     onChange={(e) => setEventName(e.target.value)}
+                    required
+                />
+
+                <label>Organizer Email:</label>
+                <input
+                    type="email"
+                    value={organizerEmail}
+                    onChange={(e) => setOrganizerEmail(e.target.value)}
                     required
                 />
 
@@ -183,15 +184,13 @@ const EventDetails = () => {
                     )}
                 </ul>
 
-                <p>Organizer Email: {organizerEmail}</p> {/* Display organizer email */}
-
                 <button type="button" onClick={() => setAdditionalDetailsOpen(!additionalDetailsOpen)}>
                     {additionalDetailsOpen ? "Close Additional Details" : "Additional Details"}
                 </button>
 
                 {additionalDetailsOpen && (
                     <div className="additional-details">
-                        <label>Plans:</label>
+                        <label>Plans Manually:</label>
                         <textarea
                             value={adPlans}
                             onChange={(e) => setAdPlans(e.target.value)}
@@ -207,11 +206,14 @@ const EventDetails = () => {
                         />
                         <button type="button" onClick={handleAddPlan}>Add Plan</button>
 
-                        <label>Import Map PDF:</label>
+                        <label>Upload Schedule (Plans):</label>
                         <input type="file" accept="application/pdf" onChange={handleFileChange} />
 
-                        <label>Add Plans (Image or PDF):</label>
-                        <input type="file" accept="image/*,application/pdf" onChange={handleFileChange} />
+                        <label>Import Map:</label>
+                        <input type="file" accept="application/pdf" onChange={handleFileChange} />
+
+                        <label>Upload Images and Videos:</label>
+                        <input type="file" accept="image/*,video/*" onChange={handleFileChange} />
                     </div>
                 )}
 
@@ -223,6 +225,3 @@ const EventDetails = () => {
 };
 
 export default EventDetails;
-
-
-
