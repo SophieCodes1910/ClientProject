@@ -12,11 +12,11 @@ export const LandingPage = () => {
 
     // Fetch data from the API
     useEffect(() => {
-        fetch('https://4b9b-80-233-47-137.ngrok-free.app ', {
+        fetch('https://4b9b-80-233-47-137.ngrok-free.app', {
             method: 'GET',
             credentials: 'include', // Include cookies and authorization headers
             headers: {
-                'Content-Type': 'application/json', // Adjust headers as needed
+                'Content-Type': 'application/json',
             },
         })
         .then(response => {
@@ -27,17 +27,16 @@ export const LandingPage = () => {
         })
         .then(data => setData(data))
         .catch(error => setError(error));
-    }, []); // Empty dependency array means this runs once when the component mounts
+    }, []); // Run once when the component mounts
 
-    // Image rotation logic
+    // Image rotation logic for carousel
     useEffect(() => {
-        const rotateImages = () => {
+        const interval = setInterval(() => {
             setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-        };
-        const interval = setInterval(rotateImages, 3000);
+        }, 3000); // Change every 3 seconds
 
         return () => {
-            clearInterval(interval);
+            clearInterval(interval); // Clear interval on component unmount
         };
     }, [images.length]);
 
@@ -56,6 +55,7 @@ export const LandingPage = () => {
                             </p>
                         </div>
 
+                        {/* Carousel component */}
                         <div className="how-it-works-images carousel">
                             <div 
                                 className="carousel-track"
@@ -77,7 +77,7 @@ export const LandingPage = () => {
                 <h1>Section 2</h1>
 
                 {/* Display fetched data or error message */}
-                {error && <p>Error: {error.message}</p>}
+                {error && <p className="error-message">Error: {error.message}</p>}
                 {data && (
                     <div>
                         <h2>Fetched Data:</h2>
@@ -88,3 +88,4 @@ export const LandingPage = () => {
         </div>
     );
 };
+
