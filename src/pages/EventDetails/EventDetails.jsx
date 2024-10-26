@@ -1,4 +1,4 @@
-//EventDetails.jsx
+// EventDetails.jsx
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { db } from "../../firebase";
@@ -100,11 +100,12 @@ const EventDetails = () => {
     };
 
     const handleAddPlan = () => {
-        if (manualPlan) {
-            setAdPlans((prevPlans) => prevPlans + "\n" + manualPlan);
+        const planPattern = /^.+:\s*\d{2}:\d{2}$/;
+        if (manualPlan.match(planPattern)) {
+            setAdPlans((prevPlans) => `${prevPlans}\n${manualPlan}`);
             setManualPlan("");
         } else {
-            toast.error("Please enter a valid plan.");
+            toast.error("Plan format should be 'Description: HH:MM'");
         }
     };
 
@@ -202,7 +203,7 @@ const EventDetails = () => {
                             type="text"
                             value={manualPlan}
                             onChange={(e) => setManualPlan(e.target.value)}
-                            placeholder="Plan: Time"
+                            placeholder="Description: HH:MM"
                         />
                         <button type="button" onClick={handleAddPlan}>Add Plan</button>
 
