@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import logo from "./assets/logo.png";
 import "./App.css";
 import { Navbar } from "./components/Navbar/Navbar.jsx";
-import { LandingPage } from "./pages/LandingPage/LandingPage.jsx"; 
+import { LandingPage } from "./pages/LandingPage/LandingPage.jsx";  // Import LandingPage
 import { Home } from "./pages/Home/Home.jsx";
 import { Contact } from "./pages/Contact/Contact.jsx";
 import { Login } from "./pages/Login/Login.jsx";
