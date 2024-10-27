@@ -48,7 +48,6 @@ export const LandingPage = () => {
 
     return (
         <div id="landing-page">
-            <Navbar />
             <div className="hero">
                 <h1>Welcome to Huppsi!</h1>
                 <p>Create a celebration with one click!</p>
