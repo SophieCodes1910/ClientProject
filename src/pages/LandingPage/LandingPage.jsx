@@ -7,28 +7,36 @@ import "./LandingPage.css";
 
 export const LandingPage = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [data, setData] = useState(null); // State to store fetched data
-    const [error, setError] = useState(null); // State to store error if any
+    const [data, setData] = useState(null);
+    const [error, setError] = useState(null);
+    
     const images = [image60th, imageAMconcert, imageParis];
 
     // Fetch data from the API
     useEffect(() => {
-        fetch('https://4b9b-80-233-47-137.ngrok-free.app', {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+        const fetchData = async () => {
+            try {
+                const response = await fetch('https://4b9b-80-233-47-137.ngrok-free.app', {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const result = await response.json();
+                setData(result);
+            } catch (error) {
+                setError(error);
             }
-            return response.json();
-        })
-        .then(data => setData(data))
-        .catch(error => setError(error));
-    }, []);
+        };
+
+        fetchData();
+    }, []); // Empty dependency array to run only once on mount
 
     // Image rotation logic for carousel
     useEffect(() => {
@@ -41,9 +49,7 @@ export const LandingPage = () => {
 
     return (
         <div id="landing-page">
-            {/* Render Navbar at the top */}
             <Navbar />
-
             <div className="hero">
                 <h1>Welcome to Huppsi!</h1>
                 <p>Create a celebration with one click!</p>
@@ -79,12 +85,15 @@ export const LandingPage = () => {
                 <h1>Section 2</h1>
 
                 {/* Display fetched data or error message */}
-                {error && <p className="error-message">Error: {error.message}</p>}
-                {data && (
+                {error ? (
+                    <p className="error-message">Error: {error.message}</p>
+                ) : data ? (
                     <div>
                         <h2>Fetched Data:</h2>
                         <pre>{JSON.stringify(data, null, 2)}</pre>
                     </div>
+                ) : (
+                    <p>Loading data...</p>
                 )}
             </div>
         </div>
