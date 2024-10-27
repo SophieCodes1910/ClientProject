@@ -1,10 +1,10 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from 'react-hot-toast';
 import { signInWithEmailAndPassword } from "firebase/auth";  
 import { auth } from "../../firebase"; 
 import PropTypes from 'prop-types';
+import { useLocation } from "react-router-dom"; // Import useLocation
 import "./login.css";
 
 export const Login = ({ setLoggedIn }) => {
@@ -12,6 +12,7 @@ export const Login = ({ setLoggedIn }) => {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation(); // Get current location
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -60,9 +61,9 @@ export const Login = ({ setLoggedIn }) => {
             setLoading(false);
         }
     };
-    
+
     return (
-        <div className="login-page"> {/* New wrapper div for the login background */}
+        <div className={location.pathname === '/login' || location.pathname === '/register' ? 'auth-page' : ''}> {/* Conditional class */}
             <div className="login-container">
                 <h2>Login</h2>
                 <form onSubmit={handleLogin}>

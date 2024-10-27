@@ -1,9 +1,9 @@
 /* login.css */
 
-/* Ensure the login container is centered with Flexbox */
-.login-page {
-  height: 100vh; /* Make it full height */
-  background: url("../../assets/LoginBackground.svg") no-repeat center center;
+/* This class will only be used for login and register pages */
+.auth-page {
+  height: 100vh; /* Full height */
+  background: url("../../assets/LoginBackground.svg") no-repeat center center; /* Centering */
   background-size: cover; /* Make the background cover the entire viewport */
   display: flex;
   justify-content: center;
