@@ -1,4 +1,3 @@
-// Register.jsx
 import { useState } from "react";
 import { auth } from "../../firebase"; // Import Firebase Auth
 import { createUserWithEmailAndPassword } from "firebase/auth"; // Firebase method to create users
@@ -55,52 +54,54 @@ export const Register = () => {
   };
 
   return (
-    <div className="register-container">
-      <h2>Register</h2>
-      <form onSubmit={handleRegister}>
-        <div>
-          <label>Name:</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Confirm Password:</label>
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit" disabled={loading} className={loading ? "loading" : ""}>
-          {loading ? <span className="loader"></span> : "Register"}
-        </button>
-        Already have an account?
-        <Link className="login-btn" to="/login">Login</Link>
-      </form>
-      <ToastContainer />
+    <div className="register-background"> {/* Apply the background class here */}
+      <div className="register-container">
+        <h2>Register</h2>
+        <form onSubmit={handleRegister}>
+          <div>
+            <label>Name:</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label>Email:</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label>Password:</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label>Confirm Password:</label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit" disabled={loading} className={loading ? "loading" : ""}>
+            {loading ? <span className="loader"></span> : "Register"}
+          </button>
+          Already have an account?
+          <Link className="login-btn" to="/login">Login</Link>
+        </form>
+        <ToastContainer />
+      </div>
     </div>
   );
 };

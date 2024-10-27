@@ -63,7 +63,7 @@ export const Login = ({ setLoggedIn }) => {
     };
 
     return (
-        <div className={location.pathname === '/login' || location.pathname === '/register' ? 'auth-page' : ''}> {/* Conditional class */}
+        <div className="auth-page"> {/* Apply the background class here */}
             <div className="login-container">
                 <h2>Login</h2>
                 <form onSubmit={handleLogin}>

@@ -1,11 +1,20 @@
+/* register.css*/
 /* Base styles */
+.register-background {
+  height: 100vh; /* Full height */
+  width: 100vw; /* Full width of the viewport */
+  background: url("../../assets/LoginBackground.svg") no-repeat center center; /* Adjust path */
+  background-size: cover; /* Cover the entire viewport */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative; /* Relative positioning to contain children */
+}
 body {
   margin: 0;
   padding: 0;
   height: 100vh;  /* Full height of the viewport */
   width: 100vw;   /* Full width of the viewport */
-  background: url("../../assets/LoginBackground.svg") no-repeat center center; /* Center the background image */
-  background-size: cover; /* Make the background cover the entire viewport */
   overflow: hidden; /* Prevent scrollbars */
   font-family: Arial, sans-serif;
 }
