@@ -3,6 +3,7 @@
 /* This class will only be used for login and register pages */
 .auth-page {
   height: 100vh; /* Full height */
+  width: 100vh;
   background: url("../../assets/LoginBackground.svg") no-repeat center center; /* Centering */
   background-size: cover; /* Make the background cover the entire viewport */
   display: flex;
