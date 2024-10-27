@@ -1,4 +1,3 @@
-/* register.css*/
 /* Base styles */
 .register-background {
   height: 100vh; /* Full height */
@@ -10,17 +9,19 @@
   align-items: center;
   position: relative; /* Relative positioning to contain children */
 }
+
 body {
   margin: 0;
   padding: 0;
-  height: 100vh;  /* Full height of the viewport */
-  width: 100vw;   /* Full width of the viewport */
+  height: 100vh; /* Full height of the viewport */
+  width: 100vw; /* Full width of the viewport */
   overflow: hidden; /* Prevent scrollbars */
   font-family: Arial, sans-serif;
 }
 
 .register-container {
   width: 95%;
+  max-width: 400px; /* Limit the maximum width for better responsiveness */
   height: calc(100vh - 80px); /* Adjust for potential header or other elements */
   display: flex;
   justify-content: center;
@@ -34,8 +35,7 @@ form {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
-  width: 100%;  /* Ensure it uses full width of its container */
+  width: 100%; /* Ensure it uses full width of its container */
   margin: 10px; /* Margin around form */
 }
 
@@ -56,7 +56,7 @@ label {
 input[type="text"],
 input[type="email"],
 input[type="password"] {
-  width: calc(100% - 20px); /* Full width accounting for padding */
+  width: 100%; /* Full width */
   padding: 10px;
   margin-bottom: 20px;
   border: 1px solid #dddddd;
@@ -102,29 +102,21 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px 20px;
-  font-size: 16px;
-  border: none;
-  background-color: #007bff;
-  color: white;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-  cursor: pointer; /* Change cursor to pointer on hover */
 }
 
 button:disabled {
-  background-color: #5a9bff;  /* Lighter shade when disabled */
+  background-color: #5a9bff; /* Lighter shade when disabled */
   cursor: not-allowed;
-  opacity: 0.7;  /* Make the button slightly transparent when disabled */
+  opacity: 0.7; /* Make the button slightly transparent when disabled */
 }
 
 button.loading {
-  background-color: #5a9bff;  /* Change color when loading */
+  background-color: #5a9bff; /* Change color when loading */
 }
 
 .loader {
-  border: 4px solid #f3f3f3;  /* Light grey */
-  border-top: 4px solid #3498db;  /* Blue */
+  border: 4px solid #f3f3f3; /* Light grey */
+  border-top: 4px solid #3498db; /* Blue */
   border-radius: 50%;
   width: 20px;
   height: 20px;
