@@ -8,7 +8,7 @@ export const LandingPage = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
-    
+
     const images = [image60th, imageAMconcert, imageParis];
 
     // Fetch data from the API
@@ -35,7 +35,7 @@ export const LandingPage = () => {
         };
 
         fetchData();
-    }, []); // Empty dependency array to run only once on mount
+    }, []); // Run only once on mount
 
     // Image rotation logic for carousel
     useEffect(() => {
@@ -80,7 +80,7 @@ export const LandingPage = () => {
                     </div>
                 </div>
 
-                <h1>Section 2</h1>
+                <h2>Section 2</h2>
 
                 {/* Display fetched data or error message */}
                 {error ? (
