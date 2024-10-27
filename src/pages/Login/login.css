@@ -1,11 +1,9 @@
 /* login.css */
 
-/* Ensure the body is centered with Flexbox */
-body {
-  margin: 0;
-  padding: 0;
-  height: 100vh;
-  background: url("../../assets/LoginBackground.svg") no-repeat center center; /* Centering and no repeat */
+/* Ensure the login container is centered with Flexbox */
+.login-page {
+  height: 100vh; /* Make it full height */
+  background: url("../../assets/LoginBackground.svg") no-repeat center center;
   background-size: cover; /* Make the background cover the entire viewport */
   display: flex;
   justify-content: center;

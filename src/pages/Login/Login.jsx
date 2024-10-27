@@ -1,5 +1,4 @@
 
-//Login.jsx
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from 'react-hot-toast';
@@ -33,10 +32,9 @@ export const Login = ({ setLoggedIn }) => {
                 navigate("/"); 
             }, 3000);
         } catch (error) {
-            cconsole.error("Login error:", error);
+            console.error("Login error:", error);
             console.log("Error code:", error.code);
             console.log("Error message:", error.message);
-            
             
             switch (error.code) {
                 case 'auth/user-not-found':
@@ -63,36 +61,37 @@ export const Login = ({ setLoggedIn }) => {
         }
     };
     
-
     return (
-        <div className="login-container">
-            <h2 style={{ color: window.location.pathname === '/login' ? 'black' : 'white' }}>Login</h2>
-            <form onSubmit={handleLogin}>
-                <div>
-                    <label>Email:</label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Password:</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                <button type="submit" disabled={loading} className={loading ? "loading" : ""}>
-                    {loading ? <span className="loader"></span> : "Login"}
-                </button>
-                <p>Don't have an account? 
-                    <Link to="/register" className="register-btn"> Register</Link>
-                </p>
-            </form>
+        <div className="login-page"> {/* New wrapper div for the login background */}
+            <div className="login-container">
+                <h2>Login</h2>
+                <form onSubmit={handleLogin}>
+                    <div>
+                        <label>Email:</label>
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label>Password:</label>
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <button type="submit" disabled={loading} className={loading ? "loading" : ""}>
+                        {loading ? <span className="loader"></span> : "Login"}
+                    </button>
+                    <p>Don't have an account? 
+                        <Link to="/register" className="register-btn"> Register</Link>
+                    </p>
+                </form>
+            </div>
         </div>
     );
 };
