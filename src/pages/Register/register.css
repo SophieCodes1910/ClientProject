@@ -6,9 +6,7 @@ body {
   width: 100vw;   /* Full width of the viewport */
   background: url("../../assets/LoginBackground.svg") no-repeat center center; /* Center the background image */
   background-size: cover; /* Make the background cover the entire viewport */
-  display: flex;  /* Flexbox for centering */
-  justify-content: center;
-  align-items: center;
+  overflow: hidden; /* Prevent scrollbars */
   font-family: Arial, sans-serif;
 }
 
