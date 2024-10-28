@@ -16,30 +16,25 @@ export const MyInvitations = () => {
             setLoading(true);
             try {
                 const eventsCollection = collection(db, "events");
-                const q = query(eventsCollection, where("organizerEmail", "==", email));
-                const querySnapshot = await getDocs(q);
-                
-                const fetchedEvents = querySnapshot.docs.map(doc => {
-                    const data = doc.data();
-                    
-                    // Combine eventDate with eventStartTime and eventEndTime to create valid Date objects
-                    const startTime = `${data.eventDate}T${data.eventStartTime}:00`;
-                    const endTime = `${data.eventDate}T${data.eventEndTime}:00`;
-                    
-                    const eventStartTime = new Date(startTime);
-                    const eventEndTime = new Date(endTime);
 
-                    // Check for invalid dates
-                    const startTimeValid = !isNaN(eventStartTime.getTime());
-                    const endTimeValid = !isNaN(eventEndTime.getTime());
+                // Fetch events the user organized
+                const organizedQuery = query(eventsCollection, where("organizerEmail", "==", email));
+                const organizedSnapshot = await getDocs(organizedQuery);
 
-                    return {
-                        id: doc.id,
-                        ...data,
-                        eventStartTime: startTimeValid ? eventStartTime : null,
-                        eventEndTime: endTimeValid ? eventEndTime : null
-                    };
-                });
+                // Fetch events the user is invited to
+                const invitedQuery = query(eventsCollection, where("invitedEmails", "array-contains", email));
+                const invitedSnapshot = await getDocs(invitedQuery);
+
+                const fetchedEvents = [
+                    ...organizedSnapshot.docs.map(doc => {
+                        const data = doc.data();
+                        return parseEventData(doc, data, true);
+                    }),
+                    ...invitedSnapshot.docs.map(doc => {
+                        const data = doc.data();
+                        return parseEventData(doc, data, false);
+                    })
+                ];
 
                 setEvents(fetchedEvents);
             } catch (error) {
@@ -49,16 +44,36 @@ export const MyInvitations = () => {
             }
         };
 
+        // Helper function to parse event data
+        const parseEventData = (doc, data, isOrganizer) => {
+            const startTime = `${data.eventDate}T${data.eventStartTime}:00`;
+            const endTime = `${data.eventDate}T${data.eventEndTime}:00`;
+            const eventStartTime = new Date(startTime);
+            const eventEndTime = new Date(endTime);
+
+            return {
+                id: doc.id,
+                ...data,
+                eventStartTime: !isNaN(eventStartTime.getTime()) ? eventStartTime : null,
+                eventEndTime: !isNaN(eventEndTime.getTime()) ? eventEndTime : null,
+                isOrganizer
+            };
+        };
+
         fetchEvents();
     }, [email]);
 
     const handleEditClick = (event) => {
-        navigate("/EventDetails", { state: { docId: event.id } });
+        if (event.isOrganizer) {
+            navigate("/EventDetails", { state: { docId: event.id } });
+        }
     };
 
     return (
         <>
-            {loading ? (<Loader />) : (
+            {loading ? (
+                <Loader />
+            ) : (
                 <div className={events.length > 0 ? 'my-invitations-container' : "no-events-container"}>
                     {events.length === 0 ? (
                         <div className="no-events-card">
@@ -73,13 +88,18 @@ export const MyInvitations = () => {
                             <div key={event.id} className="event-card">
                                 <div className="event-header">
                                     <h2 className="event-name">{event.eventName}</h2>
+                                    <p className="event-type">
+                                        {event.isOrganizer ? "My Event" : "Invited Event"}
+                                    </p>
                                 </div>
                                 <p><strong>Location:</strong> {event.location}</p>
                                 <p><strong>Start:</strong> {event.eventStartTime ? event.eventStartTime.toLocaleString() : "N/A"}</p>
                                 <p><strong>End:</strong> {event.eventEndTime ? event.eventEndTime.toLocaleString() : "N/A"}</p>
-                                <button className="edit-button" onClick={() => handleEditClick(event)}>
-                                    Edit
-                                </button>
+                                {event.isOrganizer && (
+                                    <button className="edit-button" onClick={() => handleEditClick(event)}>
+                                        Edit
+                                    </button>
+                                )}
                             </div>
                         ))
                     )}
