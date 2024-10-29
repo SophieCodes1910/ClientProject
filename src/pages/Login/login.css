@@ -18,7 +18,7 @@ body {
   background: url("../../assets/LoginBackground.svg") no-repeat center center;
   background-size: cover; /* Make the background cover the entire viewport */
   margin: 0;
-  padding: 0;
+  padding: 50px;
   min-height: 100vh; /* Full viewport height */
   width: 100vw;
   overflow-y: auto; /* Enable vertical scrolling */
