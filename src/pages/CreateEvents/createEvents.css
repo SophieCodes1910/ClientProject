@@ -6,8 +6,8 @@ html, body {
     width: 100%;
     font-family: Arial, sans-serif;
     overflow-y: auto; /* Enable scrolling if needed */
-  }
-  
+}
+
 .create-events-container {
     display: flex !important;
     justify-content: center !important;
@@ -19,8 +19,10 @@ html, body {
 
 /* Styling for the event creation card */
 .events {
-    background: url("../../assets/EventBackground.svg") no-repeat center center;
-    background-size: cover; /* Make the background cover the entire viewport */
+    background-image: url("/assets/EventBackground.svg"); /* Ensure correct path */
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover; /* Make the background cover the entire container */
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
