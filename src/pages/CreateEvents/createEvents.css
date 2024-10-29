@@ -1,4 +1,4 @@
-/* Container for the entire events section */
+/* Container for the entire createEvents.css section */
 html, body {
     margin: 0;
     padding: 0;
@@ -8,28 +8,17 @@ html, body {
     overflow-y: auto; /* Enable scrolling if needed */
 }
 
+/* Fullscreen background setup for create events */
 .create-events-container {
     display: flex;
-    justify-content: center;
     align-items: center;
-    padding: 40px 20px;
-    min-height: 100vh; /* Ensure it covers full height */
+    justify-content: center;
+    min-height: 100vh; /* Full viewport height */
+    width: 100%; /* Full viewport width */
+    background: url("/assets/EventBackground.svg") no-repeat center center; /* Ensure correct path */
+    background-size: cover; /* Make the background cover the entire viewport */
     position: relative; /* Position relative for children to position absolutely if needed */
-}
-
-/* Styling for the full-page background image */
-body {
-    position: fixed; /* Fixed positioning to cover the viewport */
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: url("/assets/EventBackground.svg"); /* Ensure correct path */
-    background-size: cover; /* Ensure image covers the entire background */
-    background-repeat: no-repeat;
-    background-position: center center; /* Center the image */
-    z-index: -1; /* Place it behind the other content */
-    opacity: 0.9; /* Optional: add slight transparency */
+    opacity: 0.9; /* Optional: add slight transparency to the background */
 }
 
 /* Styling for the event creation card */
@@ -104,3 +93,4 @@ body {
         padding: 15px; /* Reduced padding for buttons */
     }
 }
+
