@@ -21,6 +21,7 @@ const EventDetails = () => {
     const [additionalDetailsOpen, setAdditionalDetailsOpen] = useState(false);
     const [adPlans, setAdPlans] = useState("");
     const [manualPlan, setManualPlan] = useState("");
+    const [addedPlans, setAddedPlans] = useState([]); // State for added plans
     const [uploadedFiles, setUploadedFiles] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -48,6 +49,7 @@ const EventDetails = () => {
                 setEventEndTime(eventData.eventEndTime || "");
                 setInviteeEmails(eventData.inviteeEmails || []);
                 setAdPlans(eventData.adPlans || "");
+                setAddedPlans(eventData.addedPlans || []); // Load existing plans
             } catch (error) {
                 console.error("Error fetching event details:", error);
                 toast.error("Error fetching event details.");
@@ -72,6 +74,7 @@ const EventDetails = () => {
                 eventEndTime,
                 inviteeEmails,
                 adPlans,
+                addedPlans, // Save added plans to Firestore
                 uploadedFiles
             });
             toast.success("Event updated successfully!");
@@ -103,11 +106,15 @@ const EventDetails = () => {
     const handleAddPlan = () => {
         const planPattern = /^.+:\s*\d{2}:\d{2}$/; // Ensure the format is 'Description: HH:MM'
         if (planPattern.test(manualPlan)) {
-            setAdPlans((prevPlans) => `${prevPlans}\n${manualPlan}`);
+            setAddedPlans((prevPlans) => [...prevPlans, manualPlan]); // Add to the list of added plans
             setManualPlan("");
         } else {
             toast.error("Plan format should be 'Description: HH:MM'");
         }
+    };
+
+    const handleRemovePlan = (planToRemove) => {
+        setAddedPlans(addedPlans.filter(plan => plan !== planToRemove)); // Remove the plan from the list
     };
 
     if (loading) {
@@ -210,14 +217,29 @@ const EventDetails = () => {
 
                 {additionalDetailsOpen && (
                     <div className="additional-details">
-                        <label>Add Plan Manually:</label>
-                        <input
-                            type="text"
-                            value={manualPlan}
-                            onChange={(e) => setManualPlan(e.target.value)}
-                            placeholder="Description: HH:MM"
-                        />
-                        <button type="button" onClick={handleAddPlan}>Add Plan</button>
+                        <h3>Add Plans</h3>
+                        <div className="form-group">
+                            <input
+                                type="text"
+                                value={manualPlan}
+                                onChange={(e) => setManualPlan(e.target.value)}
+                                placeholder="Description: HH:MM"
+                            />
+                            <button type="button" onClick={handleAddPlan}>Add Plan</button>
+                        </div>
+
+                        <ul className="added-plans-list">
+                            {addedPlans.length === 0 ? (
+                                <li>No plans added yet.</li>
+                            ) : (
+                                addedPlans.map((plan, index) => (
+                                    <li key={index}>
+                                        {plan}
+                                        <button type="button" onClick={() => handleRemovePlan(plan)}>Remove</button>
+                                    </li>
+                                ))
+                            )}
+                        </ul>
 
                         <div className="file-upload">
                             <label>Upload Schedule (Plans):</label>
@@ -236,8 +258,9 @@ const EventDetails = () => {
                     </div>
                 )}
 
-                <button type="submit" className="submit-button">Update Event</button>
+                <button type="submit">Update Event</button>
             </form>
+
             <ToastContainer />
         </div>
     );
