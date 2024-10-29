@@ -15,11 +15,10 @@ html, body {
     justify-content: center;
     min-height: 100vh; /* Full viewport height */
     width: 100%; /* Full viewport width */
-    background-image: url("../../assets/EventBackground.svg"); /* Ensure correct path */
+    background-image: url("./assets/EventBackground.svg"); /* Correct path based on your folder structure */
     background-repeat: no-repeat; /* No repeat */
     background-size: cover; /* Cover the entire container */
     background-position: center center; /* Center the image */
-    opacity: 1; /* Set opacity to 1 to see the background clearly */
 }
 
 /* Styling for the event creation card */
@@ -94,4 +93,3 @@ html, body {
         padding: 15px; /* Reduced padding for buttons */
     }
 }
-

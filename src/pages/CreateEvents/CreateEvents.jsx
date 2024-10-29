@@ -4,8 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { db } from "../../firebase";
+import React, { useState } from "react"; // Don't forget to import useState
 import { addDoc, collection } from "firebase/firestore";
-import './createEvents.css';
+import { useNavigate } from "react-router-dom"; // Ensure to import useNavigate
+import { ToastContainer, toast } from "react-toastify"; // Import toast
+import './createEvents.css'; // Import your CSS file
+import { db } from './firebase'; // Ensure to import your Firestore db
 
 export const CreateEvents = () => {
     const [eventName, setEventName] = useState("");
