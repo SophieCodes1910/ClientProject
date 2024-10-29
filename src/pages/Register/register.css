@@ -1,6 +1,6 @@
 /* Base styles */
 .register-background {
-  height: 100vh; /* Full height */
+  height: auto; /* Full height */
   width: 100vw; /* Full width of the viewport */
   background: url("../../assets/LoginBackground.svg") no-repeat center center; /* Adjust path */
   background-size: cover; /* Cover the entire viewport */
