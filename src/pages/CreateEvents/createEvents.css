@@ -13,14 +13,13 @@ html, body {
     justify-content: center;
     align-items: center;
     padding: 40px 20px;
-    min-height: 100vh;
-    position: relative;
+    min-height: 100vh; /* Ensure it covers full height */
+    position: relative; /* Position relative for children to position absolutely if needed */
 }
 
 /* Styling for the full-page background image */
 body {
-    content: "";
-    position: fixed;
+    position: fixed; /* Fixed positioning to cover the viewport */
     top: 0;
     left: 0;
     right: 0;
@@ -28,7 +27,7 @@ body {
     background-image: url("/assets/EventBackground.svg"); /* Ensure correct path */
     background-size: cover; /* Ensure image covers the entire background */
     background-repeat: no-repeat;
-    background-position: center center;
+    background-position: center center; /* Center the image */
     z-index: -1; /* Place it behind the other content */
     opacity: 0.9; /* Optional: add slight transparency */
 }
@@ -39,7 +38,7 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    max-width: 600px;
+    max-width: 600px; /* Max width of the event form */
     width: 100%;
     z-index: 1; /* Ensure it stays on top of the background */
 }
@@ -55,14 +54,14 @@ body {
 .event-form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 20px; /* Spacing between form elements */
 }
 
 /* Input fields */
 .event-form input,
 .event-form select,
 .event-form textarea {
-    width: 100%;
+    width: 100%; /* Full width for input fields */
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
@@ -87,7 +86,7 @@ body {
     border-radius: 5px;
     font-size: 1.1rem;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease; /* Transition effect for hover */
 }
 
 /* Button hover effect */
@@ -98,10 +97,10 @@ body {
 /* Responsive design for smaller screens */
 @media screen and (max-width: 600px) {
     .events {
-        padding: 15px;
+        padding: 15px; /* Reduced padding on smaller screens */
     }
 
     .create-event {
-        padding: 15px;
+        padding: 15px; /* Reduced padding for buttons */
     }
 }
