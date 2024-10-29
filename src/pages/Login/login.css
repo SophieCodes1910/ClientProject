@@ -6,6 +6,9 @@ html, body {
   width: 100vw;
   overflow: hidden; /* Prevent body from scrolling */
   font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Fullscreen background setup for .auth-page */
@@ -13,23 +16,12 @@ html, body {
   position: fixed; /* Fix background to viewport */
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  width: 100vw;
+  height: 100vh;
   background: url("../../assets/LoginBackground.svg") no-repeat center center;
   background-size: cover;
   z-index: -1; /* Place behind other content */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Body Styling */
-body {
-  overflow-y: hidden; /* Prevent page scroll */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: Arial, sans-serif;
+  overflow: hidden; /* Prevents scrolling of the background */
 }
 
 /* Login Container Styling */
