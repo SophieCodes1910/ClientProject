@@ -1,4 +1,3 @@
-// EventDetails.jsx
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { db } from "../../firebase";
@@ -22,7 +21,7 @@ const EventDetails = () => {
     const [additionalDetailsOpen, setAdditionalDetailsOpen] = useState(false);
     const [adPlans, setAdPlans] = useState("");
     const [manualPlan, setManualPlan] = useState("");
-    const [uploadedFile, setUploadedFile] = useState(null);
+    const [uploadedFiles, setUploadedFiles] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -73,7 +72,7 @@ const EventDetails = () => {
                 eventEndTime,
                 inviteeEmails,
                 adPlans,
-                uploadedFile
+                uploadedFiles
             });
             toast.success("Event updated successfully!");
         } catch (error) {
@@ -83,7 +82,8 @@ const EventDetails = () => {
     };
 
     const handleAddEmail = () => {
-        if (newEmail && !inviteeEmails.includes(newEmail)) {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email regex
+        if (emailPattern.test(newEmail) && !inviteeEmails.includes(newEmail)) {
             setInviteeEmails([...inviteeEmails, newEmail]);
             setNewEmail("");
         } else {
@@ -96,12 +96,13 @@ const EventDetails = () => {
     };
 
     const handleFileChange = (e) => {
-        setUploadedFile(e.target.files[0]);
+        const files = Array.from(e.target.files);
+        setUploadedFiles(prevFiles => [...prevFiles, ...files]);
     };
 
     const handleAddPlan = () => {
-        const planPattern = /^.+:\s*\d{2}:\d{2}$/;
-        if (manualPlan.match(planPattern)) {
+        const planPattern = /^.+:\s*\d{2}:\d{2}$/; // Ensure the format is 'Description: HH:MM'
+        if (planPattern.test(manualPlan)) {
             setAdPlans((prevPlans) => `${prevPlans}\n${manualPlan}`);
             setManualPlan("");
         } else {
@@ -110,69 +111,83 @@ const EventDetails = () => {
     };
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div className="loading-indicator">Loading event details...</div>;
     }
 
     return (
         <div className="event-details-container">
             <h2>Event Details</h2>
-            <form onSubmit={handleUpdateEvent}>
-                <label>Event Name:</label>
-                <input
-                    type="text"
-                    value={eventName}
-                    onChange={(e) => setEventName(e.target.value)}
-                    required
-                />
+            <form onSubmit={handleUpdateEvent} className="event-form">
+                <div className="form-group">
+                    <label>Event Name:</label>
+                    <input
+                        type="text"
+                        value={eventName}
+                        onChange={(e) => setEventName(e.target.value)}
+                        required
+                    />
+                </div>
 
-                <label>Organizer Email:</label>
-                <input
-                    type="email"
-                    value={organizerEmail}
-                    onChange={(e) => setOrganizerEmail(e.target.value)}
-                    required
-                />
+                <div className="form-group">
+                    <label>Organizer Email:</label>
+                    <input
+                        type="email"
+                        value={organizerEmail}
+                        onChange={(e) => setOrganizerEmail(e.target.value)}
+                        required
+                    />
+                </div>
 
-                <label>Location:</label>
-                <input
-                    type="text"
-                    value={locationName}
-                    onChange={(e) => setLocationName(e.target.value)}
-                />
+                <div className="form-group">
+                    <label>Location:</label>
+                    <input
+                        type="text"
+                        value={locationName}
+                        onChange={(e) => setLocationName(e.target.value)}
+                    />
+                </div>
 
-                <label>Date:</label>
-                <input
-                    type="date"
-                    value={eventDate}
-                    onChange={(e) => setEventDate(e.target.value)}
-                    required
-                />
+                <div className="form-group">
+                    <label>Date:</label>
+                    <input
+                        type="date"
+                        value={eventDate}
+                        onChange={(e) => setEventDate(e.target.value)}
+                        required
+                    />
+                </div>
 
-                <label>Start Time:</label>
-                <input
-                    type="time"
-                    value={eventStartTime}
-                    onChange={(e) => setEventStartTime(e.target.value)}
-                    required
-                />
+                <div className="form-group">
+                    <label>Start Time:</label>
+                    <input
+                        type="time"
+                        value={eventStartTime}
+                        onChange={(e) => setEventStartTime(e.target.value)}
+                        required
+                    />
+                </div>
 
-                <label>End Time:</label>
-                <input
-                    type="time"
-                    value={eventEndTime}
-                    onChange={(e) => setEventEndTime(e.target.value)}
-                    required
-                />
+                <div className="form-group">
+                    <label>End Time:</label>
+                    <input
+                        type="time"
+                        value={eventEndTime}
+                        onChange={(e) => setEventEndTime(e.target.value)}
+                        required
+                    />
+                </div>
 
                 <h3>Invitees</h3>
-                <input
-                    type="email"
-                    value={newEmail}
-                    onChange={(e) => setNewEmail(e.target.value)}
-                    placeholder="Add invitee email"
-                />
-                <button type="button" onClick={handleAddEmail}>Add Email</button>
-                <ul>
+                <div className="form-group invitee-email">
+                    <input
+                        type="email"
+                        value={newEmail}
+                        onChange={(e) => setNewEmail(e.target.value)}
+                        placeholder="Add invitee email"
+                    />
+                    <button type="button" onClick={handleAddEmail}>Add Email</button>
+                </div>
+                <ul className="invitee-list">
                     {inviteeEmails.length === 0 ? (
                         <li>No invitees added yet.</li>
                     ) : (
@@ -185,13 +200,16 @@ const EventDetails = () => {
                     )}
                 </ul>
 
-                <button type="button" onClick={() => setAdditionalDetailsOpen(!additionalDetailsOpen)}>
+                <button
+                    type="button"
+                    className="toggle-details"
+                    onClick={() => setAdditionalDetailsOpen(!additionalDetailsOpen)}
+                >
                     {additionalDetailsOpen ? "Close Additional Details" : "Additional Details"}
                 </button>
 
                 {additionalDetailsOpen && (
                     <div className="additional-details">
-                       
                         <label>Add Plan Manually:</label>
                         <input
                             type="text"
@@ -201,18 +219,24 @@ const EventDetails = () => {
                         />
                         <button type="button" onClick={handleAddPlan}>Add Plan</button>
 
-                        <label>Upload Schedule (Plans):</label>
-                        <input type="file" accept="application/pdf" onChange={handleFileChange} />
+                        <div className="file-upload">
+                            <label>Upload Schedule (Plans):</label>
+                            <input type="file" accept="application/pdf" onChange={handleFileChange} multiple />
+                        </div>
 
-                        <label>Import Map:</label>
-                        <input type="file" accept="application/pdf" onChange={handleFileChange} />
+                        <div className="file-upload">
+                            <label>Import Map:</label>
+                            <input type="file" accept="application/pdf" onChange={handleFileChange} multiple />
+                        </div>
 
-                        <label>Upload Images and Videos:</label>
-                        <input type="file" accept="image/*,video/*" onChange={handleFileChange} />
+                        <div className="file-upload">
+                            <label>Upload Images and Videos:</label>
+                            <input type="file" accept="image/*,video/*" onChange={handleFileChange} multiple />
+                        </div>
                     </div>
                 )}
 
-                <button type="submit">Update Event</button>
+                <button type="submit" className="submit-button">Update Event</button>
             </form>
             <ToastContainer />
         </div>
