@@ -191,13 +191,7 @@ const EventDetails = () => {
 
                 {additionalDetailsOpen && (
                     <div className="additional-details">
-                        <label>Plans Manually:</label>
-                        <textarea
-                            value={adPlans}
-                            onChange={(e) => setAdPlans(e.target.value)}
-                            placeholder="Add your plans here..."
-                        />
-
+                       
                         <label>Add Plan Manually:</label>
                         <input
                             type="text"
