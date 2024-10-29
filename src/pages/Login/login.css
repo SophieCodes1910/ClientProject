@@ -1,6 +1,6 @@
 /* login.css*/
 .auth-page {
-  height: auto;/* Full height */
+  height: 100vh;/* Full height */
   width: 100vw; /* Full width of the viewport */
   background: url("../../assets/LoginBackground.svg") no-repeat center center; /* Centering */
   background-size: cover; /* Make the background cover the entire viewport */
