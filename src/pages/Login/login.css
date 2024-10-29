@@ -1,35 +1,45 @@
-/* login.css*/
+/* Fullscreen background setup for .auth-page */
 .auth-page {
-  height: 100vh;/* Full height */
-  width: 100vw; /* Full width of the viewport */
-  background: url("../../assets/LoginBackground.svg") no-repeat center center; /* Centering */
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh; /* Full viewport height */
+  width: 100vw; /* Full viewport width */
+  background: url("../../assets/LoginBackground.svg") no-repeat center center;
   background-size: cover; /* Make the background cover the entire viewport */
+  z-index: -1; /* Ensure it stays behind all other content */
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: Arial, sans-serif;
+  overflow: hidden; /* Prevent scrolling on the background itself */
 }
+
+/* Body Styling */
 body {
   margin: 0;
   padding: 0;
-  height: auto; /* Allow scrolling by setting height to auto */
+  min-height: 100vh; /* Full viewport height */
   width: 100vw;
   overflow-y: auto; /* Enable vertical scrolling */
   font-family: Arial, sans-serif;
 }
 
+/* Login Container Styling */
 .login-container {
+  position: relative;
   width: 95%;
-  max-width: 400px; /* Restrict the width to make it responsive */
+  max-width: 400px;
   padding: 20px;
-  border-radius: 8px;
+  margin: 20px auto; /* Center horizontally and add spacing */
   background-color: #ffffff;
+  border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1; /* Ensure it sits above the background */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 10px;
 }
 
 /* Center heading */
