@@ -43,19 +43,12 @@ export const Navbar = () => {
     };
 
     const toggleEventsDropdown = () => {
-        setEventsDropdown(prev => (isMobile ? !prev : true));
+        setEventsDropdown(!eventsDropdown);
     };
 
     const toggleAccountDropdown = () => {
-        setAccountDropdown(prev => (isMobile ? !prev : true));
+        setAccountDropdown(!accountDropdown);
     };
-
-    useEffect(() => {
-        if (!isMobile) {
-            setEventsDropdown(false);
-            setAccountDropdown(false);
-        }
-    }, [isMobile]);
 
     const closeDropdownMenu = () => {
         setClick(false);
