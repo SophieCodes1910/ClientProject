@@ -30,6 +30,9 @@
     .menu-icon {
         display: block;
         font-size: 1.8rem;
+        position: absolute;
+        right: 20px; /* Position menu icon to the far right */
+        top: 25px;
     }
     .nav-menu {
         flex-direction: column;
@@ -82,7 +85,8 @@
         width: 100vw;
         height: calc(100vh - 80px);
         background: rgba(0, 0, 0, 0.5);
-        z-index: 999; /* Lower than nav-menu but higher than the main content */
+        z-index: 1000; /* Lower than nav-menu but higher than the main content */
     }
 }
+
 
