@@ -1,8 +1,3 @@
-/* Basic Reset */
-*, *::before, *::after {
-    box-sizing: border-box;
-}
-
 /* Navbar Styles */
 .navbar {
     background: #b2ffa0;
@@ -17,117 +12,17 @@
     padding: 0 20px;
 }
 
-.navbar-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.navbar-logo {
-    color: #fff;
-    cursor: pointer;
-    text-decoration: none;
-    font-size: 2rem;
-}
-
-.navbar-container .logo {
-    width: 80px;
-}
-
 .menu-icon {
     display: none;
-    color: #fff;
+    color: #32ab26;
     font-size: 1.8rem;
     cursor: pointer;
-}
-
-.nav-menu {
-    display: flex;
-    align-items: center;
-    list-style: none;
-    text-align: center;
-}
-
-.nav-item {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-}
-
-.nav-links {
-    color: #32ab26;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.nav-links-border {
-    border: 1px solid #32ab26;
-    border-radius: 10px;
-}
-
-.nav-links-border:hover {
-    background-color: #32ab26;
-    color: #fff;
-}
-
-.nav-links.active-link {
-    color: #32ab26;
-    border-bottom: 3px solid #32ab26;
-}
-
-.dropdown-link {
-    white-space: nowrap;
-}
-
-.dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    list-style: none;
-    text-align: start;
-    background: #32ab26;
-    padding: 10px 0;
-    border-radius: 0 0 5px 5px;
-    z-index: 999;
-    min-width: 150px;
-}
-
-.dropdown-menu li {
-    padding: 10px 20px;
-}
-
-.dropdown-menu li a {
-    color: #fff;
-    text-decoration: none;
-    display: block;
-}
-
-.dropdown-menu li a:hover {
-    color: #42d623;
-}
-
-.nav-item:hover .dropdown-menu,
-.nav-item .dropdown-menu.show {
-    display: block;
 }
 
 /* Mobile Styles */
 @media screen and (max-width: 960px) {
     .menu-icon {
-        display: flex;
-        font-size: 1.8rem;
-        cursor: pointer;
+        display: block;
     }
     .nav-menu {
         flex-direction: column;
@@ -139,8 +34,7 @@
         background-color: #b2ffa0;
         opacity: 0;
         visibility: hidden;
-        display: none;
-        transition: opacity 0.5s ease, visibility 0.5s ease;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
     }
     .nav-menu.active {
         opacity: 1;
@@ -148,12 +42,22 @@
         display: flex;
         z-index: 1;
     }
+    .nav-item {
+        width: 100%;
+        text-align: center;
+    }
+    .nav-links {
+        padding: 1rem;
+        width: 100%;
+        text-align: center;
+        color: #32ab26;
+    }
     .dropdown-menu {
         position: static;
         display: block;
         background-color: #32ab26;
         padding: 0;
-        margin: 10px 0;
+        width: 100%;
     }
     .menu-overlay {
         position: fixed;

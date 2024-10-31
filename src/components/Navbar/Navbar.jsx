@@ -124,3 +124,4 @@ export const Navbar = () => {
         </nav>
     );
 };
+
