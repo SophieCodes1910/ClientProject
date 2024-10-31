@@ -1,25 +1,23 @@
-import React, { useState } from "react"; // Ensure useState is imported only once
-import { addDoc, collection } from "firebase/firestore"; // Firestore imports
-import { useNavigate } from "react-router-dom"; // Navigation import
-import { ToastContainer, toast } from "react-toastify"; // Toast imports
-import './createEvents.css'; // CSS import
-import { db } from "../../firebase"; // Import your Firestore db
+import React, { useState } from "react";
+import { addDoc, collection } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import './createEvents.css';
+import { db } from "../../firebase";
 
 export const CreateEvents = () => {
-    const [eventName, setEventName] = useState(""); // State for event name
-    const organizerEmail = localStorage.getItem("email"); // Get organizer email from local storage
-    const navigate = useNavigate(); // Use navigate for routing
+    const [eventName, setEventName] = useState("");
+    const organizerEmail = localStorage.getItem("email");
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Prevent default form submission
-
+        e.preventDefault();
         const eventData = {
             eventName,
             organizerEmail,
         };
-
         try {
-            const docRef = await addDoc(collection(db, "events"), eventData); // Add event to Firestore
+            const docRef = await addDoc(collection(db, "events"), eventData);
             toast.success("Event created successfully!", {
                 position: "bottom-right",
                 autoClose: 1500,
@@ -28,12 +26,12 @@ export const CreateEvents = () => {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                onClose: () => navigate("/EventDetails", { state: { docId: docRef.id } }) // Redirect to EventDetails
+                onClose: () => navigate("/EventDetails", { state: { docId: docRef.id } })
             });
-            setEventName(''); // Reset event name input
+            setEventName('');
         } catch (error) {
             console.error("Error creating event:", error);
-            toast.error(`Error: ${error.message}`); // Show error toast
+            toast.error(`Error: ${error.message}`);
         }
     };
 
