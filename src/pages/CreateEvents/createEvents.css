@@ -5,7 +5,7 @@ html, body {
     height: 100%;
     width: 100%;
     font-family: Arial, sans-serif;
-    overflow: hidden; /* Set global overflow to hidden */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 /* Main Container for Fullscreen Background */
@@ -21,7 +21,8 @@ html, body {
     background-position: center;
     background-attachment: fixed;
     position: relative;
-    overflow-y: auto; /* Allow scrolling in the container */
+    padding: 20px; /* Add padding to avoid edge issues */
+    overflow-y: auto; /* Allow vertical scroll */
     z-index: 1;
 }
 
@@ -32,9 +33,10 @@ html, body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     padding: 20px;
     max-width: 600px;
-    width: 90%;
+    width: 100%;
     position: relative;
-    z-index: 10; /* Higher z-index to appear above background */
+    z-index: 10;
+    box-sizing: border-box; /* Prevents layout shifts due to padding */
 }
 
 .events h2 {
@@ -87,17 +89,22 @@ html, body {
 
 /* Responsive Adjustments for Small Screens */
 @media screen and (max-width: 600px) {
+    .create-events-container {
+        padding: 10px; /* Adjust padding on smaller screens */
+    }
+
     .events {
         padding: 15px;
-        width: 100%;
     }
 
     .create-event {
-        padding: 12px;
+        padding: 10px;
         font-size: 1rem;
     }
     
-    .event-form input, .event-form select, .event-form textarea {
+    .event-form input,
+    .event-form select,
+    .event-form textarea {
         padding: 10px;
         font-size: 0.9rem;
     }

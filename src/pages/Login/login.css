@@ -5,7 +5,7 @@ html, body {
   height: 100%;
   width: 100%;
   font-family: Arial, sans-serif;
-  overflow: hidden;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 /* Fullscreen Background for Login Page */
@@ -18,25 +18,26 @@ html, body {
   background: url("../../assets/LoginBackground.svg") no-repeat center center;
   background-size: cover;
   z-index: 1;
-  overflow-y: auto; /* Allow scrolling in the container */
   padding: 20px;
+  overflow-y: auto; /* Allow vertical scrolling */
 }
 
 /* Login Container Styling */
 .login-container {
   position: relative;
-  width: 95%;
+  width: 100%;
   max-width: 400px;
   padding: 20px;
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  z-index: 10; /* Higher z-index to appear above background */
+  z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-height: 90vh;
-  overflow-y: auto;
+  max-height: 90vh; /* Limit height on small screens */
+  overflow-y: auto; /* Allow scroll within the container */
+  box-sizing: border-box; /* Prevents layout shifts due to padding */
 }
 
 /* Heading Styling */
@@ -117,9 +118,21 @@ button.loading {
   100% { transform: rotate(360deg); }
 }
 
-/* Responsive Design */
+/* Responsive Design for Small Screens */
 @media (max-width: 600px) {
+  .auth-page {
+      padding: 15px;
+  }
+
   .login-container {
       padding: 15px;
+      max-width: 90%; /* Make sure it fits well on smaller screens */
+  }
+
+  input[type="email"],
+  input[type="password"],
+  button[type="submit"] {
+      font-size: 14px;
+      padding: 8px;
   }
 }
