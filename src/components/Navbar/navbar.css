@@ -42,7 +42,7 @@
         opacity: 0;
         visibility: hidden;
         transition: opacity 0.3s ease, visibility 0.3s ease;
-        z-index: 1;
+        z-index: 1001; /* Ensure the nav menu is above the overlay */
     }
     .nav-menu.active {
         opacity: 1;
@@ -82,7 +82,7 @@
         width: 100vw;
         height: calc(100vh - 80px);
         background: rgba(0, 0, 0, 0.5);
-        z-index: 998;
+        z-index: 999; /* Lower than nav-menu but higher than the main content */
     }
 }
 
