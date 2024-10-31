@@ -17,6 +17,8 @@ html, body {
   background: url("../../assets/LoginBackground.svg") no-repeat center center;
   background-size: cover;
   padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto; /* Enable vertical scrolling */
 }
 
 .login-container {

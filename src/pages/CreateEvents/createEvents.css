@@ -21,6 +21,7 @@ html, body {
     background-attachment: fixed;
     padding: 20px;
     overflow-y: auto; /* Enable vertical scrolling */
+    box-sizing: border-box;
 }
 
 .events {
@@ -33,6 +34,8 @@ html, body {
     max-height: 90vh; /* Ensure it fits on smaller screens */
     overflow-y: auto; /* Enable scrolling within form */
     box-sizing: border-box;
+    position: relative;
+    z-index: 10;
 }
 
 @media screen and (max-width: 600px) {
@@ -43,4 +46,3 @@ html, body {
         padding: 15px;
     }
 }
-

@@ -15,6 +15,7 @@ html, body {
   justify-content: center;
   align-items: center;
   padding: 20px;
+  box-sizing: border-box;
   overflow-y: auto; /* Enable vertical scrolling */
 }
 
@@ -31,6 +32,8 @@ html, body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
   max-height: 90vh; /* Ensure it fits on smaller screens */
+  position: relative;
+  z-index: 10;
 }
 
 @media (max-width: 600px) {
