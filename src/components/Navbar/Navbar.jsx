@@ -67,7 +67,7 @@ export const Navbar = () => {
                 <Link to="/home" className="navbar-logo" onClick={closeDropdownMenu}>
                     <img className="logo" src={logo} alt="event schedule app main logo"/>
                 </Link>
-                <div className="menu-icon" onClick={handleClick} aria-expanded={click}>
+                <div className="menu-icon" onClick={handleClick}>
                     <i className={click ? "fas fa-times" : "fas fa-bars"}></i>
                 </div>
                 <ul className={click ? "nav-menu active" : "nav-menu"}>
@@ -77,10 +77,11 @@ export const Navbar = () => {
                         </Link>
                     </li>
                     <li className="nav-item"
-                        onClick={() => isMobile && toggleEventsDropdown()}
+                        onMouseEnter={() => !isMobile && setEventsDropdown(true)}
+                        onMouseLeave={() => !isMobile && setEventsDropdown(false)}
                         ref={eventsDropdownRef}
                     >
-                        <div className="nav-links" aria-expanded={eventsDropdown || (!isMobile && click)}>
+                        <div className="nav-links" onClick={toggleEventsDropdown}>
                             Events &nbsp; <i className="fas fa-caret-down"/>
                         </div>
                         {(eventsDropdown || (!isMobile && click)) && (
@@ -96,12 +97,13 @@ export const Navbar = () => {
                         </Link>
                     </li>
                     <li className="nav-item"
-                        onClick={() => isMobile && toggleAccountDropdown()}
+                        onMouseEnter={() => !isMobile && setAccountDropdown(true)}
+                        onMouseLeave={() => !isMobile && setAccountDropdown(false)}
                         ref={accountDropdownRef}
                     >
                         <div style={isAuthenticated() ? {marginBottom: "20px"} : {marginBottom: "0px"}}
                              className={`nav-links ${isAuthenticated() ? "" : "nav-links-border"}`}
-                             aria-expanded={accountDropdown || (!isMobile && click)}>
+                             onClick={toggleAccountDropdown}>
                             {isAuthenticated() ? (
                                 <UserName username={email}/>
                             ) : (

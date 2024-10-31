@@ -15,12 +15,13 @@
 .menu-icon {
     display: none;
     color: #32ab26;
-    font-size: 1.8rem; /* Standard icon size */
+    font-size: 1.8rem;
     cursor: pointer;
+    margin-left: auto; /* Aligns icon to the right */
 }
 
 .navbar-container .logo {
-    width: 80px; /* Fixed logo width to avoid scaling issues */
+    width: 80px;
     height: auto;
 }
 
@@ -28,7 +29,7 @@
 @media screen and (max-width: 960px) {
     .menu-icon {
         display: block;
-        font-size: 1.5rem; /* Adjust font size for better scaling on small screens */
+        font-size: 1.8rem;
     }
     .nav-menu {
         flex-direction: column;
@@ -41,7 +42,7 @@
         opacity: 0;
         visibility: hidden;
         transition: opacity 0.3s ease, visibility 0.3s ease;
-        z-index: 1; /* Make sure it's above other elements */
+        z-index: 1;
     }
     .nav-menu.active {
         opacity: 1;
@@ -51,14 +52,14 @@
     .nav-item {
         width: 100%;
         text-align: center;
-        padding: 15px 0; /* Added padding for better touch targeting */
+        padding: 15px 0;
     }
     .nav-links {
         padding: 1rem;
         width: 100%;
         text-align: center;
         color: #32ab26;
-        font-size: 1rem; /* Adjust font size for readability */
+        font-size: 1rem;
     }
     .dropdown-menu {
         position: static;
@@ -72,7 +73,7 @@
         color: #fff;
         padding: 10px 20px;
         display: block;
-        font-size: 0.9rem; /* Smaller font for dropdown links on mobile */
+        font-size: 0.9rem;
     }
     .menu-overlay {
         position: fixed;
