@@ -1,97 +1,95 @@
-/* Container for the entire createEvents.css section */
 html, body {
     margin: 0;
     padding: 0;
-    height: 100%; /* Full page height */
-    width: 100%; /* Full page width */
+    height: 100%;
+    width: 100%;
     font-family: Arial, sans-serif;
-    overflow-y: auto; /* Enable scrolling if needed */
-    min-height: 100vh; /* Ensure the background covers full height */
+    overflow-y: auto;
+    min-height: 100vh;
 }
 
-/* Fullscreen background setup for create events */
 .create-events-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 100vh; /* Full viewport height */
-    width: 100%; /* Full viewport width */
-    background-image: url("../../assets/EventBackground.svg"); /* Correct path based on your folder structure */
-    background-repeat: no-repeat; /* No repeat */
-    background-size: cover; /* Cover the entire container */
-    background-position: center center; /* Center the image */
-    background-attachment: fixed; /* Keep background fixed on scroll */
+    min-height: 100vh;
+    width: 100%;
+    background-image: url("../../assets/EventBackground.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 }
 
-/* Styling for the event creation card */
 .events {
-    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white for contrast */
+    background-color: rgba(255, 255, 255, 0.9);
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    max-width: 600px; /* Max width of the event form */
-    width: 100%;
-    z-index: 1; /* Ensure it stays on top of the background */
+    max-width: 600px;
+    width: 90%; /* Width adjustment to fit smaller screens */
+    z-index: 1;
 }
 
-/* Header styling */
 .events h2 {
     text-align: center;
-    color: #32ab26; /* Green color for header */
+    color: #32ab26;
     margin-bottom: 20px;
 }
 
-/* Form styling */
 .event-form {
     display: flex;
     flex-direction: column;
-    gap: 20px; /* Spacing between form elements */
+    gap: 20px;
 }
 
-/* Input fields */
 .event-form input,
 .event-form select,
 .event-form textarea {
-    width: 100%; /* Full width for input fields */
-    padding: 10px;
+    width: 100%;
+    padding: 12px;
     border-radius: 5px;
     border: 1px solid #ccc;
     font-size: 1rem;
     color: #333;
 }
 
-/* Input labels */
 .event-form label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
-    color: #32ab26; /* Green color for labels */
+    color: #32ab26;
 }
 
-/* Button styling */
 .create-event {
-    background-color: #32ab26; /* Green background for button */
+    background-color: #32ab26;
     color: white;
-    padding: 10px;
+    padding: 12px;
     border: none;
     border-radius: 5px;
     font-size: 1.1rem;
     cursor: pointer;
-    transition: background-color 0.3s ease; /* Transition effect for hover */
+    transition: background-color 0.3s ease;
 }
 
-/* Button hover effect */
 .create-event:hover {
-    background-color: #42d623; /* Slightly darker green on hover */
+    background-color: #42d623;
 }
 
-/* Responsive design for smaller screens */
+/* Adjustments for smaller screens */
 @media screen and (max-width: 600px) {
     .events {
-        padding: 15px; /* Reduced padding on smaller screens */
+        padding: 15px;
+        width: 100%; /* Full width on smaller screens */
     }
 
     .create-event {
-        padding: 15px; /* Reduced padding for buttons */
+        padding: 12px;
+        font-size: 1rem; /* Smaller font size for smaller screens */
+    }
+    
+    .event-form input, .event-form select, .event-form textarea {
+        padding: 10px; /* Slightly reduced padding on small screens */
+        font-size: 0.9rem;
     }
 }
