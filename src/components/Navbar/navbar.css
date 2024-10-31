@@ -36,6 +36,7 @@
 }
 
 .nav-item {
+    position: relative; /* Set relative for dropdown positioning */
     padding: 0 15px; /* Spacing between links */
 }
 
@@ -47,6 +48,33 @@
 
 .nav-links:hover {
     color: #28a745; /* Hover color */
+}
+
+/* Dropdown Menu Styles */
+.dropdown-menu {
+    position: absolute; /* Absolute positioning */
+    top: 100%; /* Align dropdown below the parent link */
+    left: 0; /* Align with the left of the parent link */
+    background-color: #32ab26; /* Dropdown background color */
+    display: none; /* Hidden by default */
+    flex-direction: column; /* Stack items vertically */
+    padding: 10px 0; /* Padding for dropdown */
+    z-index: 1001; /* Make sure it overlays content */
+}
+
+.nav-item:hover .dropdown-menu {
+    display: flex; /* Show dropdown on hover */
+}
+
+.dropdown-link {
+    color: #fff; /* Dropdown link color */
+    padding: 10px 20px; /* Padding for dropdown links */
+    display: block; /* Block layout for full-width clickable area */
+    font-size: 0.9rem; /* Smaller font size */
+}
+
+.dropdown-link:hover {
+    background-color: #28a745; /* Change background on hover */
 }
 
 /* Mobile Styles */
