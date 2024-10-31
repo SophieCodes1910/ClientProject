@@ -74,8 +74,8 @@ export const Navbar = () => {
                 <ul className={click ? "nav-menu active" : "nav-menu"}>
                     <li className="nav-item">
                         <Link
-                            to="/"
-                            className={getNavLinkClass("/")}
+                            to="/home"
+                            className={getNavLinkClass("/home")}
                             onClick={closeDropdownMenu}
                         >
                             Home
