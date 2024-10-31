@@ -1,24 +1,25 @@
-/* Base page setup */
+/* Base Page Setup */
 html, body {
   margin: 0;
   padding: 0;
-  height: 100%; /* Full page height */
+  height: 100%;
   width: 100%;
   font-family: Arial, sans-serif;
-  overflow-y: auto; /* Enable scrolling if needed */
+  overflow: hidden;
 }
 
-/* Fullscreen background setup for .auth-page */
+/* Fullscreen Background for Login Page */
 .auth-page {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh; /* Full viewport height */
-  width: 100%; /* Full viewport width */
+  min-height: 100vh;
+  width: 100%;
   background: url("../../assets/LoginBackground.svg") no-repeat center center;
-  background-size: cover; /* Make the background cover the entire viewport */
-  z-index: 0; /* Ensure it's beneath the login container */
-  padding: 20px; /* Add padding for small screens */
+  background-size: cover;
+  z-index: 1;
+  overflow-y: auto; /* Allow scrolling in the container */
+  padding: 20px;
 }
 
 /* Login Container Styling */
@@ -30,22 +31,22 @@ html, body {
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  z-index: 10; /* Bring login container above background */
+  z-index: 10; /* Higher z-index to appear above background */
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-height: 90vh; /* Restrict container height to allow scrolling */
-  overflow-y: auto; /* Enable content scroll inside container */
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
-/* Center heading */
+/* Heading Styling */
 h2 {
   text-align: center;
   margin-bottom: 20px;
   color: #333333;
 }
 
-/* Input Fields */
+/* Input Fields Styling */
 label {
   display: block;
   margin-bottom: 8px;
@@ -55,7 +56,7 @@ label {
 
 input[type="email"],
 input[type="password"] {
-  width: 100%; /* Full width */
+  width: 100%;
   padding: 10px;
   margin-bottom: 20px;
   border: 1px solid #dddddd;
@@ -68,10 +69,10 @@ input[type="password"] {
 
 input[type="email"]:focus,
 input[type="password"]:focus {
-  border-color: #42d623; /* Green border on focus */
+  border-color: #42d623;
 }
 
-/* Submit Button */
+/* Submit Button Styling */
 button[type="submit"] {
   width: 100%;
   padding: 10px;
@@ -82,21 +83,22 @@ button[type="submit"] {
   font-size: 16px;
   transition: background-color 0.3s;
   margin-bottom: 12px;
-  cursor: pointer; /* Add cursor to indicate interactivity */
+  cursor: pointer;
 }
 
 button[type="submit"]:hover {
   background-color: #53ff30;
 }
 
+/* Register Link Styling */
 .register-btn {
   margin-left: 10px;
   color: #42d623;
   text-decoration: underline;
-  cursor: pointer; /* Indicate link interactivity */
+  cursor: pointer;
 }
 
-/* Loader inside button */
+/* Loader Styling */
 button.loading {
   background-color: #5a9bff;
 }
@@ -118,6 +120,6 @@ button.loading {
 /* Responsive Design */
 @media (max-width: 600px) {
   .login-container {
-    padding: 15px;
+      padding: 15px;
   }
 }

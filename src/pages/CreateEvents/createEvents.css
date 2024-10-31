@@ -1,14 +1,14 @@
+/* Reset and Base Styles */
 html, body {
     margin: 0;
     padding: 0;
     height: 100%;
     width: 100%;
     font-family: Arial, sans-serif;
-    overflow-y: auto;
-    min-height: 100vh;
+    overflow: hidden; /* Set global overflow to hidden */
 }
 
-/* Container styling for fullscreen background setup */
+/* Main Container for Fullscreen Background */
 .create-events-container {
     display: flex;
     align-items: center;
@@ -20,20 +20,21 @@ html, body {
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    position: relative; /* Ensure positioning context for z-index */
-    z-index: 1; /* Lower z-index for the background */
+    position: relative;
+    overflow-y: auto; /* Allow scrolling in the container */
+    z-index: 1;
 }
 
-/* Styling for the form card to ensure it sits above other content */
+/* Form Card Styling */
 .events {
-    background-color: rgba(255, 255, 255, 0.95); /* Increase opacity for contrast */
+    background-color: rgba(255, 255, 255, 0.95);
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     padding: 20px;
     max-width: 600px;
     width: 90%;
-    z-index: 2; /* Higher z-index to appear above the background */
-    position: relative; /* Position relative to maintain z-index above background */
+    position: relative;
+    z-index: 10; /* Higher z-index to appear above background */
 }
 
 .events h2 {
@@ -42,13 +43,14 @@ html, body {
     margin-bottom: 20px;
 }
 
+/* Form Styling */
 .event-form {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-/* Input fields styling */
+/* Input Fields Styling */
 .event-form input,
 .event-form select,
 .event-form textarea {
@@ -67,6 +69,7 @@ html, body {
     color: #32ab26;
 }
 
+/* Submit Button Styling */
 .create-event {
     background-color: #32ab26;
     color: white;
@@ -82,7 +85,7 @@ html, body {
     background-color: #42d623;
 }
 
-/* Media queries for smaller screens */
+/* Responsive Adjustments for Small Screens */
 @media screen and (max-width: 600px) {
     .events {
         padding: 15px;
