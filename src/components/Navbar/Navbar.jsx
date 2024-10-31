@@ -84,7 +84,7 @@ export const Navbar = () => {
                         <div className="nav-links" onClick={toggleEventsDropdown}>
                             Events &nbsp; <i className="fas fa-caret-down"/>
                         </div>
-                        {(eventsDropdown || (isMobile && click)) && (
+                        {(eventsDropdown || (!isMobile && click)) && (
                             <ul className="dropdown-menu">
                                 <li><Link to="/events/create-events" className="dropdown-link" onClick={closeDropdownMenu}>Create Event</Link></li>
                                 <li><Link to="/events/my-invitations" className="dropdown-link" onClick={closeDropdownMenu}>My Invitations</Link></li>
@@ -110,7 +110,7 @@ export const Navbar = () => {
                                 <Link onClick={closeDropdownMenu} to="/login">Login</Link>
                             )}
                         </div>
-                        {(accountDropdown || (isMobile && click)) && isAuthenticated() && (
+                        {(accountDropdown || (!isMobile && click)) && isAuthenticated() && (
                             <ul className="dropdown-menu">
                                 <li onClick={() => logout()}>
                                     <Link to="/" className="dropdown-link" onClick={closeDropdownMenu}>Logout</Link>

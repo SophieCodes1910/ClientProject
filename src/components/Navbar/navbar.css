@@ -102,6 +102,7 @@
     padding: 10px 0;
     border-radius: 0 0 5px 5px;
     z-index: 999;
+    min-width: 150px;
 }
 
 .dropdown-menu li {
@@ -119,7 +120,7 @@
 }
 
 .nav-item:hover .dropdown-menu,
-.nav-item .dropdown-menu:hover {
+.nav-item .dropdown-menu.show {
     display: block;
 }
 
@@ -149,21 +150,15 @@
         opacity: 1;
         visibility: visible;
         display: flex;
-    }
-
-    .nav-menu .nav-item {
-        width: 100%;
-    }
-
-    .nav-links {
-        padding: 1rem;
-        justify-content: flex-start;
+        z-index: 1;
     }
 
     .dropdown-menu {
+        position: static;
         display: block;
-        position: relative;
-        padding-left: 15px;
+        background-color: #32ab26;
+        padding: 0;
+        margin: 10px 0;
     }
 
     .menu-overlay {
@@ -174,9 +169,5 @@
         height: calc(100vh - 80px);
         background: rgba(0, 0, 0, 0.5);
         z-index: 998;
-    }
-
-    .menu-overlay.show {
-        display: block;
     }
 }
