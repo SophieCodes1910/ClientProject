@@ -51,6 +51,7 @@
     .nav-item {
         width: 100%;
         text-align: center;
+        padding: 15px 0; /* Added padding for better touch targeting */
     }
     .nav-links {
         padding: 1rem;
@@ -83,3 +84,4 @@
         z-index: 998;
     }
 }
+
