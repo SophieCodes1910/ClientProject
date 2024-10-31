@@ -3,9 +3,10 @@ html, body {
     margin: 0;
     padding: 0;
     height: 100%; /* Full page height */
-    width: 100%;
+    width: 100%; /* Full page width */
     font-family: Arial, sans-serif;
     overflow-y: auto; /* Enable scrolling if needed */
+    min-height: 100vh; /* Ensure the background covers full height */
 }
 
 /* Fullscreen background setup for create events */
@@ -19,6 +20,7 @@ html, body {
     background-repeat: no-repeat; /* No repeat */
     background-size: cover; /* Cover the entire container */
     background-position: center center; /* Center the image */
+    background-attachment: fixed; /* Keep background fixed on scroll */
 }
 
 /* Styling for the event creation card */
