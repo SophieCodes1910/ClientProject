@@ -1,4 +1,3 @@
-/* Base Page Setup */
 html, body {
   margin: 0;
   padding: 0;
@@ -9,19 +8,17 @@ html, body {
   overflow-y: auto; /* Allow vertical scrolling */
 }
 
-/* Fullscreen Background for Login Page */
 .auth-page {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  height: 100%; /* Changed from min-height: 100vh; */
   width: 100%;
   background: url("../../assets/LoginBackground.svg") no-repeat center center;
   background-size: cover;
   padding: 20px;
 }
 
-/* Login Container Styling */
 .login-container {
   position: relative;
   max-width: 400px;
@@ -38,12 +35,10 @@ html, body {
   box-sizing: border-box;
 }
 
-/* Responsive Design for Small Screens */
 @media (max-width: 600px) {
   .auth-page {
       padding: 15px;
   }
-
   .login-container {
       padding: 15px;
       max-width: 90%;
