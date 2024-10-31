@@ -58,7 +58,7 @@ export const App = () => {
                     <Navbar logo={logo} />
                     <Routes>
                         {/* Default route now opens LandingPage */}
-                        <Route path="/" element={<LandingPage />} />
+                        <Route path="/ClientProject" element={<LandingPage />} />
                         <Route path="/home" element={<Home route={route} setRoute={setRoute} />} />
                         <Route path="/events/create-events" element={<CreateEvents />} />
                         <Route path="/events/my-invitations" element={<MyInvitations />} />

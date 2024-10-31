@@ -65,7 +65,7 @@ export const Navbar = () => {
     return (
         <nav className="navbar">
             <div className="navbar-container">
-                <Link to="/" className="navbar-logo" onClick={closeDropdownMenu}>
+                <Link to="/home" className="navbar-logo" onClick={closeDropdownMenu}>
                     <img className="logo" src={logo} alt="event schedule app main logo"/>
                 </Link>
                 <div className="menu-icon" onClick={handleClick}>
