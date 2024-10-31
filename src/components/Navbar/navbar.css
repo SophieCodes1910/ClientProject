@@ -1,122 +1,112 @@
 /* Navbar Styles */
 .navbar {
-    background: #b2ffa0; /* Green background */
-    height: 80px; /* Navbar height */
-    display: flex; /* Flexbox layout */
-    align-items: center; /* Center items vertically */
-    font-size: 1.2rem; /* Font size */
-    z-index: 1000; /* Layering */
-    color: #42d623; /* Text color */
-    padding: 0 20px; /* Padding for overall layout */
+    background: #b2ffa0;
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+    padding: 0 20px;
+    color: #42d623;
 }
 
 .navbar-container {
-    display: flex; /* Flex layout */
-    align-items: center; /* Center items vertically */
-    width: 100%; /* Full width */
-    justify-content: space-between; /* Space items evenly */
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
 }
 
 .navbar-logo {
-    display: flex; /* Flexbox for logo */
-    align-items: center; /* Center logo vertically */
-    margin-right: 20px; /* Space between logo and links */
+    display: flex;
+    align-items: center;
 }
 
 .logo {
-    width: 80px; /* Logo width */
-    height: auto; /* Logo height auto */
+    width: 80px;
+    height: auto;
 }
 
 .nav-menu {
-    display: flex; /* Flexbox layout for links */
-    list-style: none; /* Remove list styling */
-    margin: 0; /* Remove default margin */
-    padding: 0; /* Remove default padding */
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Hide links on wide screens until menu icon is clicked */
+@media screen and (min-width: 961px) {
+    .nav-menu {
+        display: none; /* Hide the menu initially */
+        position: absolute; /* Position relative to the icon */
+        right: 20px;
+        top: 80px;
+        background-color: #b2ffa0;
+        flex-direction: column; /* Stack items vertically */
+        width: 200px; /* Dropdown width */
+        border-radius: 4px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-menu.active {
+        display: flex; /* Show menu when active */
+    }
+}
+
+/* Hamburger icon for wide screens */
+.menu-icon {
+    display: none;
+}
+
+@media screen and (min-width: 961px) {
+    .menu-icon {
+        display: block;
+        font-size: 1.8rem;
+        cursor: pointer;
+        color: #32ab26;
+        margin-left: auto;
+    }
 }
 
 .nav-item {
-    position: relative; /* Set relative for dropdown positioning */
-    padding: 0 15px; /* Spacing between links */
+    padding: 10px;
 }
 
 .nav-links {
-    color: #32ab26; /* Link color */
-    text-decoration: none; /* Remove underline */
-    transition: color 0.3s; /* Hover transition */
+    color: #32ab26;
+    text-decoration: none;
+    transition: color 0.3s;
 }
 
 .nav-links:hover {
-    color: #28a745; /* Hover color */
-}
-
-/* Dropdown Menu Styles */
-.dropdown-menu {
-    position: absolute; /* Absolute positioning */
-    top: 100%; /* Align dropdown below the parent link */
-    left: 0; /* Align with the left of the parent link */
-    background-color: #32ab26; /* Dropdown background color */
-    display: none; /* Hidden by default */
-    flex-direction: column; /* Stack items vertically */
-    padding: 10px 0; /* Padding for dropdown */
-    z-index: 1001; /* Make sure it overlays content */
-}
-
-.nav-item:hover .dropdown-menu {
-    display: flex; /* Show dropdown on hover */
-}
-
-.dropdown-link {
-    color: #fff; /* Dropdown link color */
-    padding: 10px 20px; /* Padding for dropdown links */
-    display: block; /* Block layout for full-width clickable area */
-    font-size: 0.9rem; /* Smaller font size */
-}
-
-.dropdown-link:hover {
-    background-color: #28a745; /* Change background on hover */
+    color: #28a745;
 }
 
 /* Mobile Styles */
 @media screen and (max-width: 960px) {
     .menu-icon {
-        display: block; /* Show menu icon */
-        font-size: 1.8rem; /* Icon size */
-        position: absolute; /* Absolute position */
-        right: 20px; /* Align to the right */
-        top: 25px; /* Vertical alignment */
+        display: block;
+        font-size: 1.8rem;
+        position: absolute;
+        right: 20px;
+        top: 25px;
     }
 
     .nav-menu {
-        flex-direction: column; /* Stack items vertically */
-        width: 100%; /* Full width */
-        height: calc(100vh - 80px); /* Full height */
-        position: fixed; /* Fixed position */
-        top: 80px; /* Position below navbar */
-        left: 0; /* Align to the left */
-        background-color: #b2ffa0; /* Background color */
-        opacity: 0; /* Initially hidden */
-        visibility: hidden; /* Initially hidden */
-        transition: opacity 0.3s ease, visibility 0.3s ease; /* Fade-in transition */
+        flex-direction: column;
+        width: 100%;
+        height: calc(100vh - 80px);
+        position: fixed;
+        top: 80px;
+        left: 0;
+        background-color: #b2ffa0;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
     }
 
     .nav-menu.active {
-        opacity: 1; /* Visible when active */
-        visibility: visible; /* Visible when active */
-        display: flex; /* Flex layout */
-    }
-
-    .nav-item {
-        width: 100%; /* Full width for items */
-        text-align: center; /* Center text */
-        padding: 15px 0; /* Padding for items */
-    }
-
-    .nav-links {
-        color: #32ab26; /* Link color */
-        font-size: 1rem; /* Font size */
-        padding: 1rem; /* Padding for links */
-        text-align: center; /* Center text */
-        width: 100%; /* Full width for links */
+        opacity: 1;
+        visibility: visible;
     }
 }

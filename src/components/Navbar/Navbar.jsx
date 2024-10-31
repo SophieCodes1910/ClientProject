@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import "./navbar.css";
@@ -9,12 +9,8 @@ import { UserName } from "../UserName/UserName.jsx";
 export const Navbar = () => {
     const email = localStorage.getItem("email");
     const [click, setClick] = useState(false);
-    const [eventsDropdown, setEventsDropdown] = useState(false);
-    const [accountDropdown, setAccountDropdown] = useState(false);
-    const location = useLocation();
-    const eventsDropdownRef = useRef(null);
-    const accountDropdownRef = useRef(null);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 960);
+    const location = useLocation();
 
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth <= 960);
@@ -22,39 +18,14 @@ export const Navbar = () => {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (eventsDropdownRef.current && !eventsDropdownRef.current.contains(event.target)) {
-                setEventsDropdown(false);
-            }
-            if (accountDropdownRef.current && !accountDropdownRef.current.contains(event.target)) {
-                setAccountDropdown(false);
-            }
-        };
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
-
     const handleClick = () => {
         setClick(!click);
-        document.body.classList.toggle('menu-open', !click);
-    };
-
-    const toggleEventsDropdown = () => {
-        setEventsDropdown(!eventsDropdown);
-    };
-
-    const toggleAccountDropdown = () => {
-        setAccountDropdown(!accountDropdown);
+        document.body.classList.toggle("menu-open", !click);
     };
 
     const closeDropdownMenu = () => {
         setClick(false);
-        setEventsDropdown(false);
-        setAccountDropdown(false);
-        document.body.classList.remove('menu-open');
+        document.body.classList.remove("menu-open");
     };
 
     const getNavLinkClass = (path) => {
@@ -65,56 +36,39 @@ export const Navbar = () => {
         <nav className="navbar">
             <div className="navbar-container">
                 <Link to="/home" className="navbar-logo" onClick={closeDropdownMenu}>
-                    <img className="logo" src={logo} alt="event schedule app main logo"/>
+                    <img className="logo" src={logo} alt="event schedule app main logo" />
                 </Link>
-                <div className="menu-icon" onClick={handleClick}>
-                    <i className={click ? "fas fa-times" : "fas fa-bars"}></i>
-                </div>
+
+                {/* Menu icon only visible on wide screens */}
+                {!isMobile && (
+                    <div className="menu-icon" onClick={handleClick}>
+                        <i className={click ? "fas fa-times" : "fas fa-bars"}></i>
+                    </div>
+                )}
+
                 <ul className={`nav-menu ${click ? "active" : ""}`}>
                     <li className="nav-item">
                         <Link to="/home" className={getNavLinkClass("/home")} onClick={closeDropdownMenu}>
                             Home
                         </Link>
                     </li>
-                    <li className="nav-item"
-                        onMouseEnter={() => !isMobile && setEventsDropdown(true)}
-                        onMouseLeave={() => !isMobile && setEventsDropdown(false)}
-                        ref={eventsDropdownRef}
-                    >
-                        <div className="nav-links" onClick={isMobile ? toggleEventsDropdown : undefined}>
-                            Events &nbsp; <i className="fas fa-caret-down"/>
-                        </div>
-                        {(eventsDropdown || (!isMobile && click)) && (
-                            <ul className="dropdown-menu">
-                                <li><Link to="/events/create-events" className="dropdown-link" onClick={closeDropdownMenu}>Create Event</Link></li>
-                                <li><Link to="/events/my-invitations" className="dropdown-link" onClick={closeDropdownMenu}>My Invitations</Link></li>
-                            </ul>
-                        )}
+                    <li className="nav-item">
+                        <Link to="/events" className={getNavLinkClass("/events")} onClick={closeDropdownMenu}>
+                            Events
+                        </Link>
                     </li>
                     <li className="nav-item">
                         <Link to="/contact" className={getNavLinkClass("/contact")} onClick={closeDropdownMenu}>
                             Contact
                         </Link>
                     </li>
-                    <li className="nav-item"
-                        onMouseEnter={() => !isMobile && setAccountDropdown(true)}
-                        onMouseLeave={() => !isMobile && setAccountDropdown(false)}
-                        ref={accountDropdownRef}
-                    >
-                        <div className={`nav-links ${isAuthenticated() ? "" : "nav-links-border"}` }
-                             onClick={isMobile ? toggleAccountDropdown : undefined}>
-                            {isAuthenticated() ? (
-                                <UserName username={email}/>
-                            ) : (
-                                <Link onClick={closeDropdownMenu} to="/login">Login</Link>
-                            )}
-                        </div>
-                        {(accountDropdown || (!isMobile && click)) && isAuthenticated() && (
-                            <ul className="dropdown-menu">
-                                <li onClick={() => logout()}>
-                                    <Link to="/" className="dropdown-link" onClick={closeDropdownMenu}>Logout</Link>
-                                </li>
-                            </ul>
+                    <li className="nav-item">
+                        {isAuthenticated() ? (
+                            <UserName username={email} onClick={closeDropdownMenu} />
+                        ) : (
+                            <Link to="/login" className={getNavLinkClass("/login")} onClick={closeDropdownMenu}>
+                                Login
+                            </Link>
                         )}
                     </li>
                 </ul>
