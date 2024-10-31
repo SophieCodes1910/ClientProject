@@ -1,10 +1,10 @@
-import {useState, useEffect, useRef} from "react";
-import {Link, useLocation} from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import "./navbar.css";
-import {logout} from "../../utils/logout.js";
-import {isAuthenticated} from "../../auth/auth.js";
-import {UserName} from "../UserName/UserName.jsx";
+import { logout } from "../../utils/logout.js";
+import { isAuthenticated } from "../../auth/auth.js";
+import { UserName } from "../UserName/UserName.jsx";
 
 export const Navbar = () => {
     const email = localStorage.getItem("email");
@@ -14,7 +14,6 @@ export const Navbar = () => {
     const location = useLocation();
     const eventsDropdownRef = useRef(null);
     const accountDropdownRef = useRef(null);
-
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 960);
 
     useEffect(() => {
@@ -44,11 +43,19 @@ export const Navbar = () => {
     };
 
     const toggleEventsDropdown = () => {
-        setEventsDropdown(!eventsDropdown);
+        if (isMobile) {
+            setEventsDropdown(!eventsDropdown); // Toggle for mobile
+        } else {
+            setEventsDropdown(true); // Show on hover for desktop
+        }
     };
 
     const toggleAccountDropdown = () => {
-        setAccountDropdown(!accountDropdown);
+        if (isMobile) {
+            setAccountDropdown(!accountDropdown); // Toggle for mobile
+        } else {
+            setAccountDropdown(true); // Show on hover for desktop
+        }
     };
 
     const closeDropdownMenu = () => {
@@ -83,14 +90,14 @@ export const Navbar = () => {
                     </li>
                     <li
                         className="nav-item"
-                        onMouseEnter={() => setEventsDropdown(true)}
-                        onMouseLeave={() => setEventsDropdown(false)}
+                        onMouseEnter={() => !isMobile && setEventsDropdown(true)}
+                        onMouseLeave={() => !isMobile && setEventsDropdown(false)}
                         ref={eventsDropdownRef}
                     >
                         <div className="nav-links" onClick={toggleEventsDropdown}>
                             Events &nbsp; <i className="fas fa-caret-down"/>
                         </div>
-                        {(eventsDropdown || isMobile) && (
+                        {(eventsDropdown || (isMobile && click)) && (
                             <ul className="dropdown-menu">
                                 <li>
                                     <Link
@@ -124,8 +131,8 @@ export const Navbar = () => {
                     </li>
                     <li
                         className="nav-item"
-                        onMouseEnter={() => setAccountDropdown(true)}
-                        onMouseLeave={() => setAccountDropdown(false)}
+                        onMouseEnter={() => !isMobile && setAccountDropdown(true)}
+                        onMouseLeave={() => !isMobile && setAccountDropdown(false)}
                         ref={accountDropdownRef}
                     >
                         <div
@@ -141,7 +148,7 @@ export const Navbar = () => {
                                 </Link>
                             )}
                         </div>
-                        {(accountDropdown || isMobile) && isAuthenticated() && (
+                        {(accountDropdown || (isMobile && click)) && isAuthenticated() && (
                             <ul className="dropdown-menu">
                                 <li onClick={() => logout()}>
                                     <Link
@@ -157,6 +164,7 @@ export const Navbar = () => {
                     </li>
                 </ul>
             </div>
+            {click && <div className="menu-overlay" onClick={closeDropdownMenu}></div>}
         </nav>
     );
 };

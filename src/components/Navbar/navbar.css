@@ -1,11 +1,9 @@
-/* Reset for consistent box sizing */
 *,
 *::before,
 *::after {
     box-sizing: border-box;
 }
 
-/* Navbar styles */
 .navbar {
     background: #b2ffa0;
     height: 80px;
@@ -16,22 +14,20 @@
     position: relative;
     z-index: 1000;
     color: #42d623;
-    padding: 0 20px; /* Adjusted padding */
+    padding: 0 20px;
 }
 
-/* Navbar container */
 .navbar-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 100%; /* Ensure it fills the height of the navbar */
+    height: 100%;
     width: 100%;
-    max-width: 1200px; /* Reduced max-width to prevent overflow on smaller screens */
+    max-width: 1200px;
     padding: 0 20px;
     margin: 0 auto;
 }
 
-/* Navbar Logo */
 .navbar-logo {
     color: #fff;
     cursor: pointer;
@@ -39,12 +35,10 @@
     font-size: 2rem;
 }
 
-/* Logo container */
 .navbar-container .logo {
     width: 80px;
 }
 
-/* Menu Icon */
 .menu-icon {
     display: none;
     color: #fff;
@@ -53,7 +47,6 @@
     cursor: pointer;
 }
 
-/* Navbar Menu */
 .nav-menu-container {
     display: flex;
     align-items: center;
@@ -71,7 +64,6 @@
     text-align: center;
 }
 
-/* Navbar items and links */
 .nav-item {
     display: flex;
     justify-content: center;
@@ -92,7 +84,6 @@
 }
 
 .nav-links-border {
-    margin-bottom: 0;
     border: 1px solid #32ab26;
     border-radius: 10px;
 }
@@ -102,24 +93,11 @@
     color: #fff;
 }
 
-.nav-links:hover::after {
-    width: 100%;
-    transition: all 0.3s ease;
-}
-
 .nav-links.active-link {
     color: #32ab26;
     border-bottom: 3px solid #32ab26;
 }
 
-/* Login button styling */
-.login {
-    padding: 0;
-    border: 1px solid #32ab26;
-    border-radius: 10px;
-}
-
-/* Dropdown Menu */
 .dropdown-link {
     white-space: nowrap;
 }
@@ -127,7 +105,7 @@
 .dropdown-menu {
     display: none;
     position: absolute;
-    top: 100%; /* Position the dropdown below the parent */
+    top: 100%;
     left: 0;
     list-style: none;
     text-align: start;
@@ -153,15 +131,6 @@
     color: #42d623;
 }
 
-.nav-item:hover .dropdown-menu {
-    display: block;
-}
-
-.nav-item .dropdown-menu {
-    display: block;
-}
-
-/* Media Queries for Mobile */
 @media screen and (max-width: 960px) {
     .navbar-container {
         padding: 0 20px;
@@ -177,72 +146,8 @@
         flex-direction: column;
         width: 100%;
         height: calc(100vh - 80px);
-        position: fixed; /* Ensures menu covers the screen when open */
+        position: fixed;
         top: 80px;
         left: 0;
         opacity: 0;
         transition: all 0.5s ease;
-        background: #b2ffa0;
-        z-index: 999;
-        overflow-y: auto;
-    }
-
-    .nav-menu.active {
-        opacity: 1;
-    }
-
-    .nav-item {
-        height: 40px;
-    }
-
-    .nav-links {
-        text-align: center;
-        padding: 1rem;
-        width: 100%;
-        display: table;
-        position: relative;
-    }
-
-    .nav-links.active-link {
-        color: #32ab26;
-        border-bottom: 0 solid #32ab26;
-    }
-
-    /* Dropdown Menu for Mobile */
-    .nav-item .dropdown-menu {
-        position: relative;
-        border-radius: 0;
-        left: 10px;
-        margin: 0 auto;
-    }
-
-    .dropdown-menu li {
-        padding: 10px 0;
-        text-align: center;
-    }
-
-    /* Ensure dropdown is always visible on mobile */
-    .nav-item .dropdown-menu {
-        display: block;
-    }
-}
-
-/* General styles to hide the scroll and background when the menu is open */
-body.menu-open {
-    overflow: hidden;
-    height: 100vh;
-    position: fixed;
-    width: 100%;
-}
-
-/* Style to add a background overlay when the menu is open */
-.nav-menu.active {
-    background: #b2ffa0; /* The same color as your navbar background */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 999;
-    overflow-y: auto;
-}
