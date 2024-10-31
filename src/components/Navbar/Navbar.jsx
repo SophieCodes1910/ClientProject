@@ -70,7 +70,7 @@ export const Navbar = () => {
                 <div className="menu-icon" onClick={handleClick}>
                     <i className={click ? "fas fa-times" : "fas fa-bars"}></i>
                 </div>
-                <ul className={click ? "nav-menu active" : "nav-menu"}>
+                <ul className={`nav-menu ${click ? "active" : ""}`}>
                     <li className="nav-item">
                         <Link to="/home" className={getNavLinkClass("/home")} onClick={closeDropdownMenu}>
                             Home
@@ -81,7 +81,7 @@ export const Navbar = () => {
                         onMouseLeave={() => !isMobile && setEventsDropdown(false)}
                         ref={eventsDropdownRef}
                     >
-                        <div className="nav-links" onClick={toggleEventsDropdown}>
+                        <div className="nav-links" onClick={isMobile ? toggleEventsDropdown : undefined}>
                             Events &nbsp; <i className="fas fa-caret-down"/>
                         </div>
                         {(eventsDropdown || (!isMobile && click)) && (
@@ -101,9 +101,8 @@ export const Navbar = () => {
                         onMouseLeave={() => !isMobile && setAccountDropdown(false)}
                         ref={accountDropdownRef}
                     >
-                        <div style={isAuthenticated() ? {marginBottom: "20px"} : {marginBottom: "0px"}}
-                             className={`nav-links ${isAuthenticated() ? "" : "nav-links-border"}`}
-                             onClick={toggleAccountDropdown}>
+                        <div className={`nav-links ${isAuthenticated() ? "" : "nav-links-border"}`}
+                             onClick={isMobile ? toggleAccountDropdown : undefined}>
                             {isAuthenticated() ? (
                                 <UserName username={email}/>
                             ) : (
