@@ -39,30 +39,29 @@ export const Navbar = () => {
 
     const handleClick = () => {
         setClick(!click);
-        document.body.classList.toggle('menu-open', !click);  // Toggle body class
+        document.body.classList.toggle('menu-open', !click);
     };
 
     const toggleEventsDropdown = () => {
-        if (isMobile) {
-            setEventsDropdown(!eventsDropdown); // Toggle for mobile
-        } else {
-            setEventsDropdown(true); // Show on hover for desktop
-        }
+        setEventsDropdown(prev => (isMobile ? !prev : true));
     };
 
     const toggleAccountDropdown = () => {
-        if (isMobile) {
-            setAccountDropdown(!accountDropdown); // Toggle for mobile
-        } else {
-            setAccountDropdown(true); // Show on hover for desktop
-        }
+        setAccountDropdown(prev => (isMobile ? !prev : true));
     };
+
+    useEffect(() => {
+        if (!isMobile) {
+            setEventsDropdown(false);
+            setAccountDropdown(false);
+        }
+    }, [isMobile]);
 
     const closeDropdownMenu = () => {
         setClick(false);
         setEventsDropdown(false);
         setAccountDropdown(false);
-        document.body.classList.remove('menu-open');  // Remove body class when menu is closed
+        document.body.classList.remove('menu-open');
     };
 
     const getNavLinkClass = (path) => {
@@ -80,16 +79,11 @@ export const Navbar = () => {
                 </div>
                 <ul className={click ? "nav-menu active" : "nav-menu"}>
                     <li className="nav-item">
-                        <Link
-                            to="/home"
-                            className={getNavLinkClass("/home")}
-                            onClick={closeDropdownMenu}
-                        >
+                        <Link to="/home" className={getNavLinkClass("/home")} onClick={closeDropdownMenu}>
                             Home
                         </Link>
                     </li>
-                    <li
-                        className="nav-item"
+                    <li className="nav-item"
                         onMouseEnter={() => !isMobile && setEventsDropdown(true)}
                         onMouseLeave={() => !isMobile && setEventsDropdown(false)}
                         ref={eventsDropdownRef}
@@ -99,65 +93,34 @@ export const Navbar = () => {
                         </div>
                         {(eventsDropdown || (isMobile && click)) && (
                             <ul className="dropdown-menu">
-                                <li>
-                                    <Link
-                                        to="/events/create-events"
-                                        className="dropdown-link"
-                                        onClick={closeDropdownMenu}
-                                    >
-                                        Create Event
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        to="/events/my-invitations"
-                                        className="dropdown-link"
-                                        onClick={closeDropdownMenu}
-                                    >
-                                        My Invitations
-                                    </Link>
-                                </li>
+                                <li><Link to="/events/create-events" className="dropdown-link" onClick={closeDropdownMenu}>Create Event</Link></li>
+                                <li><Link to="/events/my-invitations" className="dropdown-link" onClick={closeDropdownMenu}>My Invitations</Link></li>
                             </ul>
                         )}
                     </li>
                     <li className="nav-item">
-                        <Link
-                            to="/contact"
-                            className={getNavLinkClass("/contact")}
-                            onClick={closeDropdownMenu}
-                        >
+                        <Link to="/contact" className={getNavLinkClass("/contact")} onClick={closeDropdownMenu}>
                             Contact
                         </Link>
                     </li>
-                    <li
-                        className="nav-item"
+                    <li className="nav-item"
                         onMouseEnter={() => !isMobile && setAccountDropdown(true)}
                         onMouseLeave={() => !isMobile && setAccountDropdown(false)}
                         ref={accountDropdownRef}
                     >
-                        <div
-                            style={isAuthenticated() ? {marginBottom: "20px"} : {marginBottom: "0px"}}
-                            className={`nav-links ${isAuthenticated() ? "" : "nav-links-border"}`}
-                            onClick={toggleAccountDropdown}
-                        >
+                        <div style={isAuthenticated() ? {marginBottom: "20px"} : {marginBottom: "0px"}}
+                             className={`nav-links ${isAuthenticated() ? "" : "nav-links-border"}`}
+                             onClick={toggleAccountDropdown}>
                             {isAuthenticated() ? (
                                 <UserName username={email}/>
                             ) : (
-                                <Link onClick={closeDropdownMenu} to="/login">
-                                    Login
-                                </Link>
+                                <Link onClick={closeDropdownMenu} to="/login">Login</Link>
                             )}
                         </div>
                         {(accountDropdown || (isMobile && click)) && isAuthenticated() && (
                             <ul className="dropdown-menu">
                                 <li onClick={() => logout()}>
-                                    <Link
-                                        to="/"
-                                        className="dropdown-link"
-                                        onClick={closeDropdownMenu}
-                                    >
-                                        Logout
-                                    </Link>
+                                    <Link to="/" className="dropdown-link" onClick={closeDropdownMenu}>Logout</Link>
                                 </li>
                             </ul>
                         )}
