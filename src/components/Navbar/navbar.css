@@ -25,6 +25,18 @@
     height: auto;
 }
 
+/* Desktop Styles */
+@media screen and (min-width: 961px) {
+    .nav-menu {
+        flex-direction: row; /* Horizontal layout for wider screens */
+        justify-content: flex-end; /* Align items to the right */
+        height: auto; /* Height adjusts automatically */
+    }
+    .nav-item {
+        padding: 0 20px; /* Add spacing between items */
+    }
+}
+
 /* Mobile Styles */
 @media screen and (max-width: 960px) {
     .menu-icon {
@@ -88,5 +100,3 @@
         z-index: 1000; /* Lower than nav-menu but higher than the main content */
     }
 }
-
-
