@@ -41,16 +41,14 @@ export const CreateEvents = () => {
                 <h2>Create an Event</h2>
                 <form className="event-form" onSubmit={handleSubmit}>
                     <div className="event-form_top">
-                        <div>
-                            <label htmlFor="event-name">Event Name:</label>
-                            <input
-                                id="event-name"
-                                type="text"
-                                value={eventName}
-                                onChange={(e) => setEventName(e.target.value)}
-                                required
-                            />
-                        </div>
+                        <label htmlFor="event-name">Event Name:</label>
+                        <input
+                            id="event-name"
+                            type="text"
+                            value={eventName}
+                            onChange={(e) => setEventName(e.target.value)}
+                            required
+                        />
                     </div>
                     <button className="create-event" type="submit">Create Event</button>
                 </form>
