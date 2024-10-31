@@ -6,6 +6,7 @@ html, body {
   width: 100%;
   font-family: Arial, sans-serif;
   overflow-x: hidden; /* Prevent horizontal scrolling */
+  overflow-y: auto; /* Allow vertical scrolling */
 }
 
 /* Fullscreen Background for Login Page */
@@ -17,15 +18,12 @@ html, body {
   width: 100%;
   background: url("../../assets/LoginBackground.svg") no-repeat center center;
   background-size: cover;
-  z-index: 1;
   padding: 20px;
-  overflow-y: auto; /* Allow vertical scrolling */
 }
 
 /* Login Container Styling */
 .login-container {
   position: relative;
-  width: 100%;
   max-width: 400px;
   padding: 20px;
   background-color: #ffffff;
@@ -35,87 +33,9 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-height: 90vh; /* Limit height on small screens */
-  overflow-y: auto; /* Allow scroll within the container */
-  box-sizing: border-box; /* Prevents layout shifts due to padding */
-}
-
-/* Heading Styling */
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #333333;
-}
-
-/* Input Fields Styling */
-label {
-  display: block;
-  margin-bottom: 8px;
-  color: #555555;
-  font-weight: bold;
-}
-
-input[type="email"],
-input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #dddddd;
-  border-radius: 4px;
-  font-size: 14px;
-  color: #333333;
-  outline: none;
-  transition: border-color 0.3s;
-}
-
-input[type="email"]:focus,
-input[type="password"]:focus {
-  border-color: #42d623;
-}
-
-/* Submit Button Styling */
-button[type="submit"] {
-  width: 100%;
-  padding: 10px;
-  background-color: #42d623;
-  color: #ffffff;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  transition: background-color 0.3s;
-  margin-bottom: 12px;
-  cursor: pointer;
-}
-
-button[type="submit"]:hover {
-  background-color: #53ff30;
-}
-
-/* Register Link Styling */
-.register-btn {
-  margin-left: 10px;
-  color: #42d623;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-/* Loader Styling */
-button.loading {
-  background-color: #5a9bff;
-}
-
-.loader {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #3498db;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  max-height: 90vh;
+  overflow-y: auto; /* Allow scroll within the form on smaller screens */
+  box-sizing: border-box;
 }
 
 /* Responsive Design for Small Screens */
@@ -126,13 +46,6 @@ button.loading {
 
   .login-container {
       padding: 15px;
-      max-width: 90%; /* Make sure it fits well on smaller screens */
-  }
-
-  input[type="email"],
-  input[type="password"],
-  button[type="submit"] {
-      font-size: 14px;
-      padding: 8px;
+      max-width: 90%;
   }
 }

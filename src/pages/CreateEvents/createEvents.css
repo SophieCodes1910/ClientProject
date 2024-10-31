@@ -6,6 +6,7 @@ html, body {
     width: 100%;
     font-family: Arial, sans-serif;
     overflow-x: hidden; /* Prevent horizontal scrolling */
+    overflow-y: auto; /* Allow vertical scrolling */
 }
 
 /* Main Container for Fullscreen Background */
@@ -20,10 +21,8 @@ html, body {
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    position: relative;
-    padding: 20px; /* Add padding to avoid edge issues */
-    overflow-y: auto; /* Allow vertical scroll */
-    z-index: 1;
+    padding: 20px;
+    overflow-y: auto; /* Enable vertical scrolling */
 }
 
 /* Form Card Styling */
@@ -34,78 +33,19 @@ html, body {
     padding: 20px;
     max-width: 600px;
     width: 100%;
-    position: relative;
-    z-index: 10;
-    box-sizing: border-box; /* Prevents layout shifts due to padding */
-}
-
-.events h2 {
-    text-align: center;
-    color: #32ab26;
-    margin-bottom: 20px;
-}
-
-/* Form Styling */
-.event-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-/* Input Fields Styling */
-.event-form input,
-.event-form select,
-.event-form textarea {
-    width: 100%;
-    padding: 12px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 1rem;
-    color: #333;
-}
-
-.event-form label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #32ab26;
-}
-
-/* Submit Button Styling */
-.create-event {
-    background-color: #32ab26;
-    color: white;
-    padding: 12px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.create-event:hover {
-    background-color: #42d623;
+    max-height: 90vh; /* Ensure it fits on smaller screens */
+    overflow-y: auto; /* Enable scrolling within form */
+    box-sizing: border-box;
 }
 
 /* Responsive Adjustments for Small Screens */
 @media screen and (max-width: 600px) {
     .create-events-container {
-        padding: 10px; /* Adjust padding on smaller screens */
+        padding: 10px;
     }
 
     .events {
         padding: 15px;
     }
-
-    .create-event {
-        padding: 10px;
-        font-size: 1rem;
-    }
-    
-    .event-form input,
-    .event-form select,
-    .event-form textarea {
-        padding: 10px;
-        font-size: 0.9rem;
-    }
 }
+
