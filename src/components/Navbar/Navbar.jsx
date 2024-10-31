@@ -101,7 +101,7 @@ export const Navbar = () => {
                         onMouseLeave={() => !isMobile && setAccountDropdown(false)}
                         ref={accountDropdownRef}
                     >
-                        <div className={`nav-links ${isAuthenticated() ? "" : "nav-links-border"}`}
+                        <div className={`nav-links ${isAuthenticated() ? "" : "nav-links-border"}` }
                              onClick={isMobile ? toggleAccountDropdown : undefined}>
                             {isAuthenticated() ? (
                                 <UserName username={email}/>

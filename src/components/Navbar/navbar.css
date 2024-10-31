@@ -1,56 +1,60 @@
 /* Navbar Styles */
 .navbar {
-    background: #b2ffa0;
-    height: 80px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 1.2rem;
-    position: relative;
-    z-index: 1000;
-    color: #42d623;
-    padding: 0 20px;
+    background: #b2ffa0; /* Green background */
+    height: 80px; /* Navbar height */
+    display: flex; /* Flexbox layout */
+    align-items: center; /* Center items vertically */
+    font-size: 1.2rem; /* Font size */
+    position: relative; /* Positioning */
+    z-index: 1000; /* Layering */
+    color: #42d623; /* Text color */
+    padding: 0 20px; /* Padding */
 }
 
 .menu-icon {
-    display: none;
-    color: #32ab26;
-    font-size: 1.8rem;
-    cursor: pointer;
-    margin-left: auto; /* Aligns icon to the right */
+    display: block; /* Show icon on all screen sizes */
+    color: #32ab26; /* Icon color */
+    font-size: 1.8rem; /* Icon size */
+    cursor: pointer; /* Pointer cursor */
+    margin-right: 20px; /* Space between icon and links */
 }
 
 .navbar-container .logo {
-    width: 80px;
-    height: auto;
+    width: 80px; /* Logo width */
+    height: auto; /* Auto height */
 }
 
 /* Desktop Styles */
 @media screen and (min-width: 961px) {
-    .nav-menu {
-        display: flex; /* Ensure links are in a row */
-        flex-direction: row; /* Set direction to row */
-        justify-content: flex-end; /* Align items to the right */
+    .navbar-container {
+        display: flex; /* Flex layout for container */
         align-items: center; /* Center items vertically */
+        justify-content: space-between; /* Space items evenly */
+        width: 100%; /* Full width */
+    }
+
+    .nav-menu {
+        display: flex; /* Flexbox for horizontal links */
+        flex-direction: row; /* Horizontal layout */
+        justify-content: flex-end; /* Align items to the right */
         list-style: none; /* Remove bullet points */
         padding: 0; /* Remove padding */
         margin: 0; /* Remove margin */
-        height: auto; /* Height adjusts automatically */
     }
-    
+
     .nav-item {
-        padding: 0 30px; /* Increase spacing between items */
+        padding: 0 30px; /* Spacing between items */
     }
-    
+
     .nav-links {
-        position: relative; /* Allow for dropdown positioning */
-        color: #32ab26; /* Change color to fit the theme */
-        text-decoration: none; /* Remove underline from links */
-        transition: color 0.3s; /* Add transition for hover effect */
+        position: relative; /* Positioning for dropdowns */
+        color: #32ab26; /* Link color */
+        text-decoration: none; /* Remove underline */
+        transition: color 0.3s; /* Hover transition */
     }
-    
+
     .nav-links:hover {
-        color: #28a745; /* Change color on hover */
+        color: #28a745; /* Hover color */
     }
 }
 
@@ -58,69 +62,69 @@
 @media screen and (max-width: 960px) {
     .menu-icon {
         display: block; /* Show menu icon on mobile */
-        font-size: 1.8rem;
-        position: absolute;
-        right: 20px; /* Position menu icon to the far right */
-        top: 25px;
+        font-size: 1.8rem; /* Icon size */
+        position: absolute; /* Position icon */
+        right: 20px; /* Position to the far right */
+        top: 25px; /* Vertical alignment */
     }
-    
+
     .nav-menu {
-        flex-direction: column; /* Stack items vertically on mobile */
-        width: 100%;
-        height: calc(100vh - 80px);
-        position: fixed;
-        top: 80px;
-        left: 0;
-        background-color: #b2ffa0;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
-        z-index: 1001; /* Ensure the nav menu is above the overlay */
+        flex-direction: column; /* Stack items vertically */
+        width: 100%; /* Full width */
+        height: calc(100vh - 80px); /* Full height */
+        position: fixed; /* Fixed position */
+        top: 80px; /* Below navbar */
+        left: 0; /* Align to the left */
+        background-color: #b2ffa0; /* Background color */
+        opacity: 0; /* Hidden by default */
+        visibility: hidden; /* Hidden by default */
+        transition: opacity 0.3s ease, visibility 0.3s ease; /* Transition */
+        z-index: 1001; /* Above overlay */
     }
-    
+
     .nav-menu.active {
-        opacity: 1;
-        visibility: visible;
-        display: flex;
+        opacity: 1; /* Visible when active */
+        visibility: visible; /* Visible when active */
+        display: flex; /* Flex display */
     }
-    
+
     .nav-item {
-        width: 100%;
-        text-align: center;
-        padding: 15px 0; /* Increase padding for mobile items */
+        width: 100%; /* Full width for items */
+        text-align: center; /* Center text */
+        padding: 15px 0; /* Padding for items */
     }
-    
+
     .nav-links {
-        padding: 1rem;
-        width: 100%;
-        text-align: center;
-        color: #32ab26;
-        font-size: 1rem;
+        padding: 1rem; /* Padding for links */
+        width: 100%; /* Full width for links */
+        text-align: center; /* Center text */
+        color: #32ab26; /* Link color */
+        font-size: 1rem; /* Font size */
     }
-    
+
     .dropdown-menu {
-        position: static;
-        display: block;
-        background-color: #32ab26;
-        padding: 0;
-        margin: 10px 0;
-        width: 100%;
+        position: static; /* Static position for dropdown */
+        display: block; /* Block display */
+        background-color: #32ab26; /* Background color */
+        padding: 0; /* No padding */
+        margin: 10px 0; /* Margin for dropdown */
+        width: 100%; /* Full width */
     }
-    
+
     .dropdown-link {
-        color: #fff;
-        padding: 10px 20px;
-        display: block;
-        font-size: 0.9rem;
+        color: #fff; /* Dropdown link color */
+        padding: 10px 20px; /* Padding for dropdown links */
+        display: block; /* Block display for dropdown links */
+        font-size: 0.9rem; /* Font size */
     }
-    
+
     .menu-overlay {
-        position: fixed;
-        top: 80px;
-        left: 0;
-        width: 100vw;
-        height: calc(100vh - 80px);
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 1000; /* Lower than nav-menu but higher than the main content */
+        position: fixed; /* Fixed overlay */
+        top: 80px; /* Below navbar */
+        left: 0; /* Align to the left */
+        width: 100vw; /* Full width */
+        height: calc(100vh - 80px); /* Full height */
+        background: rgba(0, 0, 0, 0.5); /* Overlay color */
+        z-index: 1000; /* Layering */
     }
 }
