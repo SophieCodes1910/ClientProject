@@ -16,7 +16,7 @@ html, body {
     justify-content: center;
     min-height: 100vh; /* Full viewport height */
     width: 100%; /* Full viewport width */
-    background-image: url("./assets/EventBackground.svg"); /* Correct path based on your folder structure */
+    background-image: url("../../assets/EventBackground.svg"); /* Correct path based on your folder structure */
     background-repeat: no-repeat; /* No repeat */
     background-size: cover; /* Cover the entire container */
     background-position: center center; /* Center the image */
