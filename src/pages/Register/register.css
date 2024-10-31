@@ -1,44 +1,78 @@
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100vw;
-  overflow-y: auto;
-  font-family: Arial, sans-serif;
-}
-
+/* register.css */
 .register-background {
-  height: 100%; /* Changed from min-height: 100vh; */
-  width: 100vw;
-  background: url("../../assets/LoginBackground.svg") no-repeat center center;
-  background-size: cover;
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 100vh;
+  background-color: #edf4e2;
   padding: 20px;
-  box-sizing: border-box;
-  overflow-y: auto; /* Enable vertical scrolling */
 }
 
 .register-container {
-  width: 95%;
-  max-width: 400px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding: 20px;
-  background-color: white;
+  width: 100%;
+  max-width: 450px;
+  background-color: #fff;
+  padding: 30px;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
-  max-height: 90vh; /* Ensure it fits on smaller screens */
-  position: relative;
-  z-index: 10;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
 }
 
+.register-container h2 {
+  color: #3c6e47;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.register-container label {
+  display: block;
+  font-size: 1rem;
+  color: #6b8c5a;
+  margin-bottom: 0.5rem;
+}
+
+.register-container input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #c5d5a6;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  color: #3c6e47;
+}
+
+button {
+  background-color: #3c6e47;
+  color: white;
+  padding: 0.8rem 1.2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #5a8f6e;
+}
+
+.login-btn {
+  color: #3c6e47;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.login-btn:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
 @media (max-width: 600px) {
   .register-container {
-      padding: 15px;
+      padding: 20px;
+  }
+
+  .register-container h2 {
+      font-size: 1.5rem;
   }
 }
 

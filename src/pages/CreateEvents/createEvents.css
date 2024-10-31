@@ -1,97 +1,67 @@
-/* Apply universal box-sizing */
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-}
-
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    font-family: Arial, sans-serif;
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-
+/* createEvents.css */
 .create-events-container {
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     min-height: 100vh;
-    width: 100%;
-    background-image: url("../../assets/EventBackground.svg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
+    background-color: #f1f5e0; /* Light earthy background */
     padding: 20px;
-    overflow-y: auto;
 }
 
 .events {
-    background-color: rgba(255, 255, 255, 0.95);
-    border-radius: 10px;
+    width: 100%;
+    max-width: 500px;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    max-width: 600px;
-    width: 90%; /* Update to 90% width */
-    margin: 0 auto;
-    overflow-y: auto;
+    text-align: center;
 }
 
-.event-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+.events h2 {
+    color: #3c6e47; /* Deep green color */
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
 }
 
-.event-form_top {
-    display: flex;
-    flex-direction: column;
-}
-
-.event-form_top label {
-    margin-bottom: 5px;
-    font-weight: bold;
+.event-form label {
+    display: block;
+    font-size: 1rem;
+    color: #6b8c5a;
+    margin-bottom: 0.5rem;
 }
 
 .event-form_top input {
     width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+    padding: 0.8rem;
+    border: 1px solid #c5d5a6;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    color: #3c6e47;
 }
 
 .create-event {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #fff;
-    background-color: #007bff;
+    background-color: #3c6e47;
+    color: white;
+    padding: 0.8rem 1.2rem;
+    font-size: 1rem;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .create-event:hover {
-    background-color: #0056b3;
+    background-color: #5a8f6e;
 }
 
-@media screen and (max-width: 600px) {
-    .create-events-container {
-        padding: 10px;
-    }
+/* Responsive */
+@media (max-width: 600px) {
     .events {
-        padding: 15px;
-        max-width: 100%; /* Take full screen width */
+        padding: 20px;
     }
-    .event-form_top input {
-        padding: 8px; /* Smaller padding for smaller screens */
-    }
-    .create-event {
-        padding: 10px; /* Smaller padding for button */
-        font-size: 14px; /* Slightly smaller text for button */
+
+    .events h2 {
+        font-size: 1.5rem;
     }
 }
