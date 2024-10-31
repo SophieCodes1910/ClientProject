@@ -12,6 +12,7 @@ const EventDetails = () => {
 
     const [eventName, setEventName] = useState("");
     const [organizerEmail, setOrganizerEmail] = useState("");
+    const [description, setDescription] = useState(""); // New state for description
     const [locationName, setLocationName] = useState("");
     const [eventDate, setEventDate] = useState("");
     const [eventStartTime, setEventStartTime] = useState("");
@@ -43,6 +44,7 @@ const EventDetails = () => {
                 const eventData = docSnap.data();
                 setEventName(eventData.eventName || "");
                 setOrganizerEmail(eventData.organizerEmail || "");
+                setDescription(eventData.description || ""); // Load description
                 setLocationName(eventData.location || "");
                 setEventDate(eventData.eventDate || "");
                 setEventStartTime(eventData.eventStartTime || "");
@@ -68,6 +70,7 @@ const EventDetails = () => {
             await updateDoc(eventRef, {
                 eventName,
                 organizerEmail,
+                description, // Save description
                 location: locationName,
                 eventDate,
                 eventStartTime,
@@ -142,6 +145,15 @@ const EventDetails = () => {
                         value={organizerEmail}
                         onChange={(e) => setOrganizerEmail(e.target.value)}
                         required
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label>Description:</label>
+                    <textarea
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        placeholder="Add event description"
                     />
                 </div>
 
@@ -253,12 +265,12 @@ const EventDetails = () => {
 
                         <div className="file-upload">
                             <label>Upload Images and Videos:</label>
-                            <input type="file" accept="image/*,video/*" onChange={handleFileChange} multiple />
+                            <input type="file" accept="image/*, video/*" onChange={handleFileChange} multiple />
                         </div>
                     </div>
                 )}
 
-                <button type="submit">Update Event</button>
+                <button type="submit">Save Changes</button>
             </form>
 
             <ToastContainer />
