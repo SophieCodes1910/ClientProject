@@ -8,6 +8,7 @@ html, body {
     min-height: 100vh;
 }
 
+/* Container styling for fullscreen background setup */
 .create-events-container {
     display: flex;
     align-items: center;
@@ -19,16 +20,20 @@ html, body {
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
+    position: relative; /* Ensure positioning context for z-index */
+    z-index: 1; /* Lower z-index for the background */
 }
 
+/* Styling for the form card to ensure it sits above other content */
 .events {
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.95); /* Increase opacity for contrast */
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     padding: 20px;
     max-width: 600px;
-    width: 90%; /* Width adjustment to fit smaller screens */
-    z-index: 1;
+    width: 90%;
+    z-index: 2; /* Higher z-index to appear above the background */
+    position: relative; /* Position relative to maintain z-index above background */
 }
 
 .events h2 {
@@ -43,6 +48,7 @@ html, body {
     gap: 20px;
 }
 
+/* Input fields styling */
 .event-form input,
 .event-form select,
 .event-form textarea {
@@ -76,20 +82,20 @@ html, body {
     background-color: #42d623;
 }
 
-/* Adjustments for smaller screens */
+/* Media queries for smaller screens */
 @media screen and (max-width: 600px) {
     .events {
         padding: 15px;
-        width: 100%; /* Full width on smaller screens */
+        width: 100%;
     }
 
     .create-event {
         padding: 12px;
-        font-size: 1rem; /* Smaller font size for smaller screens */
+        font-size: 1rem;
     }
     
     .event-form input, .event-form select, .event-form textarea {
-        padding: 10px; /* Slightly reduced padding on small screens */
+        padding: 10px;
         font-size: 0.9rem;
     }
 }
