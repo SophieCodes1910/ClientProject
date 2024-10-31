@@ -28,12 +28,22 @@
 /* Desktop Styles */
 @media screen and (min-width: 961px) {
     .nav-menu {
-        flex-direction: row; /* Horizontal layout for wider screens */
+        display: flex; /* Display links in a row */
+        flex-direction: row; /* Ensure links are in a row */
         justify-content: flex-end; /* Align items to the right */
         height: auto; /* Height adjusts automatically */
     }
     .nav-item {
-        padding: 0 20px; /* Add spacing between items */
+        padding: 0 30px; /* Increase spacing between items */
+    }
+    .nav-links {
+        position: relative; /* Allow for dropdown positioning */
+        color: #32ab26; /* Change color to fit the theme */
+        text-decoration: none; /* Remove underline from links */
+        transition: color 0.3s; /* Add transition for hover effect */
+    }
+    .nav-links:hover {
+        color: #28a745; /* Change color on hover */
     }
 }
 
