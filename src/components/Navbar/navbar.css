@@ -1,7 +1,5 @@
 /* Basic Reset */
-*,
-*::before,
-*::after {
+*, *::before, *::after {
     box-sizing: border-box;
 }
 
@@ -131,7 +129,6 @@
         font-size: 1.8rem;
         cursor: pointer;
     }
-
     .nav-menu {
         flex-direction: column;
         width: 100%;
@@ -145,14 +142,12 @@
         display: none;
         transition: opacity 0.5s ease, visibility 0.5s ease;
     }
-
     .nav-menu.active {
         opacity: 1;
         visibility: visible;
         display: flex;
         z-index: 1;
     }
-
     .dropdown-menu {
         position: static;
         display: block;
@@ -160,7 +155,6 @@
         padding: 0;
         margin: 10px 0;
     }
-
     .menu-overlay {
         position: fixed;
         top: 80px;
