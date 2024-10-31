@@ -38,6 +38,47 @@ html, body {
     z-index: 10;
 }
 
+.event-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.event-form_top {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.event-form_top label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.event-form_top input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.create-event {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.create-event:hover {
+    background-color: #0056b3;
+}
+
 @media screen and (max-width: 600px) {
     .create-events-container {
         padding: 10px;
@@ -45,6 +86,13 @@ html, body {
     .events {
         padding: 15px;
         max-width: 90%; /* Adjust width for smaller screens */
+    }
+    .event-form_top input {
+        padding: 8px; /* Smaller padding for smaller screens */
+    }
+    .create-event {
+        padding: 10px; /* Smaller padding for button */
+        font-size: 14px; /* Slightly smaller text for button */
     }
 }
 
