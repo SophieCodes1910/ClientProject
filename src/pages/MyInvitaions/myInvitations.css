@@ -1,3 +1,8 @@
+/* Assuming your navbar has a fixed height, adjust the value as needed */
+:root {
+    --navbar-height: 60px; /* Adjust according to your navbar height */
+}
+
 .my-invitations-container {
     display: grid !important;
     grid-template-columns: repeat(3, 1fr) !important; /* Default to 3 columns (desktop) */
@@ -5,6 +10,7 @@
     padding: 20px !important;
     align-items: start !important; /* Align items to the top */
     box-sizing: border-box !important;
+    margin-top: var(--navbar-height); /* Add margin to clear the navbar */
 }
 
 /* Tablet view: 2 elements per row */
@@ -57,7 +63,10 @@
 
 .no-events-container {
     width: 100%;
-    height: calc(100vh - 80px);
+    height: calc(100vh - var(--navbar-height)); /* Adjust height to account for navbar */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .no-events-card {
