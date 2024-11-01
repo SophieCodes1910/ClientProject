@@ -57,7 +57,7 @@ export const App = () => {
                     <Routes>
                         <Route path="/ClientProject" element={<LandingPage />} />
                         <Route path="/home" element={<Home route={route} setRoute={setRoute} />} />
-                        <Route path="/events/event/:id" element={<EventDetails />} />
+                        <Route path="/EventDetails" element={<EventDetails />} />
                         <Route path="/contact" element={<Contact />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
