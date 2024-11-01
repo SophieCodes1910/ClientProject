@@ -79,10 +79,16 @@
 
 /* Wide Screen Dropdown Positioning */
 @media screen and (min-width: 960px) {
+    /* Position the dropdown directly under the "Events" link */
+    .nav-item.dropdown {
+        position: relative;
+    }
+    
     .dropdown-menu {
         position: absolute;
-        top: 80px; /* Adjusts the dropdown to align directly below the "Events" link */
+        top: 100%; /* Positions it directly below the Events link */
         left: 0;
+        width: 100%; /* Ensure it stays aligned with the Events link width */
     }
 }
 
