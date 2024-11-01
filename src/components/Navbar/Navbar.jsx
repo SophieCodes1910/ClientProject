@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import "./navbar.css";
@@ -9,14 +9,29 @@ export const Navbar = () => {
     const email = localStorage.getItem("email");
     const [click, setClick] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 960);
-    const [eventsDropdown, setEventsDropdown] = useState(false); // State for dropdown
+    const [eventsDropdown, setEventsDropdown] = useState(false);
     const location = useLocation();
+    const dropdownRef = useRef(null);
 
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth <= 960);
         window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
+
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setEventsDropdown(false);
+            }
+        };
+
+        if (isMobile) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isMobile]);
 
     const handleClick = () => {
         setClick(!click);
@@ -25,12 +40,12 @@ export const Navbar = () => {
 
     const closeDropdownMenu = () => {
         setClick(false);
-        setEventsDropdown(false); // Close dropdown when main menu is closed
+        setEventsDropdown(false);
         document.body.classList.remove("menu-open");
     };
 
     const toggleEventsDropdown = () => {
-        setEventsDropdown(!eventsDropdown); // Toggle dropdown on click for touch devices
+        setEventsDropdown(!eventsDropdown);
     };
 
     const getNavLinkClass = (path) => {
@@ -52,10 +67,14 @@ export const Navbar = () => {
                     </li>
 
                     {/* Events with dropdown menu */}
-                    <li className="nav-item dropdown" onClick={toggleEventsDropdown}>
-                        <div 
-                            className={`nav-links ${eventsDropdown ? "active" : ""}`}
-                        >
+                    <li
+                        className={`nav-item dropdown ${eventsDropdown ? "active" : ""}`}
+                        onMouseEnter={!isMobile ? toggleEventsDropdown : null}
+                        onMouseLeave={!isMobile ? toggleEventsDropdown : null}
+                        onClick={isMobile ? toggleEventsDropdown : null}
+                        ref={dropdownRef}
+                    >
+                        <div className={`nav-links ${eventsDropdown ? "active" : ""}`}>
                             Events <i className="fas fa-caret-down"></i>
                         </div>
                         {eventsDropdown && (

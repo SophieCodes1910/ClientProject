@@ -11,13 +11,13 @@
 .navbar-container {
     display: flex;
     align-items: center;
-    justify-content: center; /* Center-aligning navbar items */
+    justify-content: center;
     width: 100%;
 }
 
 .navbar-logo {
     position: absolute;
-    left: 20px; /* Position the logo on the left side */
+    left: 20px;
 }
 
 .logo {
@@ -74,7 +74,12 @@
     background-color: rgba(66, 214, 35, 0.1);
 }
 
-/* Display dropdown menu on click for desktop */
+/* Display dropdown menu on hover for desktop */
+.nav-item.dropdown:hover .dropdown-menu {
+    display: flex;
+}
+
+/* Display dropdown menu on click for mobile */
 .nav-item.dropdown.active .dropdown-menu {
     display: flex;
 }
