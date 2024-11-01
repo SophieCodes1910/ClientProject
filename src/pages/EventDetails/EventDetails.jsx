@@ -12,20 +12,20 @@ const EventDetails = () => {
 
     const [eventName, setEventName] = useState("");
     const [organizerEmail, setOrganizerEmail] = useState("");
-    const [description, setDescription] = useState(""); // State for description
+    const [description, setDescription] = useState("");
     const [locationName, setLocationName] = useState("");
     const [eventDate, setEventDate] = useState("");
     const [eventStartTime, setEventStartTime] = useState("");
     const [eventEndTime, setEventEndTime] = useState("");
     const [inviteeEmails, setInviteeEmails] = useState([]);
     const [newEmail, setNewEmail] = useState("");
-    const [visibility, setVisibility] = useState("public"); // New state for visibility (public/private)
     const [additionalDetailsOpen, setAdditionalDetailsOpen] = useState(false);
     const [adPlans, setAdPlans] = useState("");
     const [manualPlan, setManualPlan] = useState("");
-    const [addedPlans, setAddedPlans] = useState([]); // State for added plans
+    const [addedPlans, setAddedPlans] = useState([]);
     const [uploadedFiles, setUploadedFiles] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isPublic, setIsPublic] = useState(true); // State to manage public/private option
 
     useEffect(() => {
         if (!docId) {
@@ -45,15 +45,15 @@ const EventDetails = () => {
                 const eventData = docSnap.data();
                 setEventName(eventData.eventName || "");
                 setOrganizerEmail(eventData.organizerEmail || "");
-                setDescription(eventData.description || ""); // Load description
+                setDescription(eventData.description || "");
                 setLocationName(eventData.location || "");
                 setEventDate(eventData.eventDate || "");
                 setEventStartTime(eventData.eventStartTime || "");
                 setEventEndTime(eventData.eventEndTime || "");
                 setInviteeEmails(eventData.inviteeEmails || []);
                 setAdPlans(eventData.adPlans || "");
-                setVisibility(eventData.visibility || "public"); // Load visibility
-                setAddedPlans(eventData.addedPlans || []); // Load existing plans
+                setAddedPlans(eventData.addedPlans || []);
+                setIsPublic(eventData.isPublic !== undefined ? eventData.isPublic : true); // Load existing public/private status
             } catch (error) {
                 console.error("Error fetching event details:", error);
                 toast.error("Error fetching event details.");
@@ -72,16 +72,16 @@ const EventDetails = () => {
             await updateDoc(eventRef, {
                 eventName,
                 organizerEmail,
-                description, // Save description
+                description,
                 location: locationName,
                 eventDate,
                 eventStartTime,
                 eventEndTime,
                 inviteeEmails,
                 adPlans,
-                visibility, // Save visibility
-                addedPlans, // Save added plans to Firestore
-                uploadedFiles
+                addedPlans,
+                uploadedFiles,
+                isPublic // Save public/private status to Firestore
             });
             toast.success("Event updated successfully!");
         } catch (error) {
@@ -112,7 +112,7 @@ const EventDetails = () => {
     const handleAddPlan = () => {
         const planPattern = /^.+:\s*\d{2}:\d{2}$/; // Ensure the format is 'Description: HH:MM'
         if (planPattern.test(manualPlan)) {
-            setAddedPlans((prevPlans) => [...prevPlans, manualPlan]); // Add to the list of added plans
+            setAddedPlans((prevPlans) => [...prevPlans, manualPlan]);
             setManualPlan("");
         } else {
             toast.error("Plan format should be 'Description: HH:MM'");
@@ -120,7 +120,7 @@ const EventDetails = () => {
     };
 
     const handleRemovePlan = (planToRemove) => {
-        setAddedPlans(addedPlans.filter(plan => plan !== planToRemove)); // Remove the plan from the list
+        setAddedPlans(addedPlans.filter(plan => plan !== planToRemove));
     };
 
     if (loading) {
@@ -154,35 +154,10 @@ const EventDetails = () => {
                 <div className="form-group">
                     <label>Description:</label>
                     <textarea
-                        className="description-textbox" // Apply style class to match the form
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder="Add event description"
                     />
-                </div>
-
-                <div className="form-group">
-                    <label>Event Visibility:</label>
-                    <div className="visibility-options">
-                        <label>
-                            <input
-                                type="radio"
-                                value="public"
-                                checked={visibility === "public"}
-                                onChange={() => setVisibility("public")}
-                            />
-                            Public
-                        </label>
-                        <label>
-                            <input
-                                type="radio"
-                                value="private"
-                                checked={visibility === "private"}
-                                onChange={() => setVisibility("private")}
-                            />
-                            Private
-                        </label>
-                    </div>
                 </div>
 
                 <div className="form-group">
@@ -224,10 +199,103 @@ const EventDetails = () => {
                     />
                 </div>
 
-                {/* Rest of your form goes here */}
-                <button type="submit">Save Changes</button>
-            </form>
+                <h3>Invitees</h3>
+                <div className="form-group invitee-email">
+                    <input
+                        type="email"
+                        value={newEmail}
+                        onChange={(e) => setNewEmail(e.target.value)}
+                        placeholder="Add invitee email"
+                    />
+                    <button type="button" onClick={handleAddEmail}>Add Email</button>
+                </div>
+                <ul className="invitee-list">
+                    {inviteeEmails.length === 0 ? (
+                        <li>No invitees added yet.</li>
+                    ) : (
+                        inviteeEmails.map((email, index) => (
+                            <li key={index}>
+                                {email}
+                                <button type="button" onClick={() => handleRemoveEmail(email)}>Remove</button>
+                            </li>
+                        ))
+                    )}
+                </ul>
 
+                <button
+                    type="button"
+                    className="toggle-details"
+                    onClick={() => setAdditionalDetailsOpen(!additionalDetailsOpen)}
+                >
+                    {additionalDetailsOpen ? "Close Additional Details" : "Additional Details"}
+                </button>
+
+                {additionalDetailsOpen && (
+                    <div className="additional-details">
+                        <h3>Add Plans</h3>
+                        <div className="form-group">
+                            <input
+                                type="text"
+                                value={manualPlan}
+                                onChange={(e) => setManualPlan(e.target.value)}
+                                placeholder="Description: HH:MM"
+                            />
+                            <button type="button" onClick={handleAddPlan}>Add Plan</button>
+                        </div>
+
+                        <ul className="added-plans-list">
+                            {addedPlans.length === 0 ? (
+                                <li>No plans added yet.</li>
+                            ) : (
+                                addedPlans.map((plan, index) => (
+                                    <li key={index}>
+                                        {plan}
+                                        <button type="button" onClick={() => handleRemovePlan(plan)}>Remove</button>
+                                    </li>
+                                ))
+                            )}
+                        </ul>
+
+                        <div className="form-group public-private-group">
+                            <label>Event Type:</label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    value="public"
+                                    checked={isPublic}
+                                    onChange={() => setIsPublic(true)}
+                                />
+                                Public
+                            </label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    value="private"
+                                    checked={!isPublic}
+                                    onChange={() => setIsPublic(false)}
+                                />
+                                Private
+                            </label>
+                        </div>
+
+                        <div className="form-group">
+                            <label>Upload Files:</label>
+                            <input type="file" multiple onChange={handleFileChange} />
+                        </div>
+
+                        <div>
+                            <h4>Uploaded Files:</h4>
+                            <ul>
+                                {uploadedFiles.map((file, index) => (
+                                    <li key={index}>{file.name}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                )}
+
+                <button type="submit">Update Event</button>
+            </form>
             <ToastContainer />
         </div>
     );
