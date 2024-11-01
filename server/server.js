@@ -14,12 +14,14 @@ expressApp.use(cors({
     credentials: true // Allow cookies or other credentials if needed
 }));
 
+// Preflight requests
+expressApp.options('*', cors());
+
 // Use JSON parsing middleware
 expressApp.use(express.json()); // For parsing application/json
 
 // Define your endpoints
 expressApp.post('/auth/login', async (req, res) => {
-    // Handle login logic here
     try {
         // Implement your login logic
         res.status(200).send("Login successful");
