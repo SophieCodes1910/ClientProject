@@ -7,6 +7,8 @@
     align-items: center;
     padding: 0 20px;
     color: #42d623;
+    position: relative; /* To ensure dropdown positioning */
+    z-index: 10;
 }
 
 .navbar-container {
@@ -33,27 +35,19 @@
     padding: 0;
 }
 
-/* For wide screens - show menu inline and enable dropdown on click */
+/* Wide screens - hide nav menu initially and toggle on click */
 @media screen and (min-width: 961px) {
     .nav-menu {
-        display: flex;
+        display: flex; /* Show menu as flex on wide screens */
         gap: 20px;
     }
-    
+
     .nav-menu.active {
         display: flex;
-        flex-direction: column;
-        position: absolute;
-        top: 80px;
-        right: 20px;
-        background-color: #b2ffa0;
-        padding: 10px;
-        border-radius: 4px;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     }
 }
 
-/* Mobile - full-screen dropdown */
+/* Mobile - full screen dropdown */
 @media screen and (max-width: 960px) {
     .nav-menu {
         flex-direction: column;
@@ -66,6 +60,7 @@
         opacity: 0;
         visibility: hidden;
         transition: opacity 0.3s ease, visibility 0.3s ease;
+        z-index: 9; /* Layer below overlay */
     }
 
     .nav-menu.active {
@@ -74,13 +69,12 @@
     }
 }
 
-/* Menu icon for all views */
+/* Menu icon styling */
 .menu-icon {
     font-size: 1.8rem;
     color: #32ab26;
     cursor: pointer;
-    position: relative;
-    right: 20px;
+    z-index: 10;
 }
 
 .nav-item {
@@ -97,7 +91,7 @@
     color: #28a745;
 }
 
-/* Menu overlay, only active when menu is open */
+/* Menu overlay for closing the menu */
 .menu-overlay {
     position: fixed;
     top: 0;
@@ -105,12 +99,13 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 10;
+    z-index: 8; /* Layer below menu */
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
+/* Show overlay only when menu is active */
 .nav-menu.active ~ .menu-overlay {
     opacity: 1;
     visibility: visible;
