@@ -7,8 +7,8 @@ const { auth, db, storage } = require('./src/firebase'); // Adjust the path if n
 // Create an instance of Express
 const expressApp = express();
 
-// Replace with your actual Ngrok URL
-const ngrokUrl = ' https://5544-80-233-56-174.ngrok-free.app'; // Your Ngrok tunnel URL
+// Replace with your actual Ngrok URL (make sure to remove leading/trailing spaces)
+const ngrokUrl = 'https://5544-80-233-56-174.ngrok-free.app'; // Your Ngrok tunnel URL
 
 // Use CORS middleware with specific origins
 expressApp.use(cors({
@@ -17,8 +17,8 @@ expressApp.use(cors({
     credentials: true // Allow cookies or other credentials if needed
 }));
 
-// Preflight requests
-expressApp.options('*', cors());
+// Preflight requests handling (OPTIONS method)
+expressApp.options('*', cors()); // This will handle preflight requests automatically
 
 // Use JSON parsing middleware
 expressApp.use(express.json()); // For parsing application/json
