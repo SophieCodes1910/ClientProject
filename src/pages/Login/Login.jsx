@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import { signInWithEmailAndPassword } from "firebase/auth";  
 import { auth } from "../../firebase"; 
 import PropTypes from 'prop-types';
-import { useLocation } from "react-router-dom"; // Import useLocation
+import { useLocation } from "react-router-dom"; 
 import "./login.css";
 
 export const Login = ({ setLoggedIn }) => {
@@ -12,7 +12,7 @@ export const Login = ({ setLoggedIn }) => {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const location = useLocation(); // Get current location
+    const location = useLocation();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -21,22 +21,20 @@ export const Login = ({ setLoggedIn }) => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-    
+
             localStorage.setItem("email", email);
-            setLoggedIn(true); 
-    
+            localStorage.setItem("token", user.accessToken); // Save token if needed
+            setLoggedIn(true); // Set logged in status
+
             toast.success("Login successful!", {
                 position: 'bottom-right'
             });
-    
+
             setTimeout(() => {
                 navigate("/"); 
             }, 3000);
         } catch (error) {
             console.error("Login error:", error);
-            console.log("Error code:", error.code);
-            console.log("Error message:", error.message);
-            
             switch (error.code) {
                 case 'auth/user-not-found':
                     toast.error("User not found. Please register.", { position: 'bottom-right' });
@@ -63,7 +61,7 @@ export const Login = ({ setLoggedIn }) => {
     };
 
     return (
-        <div className="auth-page"> {/* Apply the background class here */}
+        <div className="auth-page">
             <div className="login-container">
                 <h2>Login</h2>
                 <form onSubmit={handleLogin}>
@@ -100,3 +98,4 @@ export const Login = ({ setLoggedIn }) => {
 Login.propTypes = {
     setLoggedIn: PropTypes.func.isRequired,
 };
+
