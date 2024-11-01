@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './home.css';
+import { Login } from "../Login/Login";
 import { isAuthenticated } from "../../auth/auth";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -15,10 +16,6 @@ export const Home = ({ route, setRoute }) => {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const updateRoutes = (data) => {
-        setRoute(data);
-    };
-
     // Function to fetch events
     const fetchEvents = async () => {
         const organizerEmail = localStorage.getItem("email");
@@ -32,7 +29,6 @@ export const Home = ({ route, setRoute }) => {
             });
 
             if (response.data.success) {
-                // Filter to only include public events
                 const publicEvents = response.data.data.filter(event => event.isPublic);
                 setEvents(publicEvents);
                 setLoading(false);
@@ -50,54 +46,11 @@ export const Home = ({ route, setRoute }) => {
             }
         } catch (error) {
             console.error("Error fetching events:", error);
-            toast.error("An error occurred while fetching events. Please try again.", {
-                position: "bottom-right",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-        }
-    };
-
-    // Function to handle event deletion
-    const handleDelete = async (eventId) => {
-        const token = localStorage.getItem("token");
-        try {
-            const response = await axios.delete(`${apiUrl}/invitations/invitation/${eventId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            if (response.data.success) {
-                toast.success("Event deleted successfully.", {
-                    position: "bottom-right",
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-                // Remove the deleted event from the events state
-                setEvents(events.filter(event => event.id !== eventId));
-            } else {
-                toast.error("Failed to delete event: " + response.data.message, {
-                    position: "bottom-right",
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
+            let errorMessage = "An error occurred while fetching events. Please try again.";
+            if (error.response && error.response.data && error.response.data.message) {
+                errorMessage = error.response.data.message; // Use server-provided message if available
             }
-        } catch (error) {
-            console.error("Error deleting event:", error);
-            toast.error("An error occurred while deleting the event. Please try again.", {
+            toast.error(errorMessage, {
                 position: "bottom-right",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -106,15 +59,28 @@ export const Home = ({ route, setRoute }) => {
                 draggable: true,
                 progress: undefined,
             });
+        } finally {
+            setLoading(false); // Ensure loading state is reset
         }
     };
 
-    // Use effect to fetch events when component mounts or loggedIn state changes
+    // Use effect to fetch events when component mounts or when loggedIn changes
     useEffect(() => {
         if (loggedIn) {
             fetchEvents();
         }
     }, [loggedIn]);
+
+    // Use effect to set loggedIn state when authentication status changes
+    useEffect(() => {
+        const handleAuthChange = () => {
+            setLoggedIn(isAuthenticated());
+        };
+        window.addEventListener('storage', handleAuthChange);
+        return () => {
+            window.removeEventListener('storage', handleAuthChange);
+        };
+    }, []);
 
     return (
         <div className={events.length > 0 ? 'home-container' : "no-events-container"}>
@@ -128,26 +94,22 @@ export const Home = ({ route, setRoute }) => {
                                         return (
                                             <div key={event.id}>
                                                 <div className="event-card">
-                                                    <button className="delete-button"
-                                                        onClick={() => handleDelete(event.id)}>X
-                                                    </button>
                                                     <Link to={`/events/event/${event.id}`}>
                                                         <h3>{event.eventName}</h3>
                                                     </Link>
                                                 </div>
                                             </div>
-                                        );
+                                        )
                                     })
                                 ) : (
                                     <div className="no-events">
-                                        <h3>No public events found.</h3>
+                                        <h3>No events found.</h3>
                                     </div>
                                 )}
                             </div>
                         </div>
                     ) : (
-                        // Remove the Login component if user is logged in
-                        <div className="no-events">
+                        <div className="login-prompt">
                             <h3>Please log in to see events.</h3>
                         </div>
                     )}
