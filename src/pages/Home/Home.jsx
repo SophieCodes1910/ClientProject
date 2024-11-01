@@ -47,7 +47,7 @@ export const Home = () => {
                         {events.length > 0 ? (
                             events.reverse().map(event => (
                                 <div key={event.id} className="event-card">
-                                    <Link to={`/events/event//${event.id}`}>
+                                    <Link to={`/events/event/${event.id}`}>
                                         <h3>{event.eventName}</h3>
                                     </Link>
                                 </div>
