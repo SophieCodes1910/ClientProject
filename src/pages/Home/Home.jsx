@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import './home.css';
-import { Login } from "../Login/Login";
 import { isAuthenticated } from "../../auth/auth";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -147,7 +146,10 @@ export const Home = ({ route, setRoute }) => {
                             </div>
                         </div>
                     ) : (
-                        <Login setLoggedIn={setLoggedIn} />
+                        // Remove the Login component if user is logged in
+                        <div className="no-events">
+                            <h3>Please log in to see events.</h3>
+                        </div>
                     )}
                 </div>
             }
