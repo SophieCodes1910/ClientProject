@@ -254,12 +254,12 @@ const EventDetails = () => {
                         </ul>
 
                         <div className="file-upload">
-                            <label>Upload Schedule (Plans):</label>
+                            <label>Upload Seating Plan (PDF):</label>
                             <input type="file" accept="application/pdf" onChange={handleFileChange} multiple />
                         </div>
 
                         <div className="file-upload">
-                            <label>Import Map:</label>
+                            <label>Import Maps (PDF):</label>
                             <input type="file" accept="application/pdf" onChange={handleFileChange} multiple />
                         </div>
 
