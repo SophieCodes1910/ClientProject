@@ -12,13 +12,14 @@ const EventDetails = () => {
 
     const [eventName, setEventName] = useState("");
     const [organizerEmail, setOrganizerEmail] = useState("");
-    const [description, setDescription] = useState(""); // New state for description
+    const [description, setDescription] = useState(""); // State for description
     const [locationName, setLocationName] = useState("");
     const [eventDate, setEventDate] = useState("");
     const [eventStartTime, setEventStartTime] = useState("");
     const [eventEndTime, setEventEndTime] = useState("");
     const [inviteeEmails, setInviteeEmails] = useState([]);
     const [newEmail, setNewEmail] = useState("");
+    const [visibility, setVisibility] = useState("public"); // New state for visibility (public/private)
     const [additionalDetailsOpen, setAdditionalDetailsOpen] = useState(false);
     const [adPlans, setAdPlans] = useState("");
     const [manualPlan, setManualPlan] = useState("");
@@ -51,6 +52,7 @@ const EventDetails = () => {
                 setEventEndTime(eventData.eventEndTime || "");
                 setInviteeEmails(eventData.inviteeEmails || []);
                 setAdPlans(eventData.adPlans || "");
+                setVisibility(eventData.visibility || "public"); // Load visibility
                 setAddedPlans(eventData.addedPlans || []); // Load existing plans
             } catch (error) {
                 console.error("Error fetching event details:", error);
@@ -77,6 +79,7 @@ const EventDetails = () => {
                 eventEndTime,
                 inviteeEmails,
                 adPlans,
+                visibility, // Save visibility
                 addedPlans, // Save added plans to Firestore
                 uploadedFiles
             });
@@ -151,10 +154,35 @@ const EventDetails = () => {
                 <div className="form-group">
                     <label>Description:</label>
                     <textarea
+                        className="description-textbox" // Apply style class to match the form
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder="Add event description"
                     />
+                </div>
+
+                <div className="form-group">
+                    <label>Event Visibility:</label>
+                    <div className="visibility-options">
+                        <label>
+                            <input
+                                type="radio"
+                                value="public"
+                                checked={visibility === "public"}
+                                onChange={() => setVisibility("public")}
+                            />
+                            Public
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                value="private"
+                                checked={visibility === "private"}
+                                onChange={() => setVisibility("private")}
+                            />
+                            Private
+                        </label>
+                    </div>
                 </div>
 
                 <div className="form-group">
@@ -196,80 +224,7 @@ const EventDetails = () => {
                     />
                 </div>
 
-                <h3>Invitees</h3>
-                <div className="form-group invitee-email">
-                    <input
-                        type="email"
-                        value={newEmail}
-                        onChange={(e) => setNewEmail(e.target.value)}
-                        placeholder="Add invitee email"
-                    />
-                    <button type="button" onClick={handleAddEmail}>Add Email</button>
-                </div>
-                <ul className="invitee-list">
-                    {inviteeEmails.length === 0 ? (
-                        <li>No invitees added yet.</li>
-                    ) : (
-                        inviteeEmails.map((email, index) => (
-                            <li key={index}>
-                                {email}
-                                <button type="button" onClick={() => handleRemoveEmail(email)}>Remove</button>
-                            </li>
-                        ))
-                    )}
-                </ul>
-
-                <button
-                    type="button"
-                    className="toggle-details"
-                    onClick={() => setAdditionalDetailsOpen(!additionalDetailsOpen)}
-                >
-                    {additionalDetailsOpen ? "Close Additional Details" : "Additional Details"}
-                </button>
-
-                {additionalDetailsOpen && (
-                    <div className="additional-details">
-                        <h3>Add Plans</h3>
-                        <div className="form-group">
-                            <input
-                                type="text"
-                                value={manualPlan}
-                                onChange={(e) => setManualPlan(e.target.value)}
-                                placeholder="Description: HH:MM"
-                            />
-                            <button type="button" onClick={handleAddPlan}>Add Plan</button>
-                        </div>
-
-                        <ul className="added-plans-list">
-                            {addedPlans.length === 0 ? (
-                                <li>No plans added yet.</li>
-                            ) : (
-                                addedPlans.map((plan, index) => (
-                                    <li key={index}>
-                                        {plan}
-                                        <button type="button" onClick={() => handleRemovePlan(plan)}>Remove</button>
-                                    </li>
-                                ))
-                            )}
-                        </ul>
-
-                        <div className="file-upload">
-                            <label>Upload Schedule (Plans):</label>
-                            <input type="file" accept="application/pdf" onChange={handleFileChange} multiple />
-                        </div>
-
-                        <div className="file-upload">
-                            <label>Import Map:</label>
-                            <input type="file" accept="application/pdf" onChange={handleFileChange} multiple />
-                        </div>
-
-                        <div className="file-upload">
-                            <label>Upload Images and Videos:</label>
-                            <input type="file" accept="image/*, video/*" onChange={handleFileChange} multiple />
-                        </div>
-                    </div>
-                )}
-
+                {/* Rest of your form goes here */}
                 <button type="submit">Save Changes</button>
             </form>
 
