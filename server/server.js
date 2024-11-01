@@ -1,5 +1,4 @@
 // server.js
-// server.js
 const functions = require('firebase-functions');
 const cors = require('cors');
 const express = require('express');
@@ -25,7 +24,7 @@ expressApp.options('*', cors());
 expressApp.use(express.json()); // For parsing application/json
 
 // Define your endpoints
-expressApp.post('/auth/login', async (req, res) => {
+expressApp.post('/auth/auth', async (req, res) => {
     try {
         // Implement your login logic
         res.status(200).send("Login successful");
@@ -36,7 +35,7 @@ expressApp.post('/auth/login', async (req, res) => {
 });
 
 // Example endpoint for fetching events
-expressApp.get('/events', async (req, res) => {
+expressApp.get('/EventDetails', async (req, res) => {
     try {
         // Logic to fetch events from Firestore
         const events = []; // Replace with actual fetching logic
