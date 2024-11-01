@@ -9,7 +9,7 @@ export const Navbar = () => {
     const email = localStorage.getItem("email");
     const [click, setClick] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 960);
-    const [eventsDropdown, setEventsDropdown] = useState(false); // State for dropdown
+    const [eventsDropdown, setEventsDropdown] = useState(false);
     const location = useLocation();
 
     useEffect(() => {
@@ -25,12 +25,12 @@ export const Navbar = () => {
 
     const closeDropdownMenu = () => {
         setClick(false);
-        setEventsDropdown(false); // Close dropdown when main menu is closed
+        setEventsDropdown(false);
         document.body.classList.remove("menu-open");
     };
 
     const toggleEventsDropdown = () => {
-        setEventsDropdown(!eventsDropdown); // Toggle dropdown on click
+        setEventsDropdown(!eventsDropdown);
     };
 
     const getNavLinkClass = (path) => {
@@ -52,8 +52,12 @@ export const Navbar = () => {
                     </li>
 
                     {/* Events with dropdown menu */}
-                    <li className="nav-item dropdown">
-                        <div 
+                    <li
+                        className="nav-item dropdown"
+                        onMouseEnter={() => !isMobile && setEventsDropdown(true)}
+                        onMouseLeave={() => !isMobile && setEventsDropdown(false)}
+                    >
+                        <div
                             className={`nav-links ${eventsDropdown ? "active" : ""}`}
                             onClick={toggleEventsDropdown}
                         >

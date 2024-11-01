@@ -1,6 +1,39 @@
-/* Base navbar styles remain the same... */
+/* Navbar base styles */
+.navbar {
+    background: #b2ffa0;
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    color: #42d623;
+}
 
-/* Dropdown container for events link */
+.navbar-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.navbar-logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    width: 80px;
+    height: auto;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Dropdown container for Events */
 .nav-item.dropdown .nav-links {
     cursor: pointer;
     position: relative;
@@ -10,7 +43,6 @@
     margin-left: 5px;
 }
 
-/* Dropdown menu styling */
 .dropdown-menu {
     position: absolute;
     top: 100%;
@@ -37,4 +69,36 @@
 .dropdown-menu li a:hover {
     color: #28a745;
     background-color: rgba(66, 214, 35, 0.1);
+}
+
+/* Menu icon styling */
+.menu-icon {
+    font-size: 1.8rem;
+    color: #32ab26;
+    cursor: pointer;
+    display: block;
+    position: absolute;
+    right: 20px;
+    top: 25px;
+}
+
+/* Mobile menu styling */
+@media screen and (max-width: 960px) {
+    .nav-menu {
+        flex-direction: column;
+        position: fixed;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        height: calc(100vh - 80px);
+        background-color: #b2ffa0;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .nav-menu.active {
+        opacity: 1;
+        visibility: visible;
+    }
 }
