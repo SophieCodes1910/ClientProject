@@ -1,4 +1,5 @@
 // server.js
+// server.js
 const functions = require('firebase-functions');
 const cors = require('cors');
 const express = require('express');
@@ -7,9 +8,12 @@ const { auth, db, storage } = require('./src/firebase'); // Adjust the path if n
 // Create an instance of Express
 const expressApp = express();
 
-// Use CORS middleware with a specific origin
+// Replace with your actual Ngrok URL
+const ngrokUrl = ' https://5544-80-233-56-174.ngrok-free.app'; // Your Ngrok tunnel URL
+
+// Use CORS middleware with specific origins
 expressApp.use(cors({
-    origin: 'https://sophiecodes1910.github.io', // Your GitHub Pages URL
+    origin: [ngrokUrl, 'https://sophiecodes1910.github.io'], // Allow both Ngrok and GitHub Pages
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true // Allow cookies or other credentials if needed
 }));
