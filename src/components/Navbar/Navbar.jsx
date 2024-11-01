@@ -35,17 +35,12 @@ export const Navbar = () => {
     return (
         <nav className="navbar">
             <div className="navbar-container">
+                {/* Logo on the far left */}
                 <Link to="/home" className="navbar-logo" onClick={closeDropdownMenu}>
                     <img className="logo" src={logo} alt="event schedule app main logo" />
                 </Link>
 
-                {/* Menu icon only visible on wide screens */}
-                {!isMobile && (
-                    <div className="menu-icon" onClick={handleClick}>
-                        <i className={click ? "fas fa-times" : "fas fa-bars"}></i>
-                    </div>
-                )}
-
+                {/* Navigation Links in the middle */}
                 <ul className={`nav-menu ${click ? "active" : ""}`}>
                     <li className="nav-item">
                         <Link to="/home" className={getNavLinkClass("/home")} onClick={closeDropdownMenu}>
@@ -72,9 +67,13 @@ export const Navbar = () => {
                         )}
                     </li>
                 </ul>
+
+                {/* Menu icon on the far right */}
+                <div className="menu-icon" onClick={handleClick}>
+                    <i className={click ? "fas fa-times" : "fas fa-bars"}></i>
+                </div>
             </div>
             {click && <div className="menu-overlay" onClick={closeDropdownMenu}></div>}
         </nav>
     );
 };
-
