@@ -64,7 +64,7 @@ export const App = () => {
                         <Route path="/register" element={<Register />} />
                         <Route path="/create" element={<CreateEvents />} />
                         <Route path="/my-invitations" element={<MyInvitations />} />
-                        <Route path="/guest-event/:eventId" element={<GuestEventDetails />} /> {/* Guest Event Details Route */}
+                        <Route path="/events/event/:eventId" element={<GuestEventDetails />} /> {/* Guest Event Details Route */}
                         <Route path="*" element={<LandingPage />} />
                     </Routes>
                     <Toaster />
