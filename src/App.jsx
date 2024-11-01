@@ -1,9 +1,8 @@
-//App.jsx
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import logo from "./assets/logo.png";
 import "./App.css";
 import { Navbar } from "./components/Navbar/Navbar.jsx";
-import { LandingPage } from "./pages/LandingPage/LandingPage.jsx";  // Import LandingPage
+import { LandingPage } from "./pages/LandingPage/LandingPage.jsx";
 import { Home } from "./pages/Home/Home.jsx";
 import { Contact } from "./pages/Contact/Contact.jsx";
 import { Login } from "./pages/Login/Login.jsx";
@@ -18,11 +17,10 @@ import { isAuthenticated } from "./auth/auth.js";
 import { FillCreatedEvent } from "./components/FillCreatedEvent/FillCreatedEvent.jsx";
 import EventDetails from './pages/EventDetails/EventDetails.jsx';
 
-
 export const App = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const [route, setRoute] = useState([]);
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // Add state for login status
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -46,7 +44,7 @@ export const App = () => {
         };
 
         if (isAuthenticated()) {
-            setIsLoggedIn(true); // Update login status if authenticated
+            setIsLoggedIn(true);
             fetchEvents();
         }
     }, []);
@@ -57,27 +55,18 @@ export const App = () => {
                 <Router>
                     <Navbar logo={logo} />
                     <Routes>
-                        {/* Default route now opens LandingPage */}
                         <Route path="/ClientProject" element={<LandingPage />} />
                         <Route path="/home" element={<Home route={route} setRoute={setRoute} />} />
-                        <Route path="/events/create-events" element={<CreateEvents />} />
-                        <Route path="/events/my-invitations" element={<MyInvitations />} />
+                        <Route path="/events/event/:id" element={<EventDetails />} />
                         <Route path="/contact" element={<Contact />} />
-                        <Route path="/login" element={<Login setLoggedIn={setIsLoggedIn} />} /> {/* Pass setLoggedIn */}
+                        <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
-                        <Route path="/EventDetails" element={<EventDetails />} />
-                        {
-                            route.map((event) => (
-                                <Route 
-                                    key={event.id} 
-                                    path={`/events/event/${event.id}`} 
-                                    element={<FillCreatedEvent data={event} />} 
-                                />
-                            ))
-                        }
+                        <Route path="/create" element={<CreateEvents />} />
+                        <Route path="/my-invitations" element={<MyInvitations />} />
+                        <Route path="*" element={<LandingPage />} />
                     </Routes>
+                    <Toaster />
                 </Router>
-                <Toaster />
             </div>
         </MyErrorBoundary>
     );

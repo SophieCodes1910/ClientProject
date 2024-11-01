@@ -11,22 +11,14 @@ export const Home = () => {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // Function to fetch events from Firestore
+    // Function to fetch all public events from Firestore
     const fetchEvents = async () => {
-        const organizerEmail = localStorage.getItem("email");
-
-        // Check if required values are available
-        if (!organizerEmail) {
-            toast.error("Missing email. Please log in again.");
-            return; // Prevent API call if credentials are missing
-        }
-
         setLoading(true);
 
         try {
             // Define your Firestore collection reference
             const eventsRef = collection(db, "events");
-            const q = query(eventsRef, where("organizerEmail", "==", organizerEmail));
+            const q = query(eventsRef, where("isPublic", "==", true)); // Only fetch public events
 
             // Fetch documents from Firestore
             const querySnapshot = await getDocs(q);
@@ -34,9 +26,7 @@ export const Home = () => {
 
             querySnapshot.forEach((doc) => {
                 const eventData = { id: doc.id, ...doc.data() };
-                if (eventData.isPublic) { // Only include public events
-                    publicEvents.push(eventData);
-                }
+                publicEvents.push(eventData); // Include all public events
             });
 
             // Set the fetched public events to state
