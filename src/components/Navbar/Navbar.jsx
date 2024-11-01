@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react"; 
 import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import "./navbar.css";
@@ -80,12 +80,12 @@ export const Navbar = () => {
                         {eventsDropdown && (
                             <ul className="dropdown-menu">
                                 <li>
-                                    <Link to="/my-invitations" onClick={closeDropdownMenu}>
+                                    <Link to="/my-invitations" className={getNavLinkClass("/my-invitations")} onClick={closeDropdownMenu}>
                                         My Invitations
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to="/create" onClick={closeDropdownMenu}>
+                                    <Link to="/create" className={getNavLinkClass("/create")} onClick={closeDropdownMenu}>
                                         Create Events
                                     </Link>
                                 </li>
