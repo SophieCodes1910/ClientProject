@@ -1,5 +1,5 @@
 // auth.js
-import { auth } from "../../firebase"; // Adjust path as necessary
+import { auth } from "../firebase"; // Adjust path as necessary
 import { onAuthStateChanged } from "firebase/auth";
 
 export const isAuthenticated = () => {
