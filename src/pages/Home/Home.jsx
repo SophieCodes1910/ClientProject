@@ -1,27 +1,24 @@
-//Home.jsx
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import './home.css';
-import {Login} from "../Login/Login";
-import {isAuthenticated} from "../../auth/auth";
-import {ToastContainer, toast} from 'react-toastify';
+import { Login } from "../Login/Login";
+import { isAuthenticated } from "../../auth/auth";
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
-import {Loader} from "../../components/Loader/Loader.jsx";
-import {Link, useNavigate} from "react-router-dom";
+import { Loader } from "../../components/Loader/Loader.jsx";
+import { Link, useNavigate } from "react-router-dom";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-export const Home = ({route, setRoute}) => {
+export const Home = ({ route, setRoute }) => {
     const navigate = useNavigate();
     const [loggedIn, setLoggedIn] = useState(isAuthenticated());
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(false);
-    // const [homeRoute, setHomeRoute] = useState([])
 
     const updateRoutes = (data) => {
-        setRoute(data)
-    }
-
+        setRoute(data);
+    };
 
     // Function to fetch events
     const fetchEvents = async () => {
@@ -36,10 +33,11 @@ export const Home = ({route, setRoute}) => {
             });
 
             if (response.data.success) {
-                setEvents(response.data.data);
+                // Filter to only include public events
+                const publicEvents = response.data.data.filter(event => event.isPublic);
+                setEvents(publicEvents);
                 setLoading(false);
-                updateRoutes(response.data.data)
-
+                updateRoutes(publicEvents);
             } else {
                 toast.error("Failed to fetch events: " + response.data.message, {
                     position: "bottom-right",
@@ -122,39 +120,38 @@ export const Home = ({route, setRoute}) => {
     return (
         <div className={events.length > 0 ? 'home-container' : "no-events-container"}>
             {
-                loading ? <Loader/> : <div>
+                loading ? <Loader /> : <div>
                     {loggedIn ? (
                         <div className="home-content">
                             <div className="events-grid">
                                 {events.length > 0 ? (
                                     events.reverse().map(event => {
-                                            return (
-                                                <div key={event.id}>
-                                                    <div className="event-card">
-                                                        <button className="delete-button"
-                                                                onClick={() => handleDelete(event.id)}>X
-                                                        </button>
-                                                        <Link to={`/events/event/${event.id}`}>
-                                                            <h3>{event.eventName}</h3>
-                                                        </Link>
-                                                    </div>
+                                        return (
+                                            <div key={event.id}>
+                                                <div className="event-card">
+                                                    <button className="delete-button"
+                                                        onClick={() => handleDelete(event.id)}>X
+                                                    </button>
+                                                    <Link to={`/events/event/${event.id}`}>
+                                                        <h3>{event.eventName}</h3>
+                                                    </Link>
                                                 </div>
-                                            )
-                                        }
-                                    )
+                                            </div>
+                                        );
+                                    })
                                 ) : (
                                     <div className="no-events">
-                                        <h3>No events found.</h3>
+                                        <h3>No public events found.</h3>
                                     </div>
                                 )}
                             </div>
                         </div>
                     ) : (
-                        <Login setLoggedIn={setLoggedIn}/>
+                        <Login setLoggedIn={setLoggedIn} />
                     )}
                 </div>
             }
-            <ToastContainer/>
+            <ToastContainer />
         </div>
     );
 };
