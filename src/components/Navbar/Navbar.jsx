@@ -39,7 +39,6 @@ export const Navbar = () => {
                     <img className="logo" src={logo} alt="event schedule app main logo" />
                 </Link>
 
-                {/* Menu icon only visible on wide screens */}
                 {!isMobile && (
                     <div className="menu-icon" onClick={handleClick}>
                         <i className={click ? "fas fa-times" : "fas fa-bars"}></i>
