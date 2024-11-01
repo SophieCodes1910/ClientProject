@@ -35,4 +35,3 @@ const updateEvent = async (docId, eventData) => {
 
 // Export auth, db, storage, and updateEvent
 export { auth, db, storage, updateEvent };
-
