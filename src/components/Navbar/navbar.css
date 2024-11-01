@@ -1,9 +1,9 @@
-/* Base Navbar Styles */
+/* Navbar base styles */
 .navbar {
     background: #b2ffa0;
     height: 80px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     padding: 0 20px;
     color: #42d623;
@@ -13,14 +13,12 @@
     display: flex;
     align-items: center;
     width: 100%;
-    max-width: 1200px;
     justify-content: space-between;
 }
 
 .navbar-logo {
     display: flex;
     align-items: center;
-    margin-right: auto;
 }
 
 .logo {
@@ -28,31 +26,35 @@
     height: auto;
 }
 
-/* Nav menu styling */
 .nav-menu {
     display: flex;
     list-style: none;
     margin: 0;
     padding: 0;
-    gap: 20px;
 }
 
-/* Wide screen styles */
+/* For wide screens - hide nav-menu initially and show when menu is clicked */
 @media screen and (min-width: 961px) {
     .nav-menu {
-        display: flex;
-        flex-grow: 1;
-        justify-content: center; /* Center the links */
+        display: none; /* Hidden initially */
+        position: absolute;
+        right: 20px;
+        top: 80px;
+        background-color: #b2ffa0;
+        flex-direction: column;
+        width: 200px;
+        border-radius: 4px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     }
-    .menu-icon {
-        display: block; /* Display on wide screens */
+
+    .nav-menu.active {
+        display: flex; /* Display menu when active */
     }
 }
 
-/* Mobile view styling */
+/* Mobile - full screen dropdown */
 @media screen and (max-width: 960px) {
     .nav-menu {
-        display: flex;
         flex-direction: column;
         position: fixed;
         top: 80px;
@@ -69,18 +71,23 @@
         opacity: 1;
         visibility: visible;
     }
-
-    /* Menu icon appears on mobile only */
-    .menu-icon {
-        display: block;
-    }
 }
 
-/* Menu icon and overlay */
+/* Menu icon for wide and mobile views */
 .menu-icon {
+    display: none;
     font-size: 1.8rem;
     color: #32ab26;
     cursor: pointer;
+}
+
+@media screen and (max-width: 960px) {
+    .menu-icon {
+        display: block;
+        position: absolute;
+        right: 20px;
+        top: 25px;
+    }
 }
 
 .nav-item {
@@ -97,6 +104,7 @@
     color: #28a745;
 }
 
+/* Menu overlay for closing the menu when clicked */
 .menu-overlay {
     position: fixed;
     top: 0;
