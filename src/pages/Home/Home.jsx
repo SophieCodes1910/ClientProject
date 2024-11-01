@@ -2,88 +2,65 @@ import { useState, useEffect } from 'react';
 import './home.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { db } from "../../firebase"; // Import your Firestore database instance
-import { collection, getDocs, query, where } from "firebase/firestore"; // Import Firestore methods
-import { Loader } from "../../components/Loader/Loader.jsx"; // Ensure this is the correct path
+import { db } from "../../firebase";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { Loader } from "../../components/Loader/Loader.jsx";
 import { Link } from "react-router-dom";
 
 export const Home = () => {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // Function to fetch all public events from Firestore
     const fetchEvents = async () => {
         setLoading(true);
 
         try {
-            // Define your Firestore collection reference
             const eventsRef = collection(db, "events");
-            const q = query(eventsRef, where("isPublic", "==", true)); // Only fetch public events
+            const q = query(eventsRef, where("isPublic", "==", true));
 
-            // Fetch documents from Firestore
             const querySnapshot = await getDocs(q);
             const publicEvents = [];
 
             querySnapshot.forEach((doc) => {
                 const eventData = { id: doc.id, ...doc.data() };
-                publicEvents.push(eventData); // Include all public events
+                publicEvents.push(eventData);
             });
 
-            // Set the fetched public events to state
             setEvents(publicEvents);
         } catch (error) {
-            // Log detailed error info
             console.error("Error fetching events:", error);
-            let errorMessage = "An error occurred while fetching events. Please try again.";
-            toast.error(errorMessage, {
-                position: "bottom-right",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
+            toast.error("An error occurred while fetching events. Please try again.");
         } finally {
-            setLoading(false); // Ensure loading state is reset
+            setLoading(false);
         }
     };
 
-    // Use effect to fetch events when component mounts
     useEffect(() => {
         fetchEvents();
-    }, []); // No dependency to cause re-fetch
+    }, []);
 
     return (
         <div className={events.length > 0 ? 'home-container' : "no-events-container"}>
-            {
-                loading ? <Loader /> : (
-                    <div>
-                        <div className="home-content">
-                            <div className="events-grid">
-                                {events.length > 0 ? (
-                                    events.reverse().map(event => (
-                                        <div key={event.id}>
-                                            <div className="event-card">
-                                                <Link to={`/events/event/${event.id}`}>
-                                                    <h3>{event.eventName}</h3>
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <div className="no-events">
-                                        <h3>No events found.</h3>
-                                    </div>
-                                )}
+            {loading ? <Loader /> : (
+                <div className="home-content">
+                    <div className="events-grid">
+                        {events.length > 0 ? (
+                            events.reverse().map(event => (
+                                <div key={event.id} className="event-card">
+                                    <Link to={`/guest-event/${event.id}`}>
+                                        <h3>{event.eventName}</h3>
+                                    </Link>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="no-events">
+                                <h3>No events found.</h3>
                             </div>
-                        </div>
+                        )}
                     </div>
-                )
-            }
+                </div>
+            )}
             <ToastContainer />
         </div>
     );
 };
-
-

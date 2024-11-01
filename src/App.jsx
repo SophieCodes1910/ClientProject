@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { isAuthenticated } from "./auth/auth.js";
 import { FillCreatedEvent } from "./components/FillCreatedEvent/FillCreatedEvent.jsx";
 import EventDetails from './pages/EventDetails/EventDetails.jsx';
+import GuestEventDetails from './pages/GuestEventDetails/GuestEventDetails.jsx'; // Import GuestEventDetails
 
 export const App = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -63,6 +64,7 @@ export const App = () => {
                         <Route path="/register" element={<Register />} />
                         <Route path="/create" element={<CreateEvents />} />
                         <Route path="/my-invitations" element={<MyInvitations />} />
+                        <Route path="/guest-event/:eventId" element={<GuestEventDetails />} /> {/* Guest Event Details Route */}
                         <Route path="*" element={<LandingPage />} />
                     </Routes>
                     <Toaster />
