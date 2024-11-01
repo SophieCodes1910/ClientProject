@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom"; // Import useNavigate
 import { db } from "../../firebase";
 import { doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
 import { toast, ToastContainer } from "react-toastify";
@@ -8,6 +8,7 @@ import './eventDetails.css';
 
 const EventDetails = () => {
     const location = useLocation();
+    const navigate = useNavigate(); // Initialize navigate
     const { docId } = location.state || {};
     const userEmail = localStorage.getItem("email");
     
@@ -49,6 +50,11 @@ const EventDetails = () => {
             console.error("Error updating RSVP status:", error);
             toast.error("Error updating RSVP status.");
         }
+    };
+
+    const handleEditEvent = () => {
+        // Navigate to the edit page, passing along the docId as state
+        navigate("/edit-event", { state: { docId } });
     };
 
     return (
