@@ -4,7 +4,7 @@ import { db } from "../../firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import './guestEventDetails.css';
+import './GuestEventDetails.css';
 
 const GuestEventDetails = () => {
     const { eventId } = useParams();
@@ -54,29 +54,7 @@ const GuestEventDetails = () => {
                 <div><strong>Start Time:</strong> {eventDetails.eventStartTime || "N/A"}</div>
                 <div><strong>End Time:</strong> {eventDetails.eventEndTime || "N/A"}</div>
 
-                <h3>Invitees</h3>
-                <ul>
-                    {eventDetails.inviteeEmails && eventDetails.inviteeEmails.length > 0 ? (
-                        eventDetails.inviteeEmails.map((email, index) => (
-                            <li key={index}>{email}</li>
-                        ))
-                    ) : (
-                        <li>No invitees added yet.</li>
-                    )}
-                </ul>
-
-                <h3>Uploaded Files</h3>
-                <ul>
-                    {eventDetails.uploadedFiles && eventDetails.uploadedFiles.length > 0 ? (
-                        eventDetails.uploadedFiles.map((file, index) => (
-                            <li key={index}>
-                                <a href={file.url} target="_blank" rel="noopener noreferrer">{file.name}</a>
-                            </li>
-                        ))
-                    ) : (
-                        <li>No files uploaded yet.</li>
-                    )}
-                </ul>
+                {/* Invitees Section Hidden */}
             </div>
             <ToastContainer />
         </div>
