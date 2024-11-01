@@ -25,7 +25,6 @@ const EventDetails = () => {
     const [addedPlans, setAddedPlans] = useState([]);
     const [uploadedFiles, setUploadedFiles] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [isPublic, setIsPublic] = useState(true); // State to manage public/private option
 
     useEffect(() => {
         if (!docId) {
@@ -53,7 +52,6 @@ const EventDetails = () => {
                 setInviteeEmails(eventData.inviteeEmails || []);
                 setAdPlans(eventData.adPlans || "");
                 setAddedPlans(eventData.addedPlans || []);
-                setIsPublic(eventData.isPublic !== undefined ? eventData.isPublic : true); // Load existing public/private status
             } catch (error) {
                 console.error("Error fetching event details:", error);
                 toast.error("Error fetching event details.");
@@ -81,7 +79,6 @@ const EventDetails = () => {
                 adPlans,
                 addedPlans,
                 uploadedFiles,
-                isPublic // Save public/private status to Firestore
             });
             toast.success("Event updated successfully!");
         } catch (error) {
@@ -112,7 +109,7 @@ const EventDetails = () => {
     const handleAddPlan = () => {
         const planPattern = /^.+:\s*\d{2}:\d{2}$/; // Ensure the format is 'Description: HH:MM'
         if (planPattern.test(manualPlan)) {
-            setAddedPlans((prevPlans) => [...prevPlans, manualPlan]);
+            setAddedPlans(prevPlans => [...prevPlans, manualPlan]);
             setManualPlan("");
         } else {
             toast.error("Plan format should be 'Description: HH:MM'");
@@ -256,46 +253,26 @@ const EventDetails = () => {
                             )}
                         </ul>
 
-                        <div className="form-group public-private-group">
-                            <label>Event Type:</label>
-                            <label>
-                                <input
-                                    type="radio"
-                                    value="public"
-                                    checked={isPublic}
-                                    onChange={() => setIsPublic(true)}
-                                />
-                                Public
-                            </label>
-                            <label>
-                                <input
-                                    type="radio"
-                                    value="private"
-                                    checked={!isPublic}
-                                    onChange={() => setIsPublic(false)}
-                                />
-                                Private
-                            </label>
+                        <div className="file-upload">
+                            <label>Upload Schedule (Plans):</label>
+                            <input type="file" accept="application/pdf" onChange={handleFileChange} multiple />
                         </div>
 
-                        <div className="form-group">
-                            <label>Upload Files:</label>
-                            <input type="file" multiple onChange={handleFileChange} />
+                        <div className="file-upload">
+                            <label>Import Map:</label>
+                            <input type="file" accept="application/pdf" onChange={handleFileChange} multiple />
                         </div>
 
-                        <div>
-                            <h4>Uploaded Files:</h4>
-                            <ul>
-                                {uploadedFiles.map((file, index) => (
-                                    <li key={index}>{file.name}</li>
-                                ))}
-                            </ul>
+                        <div className="file-upload">
+                            <label>Upload Images and Videos:</label>
+                            <input type="file" accept="image/*, video/*" onChange={handleFileChange} multiple />
                         </div>
                     </div>
                 )}
 
-                <button type="submit">Update Event</button>
+                <button type="submit">Save Changes</button>
             </form>
+
             <ToastContainer />
         </div>
     );
