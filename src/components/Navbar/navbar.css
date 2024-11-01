@@ -33,7 +33,6 @@
     align-items: center;
 }
 
-/* Dropdown container for Events link */
 .nav-item.dropdown .nav-links {
     cursor: pointer;
     position: relative;
@@ -45,11 +44,9 @@
     margin-left: 5px;
 }
 
-/* Desktop Dropdown Menu */
+/* Default Dropdown Menu Styling */
 .dropdown-menu {
     position: absolute;
-    top: 100%;
-    left: 0;
     display: none;
     flex-direction: column;
     background-color: #b2ffa0;
@@ -74,14 +71,24 @@
     background-color: rgba(66, 214, 35, 0.1);
 }
 
-/* Display dropdown menu on hover for desktop */
+/* Display dropdown on hover for desktop */
 .nav-item.dropdown:hover .dropdown-menu {
     display: flex;
 }
 
-/* Display dropdown menu on click for mobile */
-.nav-item.dropdown.active .dropdown-menu {
-    display: flex;
+/* Responsive Menu for Wide Screens */
+@media screen and (min-width: 961px) {
+    .dropdown-menu {
+        /* Position the dropdown directly under the Events link */
+        top: 80px;
+        left: 0;
+        margin-top: 0;
+    }
+
+    /* Optional alignment adjustment */
+    .nav-item.dropdown .dropdown-menu {
+        left: 0;
+    }
 }
 
 /* Responsive Menu for Mobile View */
@@ -90,7 +97,6 @@
         flex-direction: column;
     }
 
-    /* Mobile Dropdown and Icon */
     .nav-menu {
         flex-direction: column;
         position: fixed;
@@ -119,7 +125,6 @@
         top: 25px;
     }
 
-    /* Dropdown Menu for Mobile */
     .dropdown-menu {
         position: static;
         display: none;
@@ -127,6 +132,6 @@
     }
 
     .nav-item.dropdown.active .dropdown-menu {
-        display: flex; /* Show dropdown as part of mobile menu */
+        display: flex;
     }
 }
