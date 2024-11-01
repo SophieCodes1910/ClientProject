@@ -9,7 +9,7 @@ export const Navbar = () => {
     const email = localStorage.getItem("email");
     const [click, setClick] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 960);
-    const [eventsDropdown, setEventsDropdown] = useState(false);
+    const [eventsDropdown, setEventsDropdown] = useState(false); // State for dropdown
     const location = useLocation();
 
     useEffect(() => {
@@ -25,12 +25,12 @@ export const Navbar = () => {
 
     const closeDropdownMenu = () => {
         setClick(false);
-        setEventsDropdown(false);
+        setEventsDropdown(false); // Close dropdown when main menu is closed
         document.body.classList.remove("menu-open");
     };
 
     const toggleEventsDropdown = () => {
-        setEventsDropdown(!eventsDropdown);
+        setEventsDropdown(!eventsDropdown); // Toggle dropdown on click for touch devices
     };
 
     const getNavLinkClass = (path) => {
@@ -52,14 +52,9 @@ export const Navbar = () => {
                     </li>
 
                     {/* Events with dropdown menu */}
-                    <li
-                        className="nav-item dropdown"
-                        onMouseEnter={() => !isMobile && setEventsDropdown(true)}
-                        onMouseLeave={() => !isMobile && setEventsDropdown(false)}
-                    >
-                        <div
+                    <li className="nav-item dropdown" onClick={toggleEventsDropdown}>
+                        <div 
                             className={`nav-links ${eventsDropdown ? "active" : ""}`}
-                            onClick={toggleEventsDropdown}
                         >
                             Events <i className="fas fa-caret-down"></i>
                         </div>
@@ -99,7 +94,6 @@ export const Navbar = () => {
                     <i className={click ? "fas fa-times" : "fas fa-bars"}></i>
                 </div>
             </div>
-            {click && <div className="menu-overlay" onClick={closeDropdownMenu}></div>}
         </nav>
     );
 };

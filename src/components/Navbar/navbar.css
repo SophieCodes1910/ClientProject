@@ -74,8 +74,8 @@
     background-color: rgba(66, 214, 35, 0.1);
 }
 
-/* Display dropdown menu on hover for desktop */
-.nav-item.dropdown:hover .dropdown-menu {
+/* Display dropdown menu on click for desktop */
+.nav-item.dropdown.active .dropdown-menu {
     display: flex;
 }
 
@@ -124,15 +124,4 @@
     .nav-item.dropdown.active .dropdown-menu {
         display: flex; /* Show dropdown as part of mobile menu */
     }
-}
-
-/* Menu Overlay for Mobile */
-.menu-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 10;
 }
