@@ -1,58 +1,50 @@
 import { useState, useEffect } from 'react';
 import './home.css';
-import { Login } from "../Login/Login"; // Ensure this is the correct path
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
+import { db } from "../../firebase"; // Import your Firestore database instance
+import { collection, getDocs, query, where } from "firebase/firestore"; // Import Firestore methods
 import { Loader } from "../../components/Loader/Loader.jsx"; // Ensure this is the correct path
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-const apiUrl = import.meta.env.VITE_API_URL;
-
-export const Home = ({ route, setRoute }) => {
-    const navigate = useNavigate();
+export const Home = () => {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(false);
 
     // Function to fetch events
     const fetchEvents = async () => {
         const organizerEmail = localStorage.getItem("email");
-        const token = localStorage.getItem("token");
+
+        // Check if required values are available
+        if (!organizerEmail) {
+            toast.error("Missing email. Please log in again.");
+            return; // Prevent API call if credentials are missing
+        }
+
         setLoading(true);
-        
-        console.log("API URL:", apiUrl); // Log the API URL
-        console.log("Organizer Email:", organizerEmail); // Log the organizer email
-        console.log("Token:", token); // Log the token
 
         try {
-            const response = await axios.get(`${apiUrl}/invitations/organizer/${organizerEmail}/events`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+            // Define your Firestore collection reference
+            const eventsRef = collection(db, "events");
+            const q = query(eventsRef, where("organizerEmail", "==", organizerEmail));
+
+            // Fetch documents from Firestore
+            const querySnapshot = await getDocs(q);
+            const publicEvents = [];
+
+            querySnapshot.forEach((doc) => {
+                const eventData = { id: doc.id, ...doc.data() };
+                if (eventData.isPublic) { // Only include public events
+                    publicEvents.push(eventData);
+                }
             });
 
-            console.log("API Response:", response.data); // Log the API response
-
-            if (response.data.success) {
-                const publicEvents = response.data.data.filter(event => event.isPublic);
-                setEvents(publicEvents);
-            } else {
-                toast.error("Failed to fetch events: " + response.data.message, {
-                    position: "bottom-right",
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-            }
+            // Set the fetched public events to state
+            setEvents(publicEvents);
         } catch (error) {
-            console.error("Error fetching events:", error); // Log detailed error info
+            // Log detailed error info
+            console.error("Error fetching events:", error);
             let errorMessage = "An error occurred while fetching events. Please try again.";
-            if (error.response && error.response.data && error.response.data.message) {
-                errorMessage = error.response.data.message; // Use server-provided message if available
-            }
             toast.error(errorMessage, {
                 position: "bottom-right",
                 autoClose: 3000,
@@ -70,7 +62,7 @@ export const Home = ({ route, setRoute }) => {
     // Use effect to fetch events when component mounts
     useEffect(() => {
         fetchEvents();
-    }, []); // Removed loggedIn dependency as per your request
+    }, []); // No dependency to cause re-fetch
 
     return (
         <div className={events.length > 0 ? 'home-container' : "no-events-container"}>
@@ -79,17 +71,15 @@ export const Home = ({ route, setRoute }) => {
                     <div className="home-content">
                         <div className="events-grid">
                             {events.length > 0 ? (
-                                events.reverse().map(event => {
-                                    return (
-                                        <div key={event.id}>
-                                            <div className="event-card">
-                                                <Link to={`/events/event/${event.id}`}>
-                                                    <h3>{event.eventName}</h3>
-                                                </Link>
-                                            </div>
+                                events.reverse().map(event => (
+                                    <div key={event.id}>
+                                        <div className="event-card">
+                                            <Link to={`/events/event/${event.id}`}>
+                                                <h3>{event.eventName}</h3>
+                                            </Link>
                                         </div>
-                                    )
-                                })
+                                    </div>
+                                ))
                             ) : (
                                 <div className="no-events">
                                     <h3>No events found.</h3>
@@ -103,3 +93,4 @@ export const Home = ({ route, setRoute }) => {
         </div>
     );
 };
+
