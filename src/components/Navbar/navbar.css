@@ -1,9 +1,8 @@
-/* Navbar base styles */
+/* Base Navbar Styles */
 .navbar {
     background: #b2ffa0;
     height: 80px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     padding: 0 20px;
     color: #42d623;
@@ -12,17 +11,17 @@
 .navbar-container {
     display: flex;
     align-items: center;
+    justify-content: center; /* Center-aligning navbar items */
     width: 100%;
-    justify-content: space-between;
 }
 
 .navbar-logo {
-    display: flex;
-    align-items: center;
+    position: absolute;
+    left: 20px; /* Position the logo on the left side */
 }
 
 .logo {
-    width: 80px;
+    width: 60px;
     height: auto;
 }
 
@@ -31,23 +30,27 @@
     list-style: none;
     margin: 0;
     padding: 0;
+    align-items: center;
 }
 
-/* Dropdown container for Events */
+/* Dropdown container for Events link */
 .nav-item.dropdown .nav-links {
     cursor: pointer;
     position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .nav-item.dropdown i {
     margin-left: 5px;
 }
 
+/* Desktop Dropdown Menu */
 .dropdown-menu {
     position: absolute;
     top: 100%;
     left: 0;
-    display: flex;
+    display: none;
     flex-direction: column;
     background-color: #b2ffa0;
     border-radius: 4px;
@@ -71,19 +74,18 @@
     background-color: rgba(66, 214, 35, 0.1);
 }
 
-/* Menu icon styling */
-.menu-icon {
-    font-size: 1.8rem;
-    color: #32ab26;
-    cursor: pointer;
-    display: block;
-    position: absolute;
-    right: 20px;
-    top: 25px;
+/* Display dropdown menu on hover for desktop */
+.nav-item.dropdown:hover .dropdown-menu {
+    display: flex;
 }
 
-/* Mobile menu styling */
+/* Responsive Menu for Mobile View */
 @media screen and (max-width: 960px) {
+    .navbar-container {
+        flex-direction: column;
+    }
+
+    /* Mobile Dropdown and Icon */
     .nav-menu {
         flex-direction: column;
         position: fixed;
@@ -101,4 +103,36 @@
         opacity: 1;
         visibility: visible;
     }
+
+    .menu-icon {
+        display: block;
+        font-size: 1.8rem;
+        color: #32ab26;
+        cursor: pointer;
+        position: absolute;
+        right: 20px;
+        top: 25px;
+    }
+
+    /* Dropdown Menu for Mobile */
+    .dropdown-menu {
+        position: static;
+        display: none;
+        width: 100%;
+    }
+
+    .nav-item.dropdown.active .dropdown-menu {
+        display: flex; /* Show dropdown as part of mobile menu */
+    }
+}
+
+/* Menu Overlay for Mobile */
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 10;
 }
