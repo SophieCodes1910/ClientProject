@@ -14,10 +14,37 @@ expressApp.use(cors({
     credentials: true // Allow cookies or other credentials if needed
 }));
 
+// Use JSON parsing middleware
+expressApp.use(express.json()); // For parsing application/json
+
 // Define your endpoints
-expressApp.post('/auth/login', (req, res) => {
+expressApp.post('/auth/login', async (req, res) => {
     // Handle login logic here
-    res.send("Login successful");
+    try {
+        // Implement your login logic
+        res.status(200).send("Login successful");
+    } catch (error) {
+        console.error("Login error:", error);
+        res.status(500).send("Login failed");
+    }
+});
+
+// Example endpoint for fetching events
+expressApp.get('/events', async (req, res) => {
+    try {
+        // Logic to fetch events from Firestore
+        const events = []; // Replace with actual fetching logic
+        res.status(200).json(events);
+    } catch (error) {
+        console.error("Error fetching events:", error);
+        res.status(500).send("Failed to fetch events");
+    }
+});
+
+// Error handling middleware
+expressApp.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
 });
 
 // Export your API
