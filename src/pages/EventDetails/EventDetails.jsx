@@ -25,6 +25,7 @@ const EventDetails = () => {
     const [addedPlans, setAddedPlans] = useState([]);
     const [uploadedFiles, setUploadedFiles] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isPublic, setIsPublic] = useState(true); // New state for visibility
 
     useEffect(() => {
         if (!docId) {
@@ -52,6 +53,7 @@ const EventDetails = () => {
                 setInviteeEmails(eventData.inviteeEmails || []);
                 setAdPlans(eventData.adPlans || "");
                 setAddedPlans(eventData.addedPlans || []);
+                setIsPublic(eventData.isPublic !== undefined ? eventData.isPublic : true); // Set public/private state
             } catch (error) {
                 console.error("Error fetching event details:", error);
                 toast.error("Error fetching event details.");
@@ -79,6 +81,7 @@ const EventDetails = () => {
                 adPlans,
                 addedPlans,
                 uploadedFiles,
+                isPublic // Include visibility in the update
             });
             toast.success("Event updated successfully!");
         } catch (error) {
@@ -219,6 +222,12 @@ const EventDetails = () => {
                     )}
                 </ul>
 
+                <div className="form-group visibility-toggle">
+                    <label>Event Visibility:</label>
+                    <button type="button" className={isPublic ? "active" : ""} onClick={() => setIsPublic(true)}>Public</button>
+                    <button type="button" className={!isPublic ? "active" : ""} onClick={() => setIsPublic(false)}>Private</button>
+                </div>
+
                 <button
                     type="button"
                     className="toggle-details"
@@ -253,19 +262,14 @@ const EventDetails = () => {
                             )}
                         </ul>
 
-                        <div className="file-upload">
-                            <label>Upload Seating Plan (PDF):</label>
-                            <input type="file" accept="application/pdf" onChange={handleFileChange} multiple />
-                        </div>
-
-                        <div className="file-upload">
-                            <label>Import Maps (PDF):</label>
-                            <input type="file" accept="application/pdf" onChange={handleFileChange} multiple />
-                        </div>
-
-                        <div className="file-upload">
-                            <label>Upload Images and Videos:</label>
-                            <input type="file" accept="image/*, video/*" onChange={handleFileChange} multiple />
+                        <div className="form-group">
+                            <label>Upload Files:</label>
+                            <input type="file" multiple onChange={handleFileChange} />
+                            <ul className="uploaded-files-list">
+                                {uploadedFiles.length > 0 && uploadedFiles.map((file, index) => (
+                                    <li key={index}>{file.name}</li>
+                                ))}
+                            </ul>
                         </div>
                     </div>
                 )}
