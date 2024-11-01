@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import { isAuthenticated } from "./auth/auth.js";
 import { FillCreatedEvent } from "./components/FillCreatedEvent/FillCreatedEvent.jsx";
 import EventDetails from './pages/EventDetails/EventDetails.jsx';
-import GuestEventDetails from './pages/GuestEventDetails/GuestEventDetails.jsx'; // Import GuestEventDetails
+import GuestEventDetails from './pages/GuestEventDetails/GuestEventDetails.jsx';
 
 export const App = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -64,8 +64,8 @@ export const App = () => {
                         <Route path="/register" element={<Register />} />
                         <Route path="/create" element={<CreateEvents />} />
                         <Route path="/my-invitations" element={<MyInvitations />} />
-                        <Route path="/events/event/:eventId" element={<GuestEventDetails />} /> {/* Guest Event Details Route */}
-                        <Route path="*" element={<LandingPage />} />
+                        <Route path="/events/event/:eventId" element={<GuestEventDetails />} /> {/* Place this route before the wildcard */}
+                        <Route path="*" element={<LandingPage />} /> {/* Wildcard route should be last */}
                     </Routes>
                     <Toaster />
                 </Router>
