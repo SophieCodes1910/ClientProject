@@ -11,7 +11,7 @@ export const Home = () => {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // Function to fetch events
+    // Function to fetch events from Firestore
     const fetchEvents = async () => {
         const organizerEmail = localStorage.getItem("email");
 
@@ -67,27 +67,29 @@ export const Home = () => {
     return (
         <div className={events.length > 0 ? 'home-container' : "no-events-container"}>
             {
-                loading ? <Loader /> : <div>
-                    <div className="home-content">
-                        <div className="events-grid">
-                            {events.length > 0 ? (
-                                events.reverse().map(event => (
-                                    <div key={event.id}>
-                                        <div className="event-card">
-                                            <Link to={`/events/event/${event.id}`}>
-                                                <h3>{event.eventName}</h3>
-                                            </Link>
+                loading ? <Loader /> : (
+                    <div>
+                        <div className="home-content">
+                            <div className="events-grid">
+                                {events.length > 0 ? (
+                                    events.reverse().map(event => (
+                                        <div key={event.id}>
+                                            <div className="event-card">
+                                                <Link to={`/events/event/${event.id}`}>
+                                                    <h3>{event.eventName}</h3>
+                                                </Link>
+                                            </div>
                                         </div>
+                                    ))
+                                ) : (
+                                    <div className="no-events">
+                                        <h3>No events found.</h3>
                                     </div>
-                                ))
-                            ) : (
-                                <div className="no-events">
-                                    <h3>No events found.</h3>
-                                </div>
-                            )}
+                                )}
+                            </div>
                         </div>
                     </div>
-                </div>
+                )
             }
             <ToastContainer />
         </div>
