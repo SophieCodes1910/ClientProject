@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Event - Huppsi</title>
+    <link rel="stylesheet" href="/css/EditEventStyles.css"> <!-- Link to your CSS file -->
+    <script>
+        // Function to handle the adding and removing of email addresses
+        function manageEmails() {
+            const emailInput = document.getElementById('invitees');
+            const emailListContainer = document.getElementById('email-list');
+            const emails = emailInput.value.split(',').map(email => email.trim()).filter(email => email);
+
+            // Clear previous email list
+            emailListContainer.innerHTML = '';
+
+            // Display the new list of emails
+            emails.forEach((email, index) => {
+                const emailItem = document.createElement('div');
+                emailItem.className = 'email-item';
+                emailItem.innerHTML = `
+                    <span>${email}</span>
+                    <button type="button" onclick="removeEmail(${index})">Remove</button>
+                `;
+                emailListContainer.appendChild(emailItem);
+            });
+
+            // Clear the input field after adding
+            emailInput.value = '';
+        }
+
+        // Function to remove an email from the list
+        function removeEmail(index) {
+            const emailListContainer = document.getElementById('email-list');
+            const emailItems = emailListContainer.getElementsByClassName('email-item');
+            emailListContainer.removeChild(emailItems[index]);
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/home">Home</a></li>
+                <li><a href="/Events">Events</a>
+                    <ul>
+                        <li><a href="/CreateEvents">Create Event</a></li>
+                        <li><a href="/ManageEvents">Manage Events</a></li>
+                    </ul>
+                </li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content Section -->
+    <main>
+        <div class="event-form-container">
+            <h2>Event Details</h2>
+            <form action="/EditEvent" method="POST" enctype="multipart/form-data">
+                <!-- Event Name -->
+                <label for="event-name">Event Name:</label>
+                <input type="text" id="event-name" name="eventName" required>
+
+                <!-- Organizer Username -->
+                <label for="organizer-username">Organizer:</label>
+                <input type="text" id="organizer-username" name="organizerUsername" required>
+
+                <!-- Event Description -->
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" rows="4" required></textarea>
+
+                <!-- Event Date -->
+                <label for="event-date">Date:</label>
+                <input type="date" id="event-date" name="eventDate" required>
+
+                <!-- Event Start Time -->
+                <label for="start-time">Start Time:</label>
+                <input type="time" id="start-time" name="startTime" required>
+
+                <!-- Event Location -->
+                <label for="location">Location:</label>
+                <input type="text" id="location" name="location" required>
+
+                <!-- Private/Public Event Checkbox -->
+                <label for="event-type">Private Event:</label>
+                <input type="checkbox" id="event-type" name="eventType"> 
+
+                <!-- Invitees -->
+                <label for="invitees">Invitees (Email addresses):</label>
+                <textarea id="invitees" name="invitees" rows="4" placeholder="Enter email addresses"></textarea>
+                <button type="button" onclick="manageEmails()">Add Emails</button>
+
+                <!-- Displaying the list of invitee emails -->
+                <div id="email-list"></div>
+
+                <!-- Schedule Upload -->
+                <label for="schedule-upload">Upload Event Schedule (PDF):</label>
+                <input type="file" id="schedule-upload" name="schedule" accept=".pdf">
+
+                <!-- Map Upload -->
+                <label for="map-upload">Upload Map (Image):</label>
+                <input type="file" id="map-upload" name="map" accept="image/*">
+
+                <!-- Pictures/Videos Upload -->
+                <label for="media-upload">Upload Pictures/Videos:</label>
+                <input type="file" id="media-upload" name="media" accept="image/*, video/*" multiple>
+
+                <!-- Additional Information -->
+                <label for="additional-info">Additional Information:</label>
+                <textarea id="additional-info" name="additionalInfo" rows="4" placeholder="Dress code, what to bring, etc."></textarea>
+
+                <!-- Submit Button -->
+                <button type="submit">Update Event</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Huppsi. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
